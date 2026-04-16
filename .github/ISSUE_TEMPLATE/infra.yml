@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    infra.yml                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/04/16 19:39:34 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/16 19:39:45 by jaubry--         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 name: Infra
 description: CI, Makefile, tooling, GitHub configuration or other infrastructure work.
 title: "[INFRA] <short title>"

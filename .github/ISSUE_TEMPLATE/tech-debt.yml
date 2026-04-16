@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    tech-debt.yml                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/04/16 19:39:36 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/16 19:39:41 by jaubry--         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 name: Tech debt
 description: Refactors or cleanup that do not add new features.
 title: "[TECH-DEBT] <short title>"
