@@ -1,0 +1,74 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    bug.yml                                            :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/04/16 19:21:11 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/16 19:23:23 by jaubry--         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+name: Bug
+description: Report a bug or unexpected behavior in the IRC server.
+title: "[BUG] <short description>"
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What went wrong?
+      placeholder: e.g. Server crashes when a client sends PART on a channel they are not in
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Minimal commands or actions to trigger the bug
+      placeholder: |
+        1. Start the server: ./ircserv 6667 password
+        2. Connect with nc: nc -C 127.0.0.1 6667
+        3. Send PASS/NICK/USER
+        4. Send: PART #nonexistent
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen?
+      placeholder: e.g. Server should send an error reply and keep running
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happens?
+      placeholder: e.g. Server exits with a segmentation fault
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Run this command and paste the output
+      placeholder: |
+        make fclean && make
+        ./ircserv 6667 password &
+        echo "OS:" $(uname -a)
+        echo "Compiler:" $(c++ --version | head -n 1)
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, compiler, IRC client
+      placeholder: e.g. Ubuntu 22.04, g++ 11.4, nc / HexChat

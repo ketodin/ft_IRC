@@ -1,0 +1,59 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    task.yml                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/04/16 19:17:16 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/16 19:20:57 by jaubry--         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+name: Task
+description: Define a clear, scoped task for the IRC server.
+title: "[TASK] <short title>"
+labels: ["task"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What part of the subject or IRC protocol is this about?
+      placeholder: e.g. Implement JOIN command according to RFC and subject
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What is the expected result?
+      placeholder: e.g. Client can join channels, server creates channel if missing, proper replies on error
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      options:
+        - label: Behavior matches the 42 subject and/or RFC
+        - label: Error cases and edge cases are handled
+        - label: Manual test with nc passes
+        - label: Manual test with the reference IRC client passes
+        - label: CI (build + cppcheck) is green
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Other issues or components required before starting
+      placeholder: e.g. Depends on auth flow, needs ClientManager, issue
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Technical notes
+      description: IRC reply codes, edge cases, RFC references
+      placeholder: e.g. ERR_NOSUCHCHANNEL (403), ERR_CHANNELISFULL (471)

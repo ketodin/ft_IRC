@@ -1,0 +1,43 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    infra.yml                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/04/16 19:39:34 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/16 19:39:45 by jaubry--         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+name: Infra
+description: CI, Makefile, tooling, GitHub configuration or other infrastructure work.
+title: "[INFRA] <short title>"
+labels: ["infra"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What part of the infrastructure is this about?
+      placeholder: e.g. Add GitHub Actions workflow for cppcheck
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What is the expected outcome?
+      placeholder: e.g. Every PR runs cppcheck and fails on any finding
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      options:
+        - label: CI runs on every pull request to main
+        - label: CI fails on error
+        - label: Documentation is updated if needed
