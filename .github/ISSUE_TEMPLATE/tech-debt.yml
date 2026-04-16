@@ -1,0 +1,40 @@
+name: Tech debt
+description: Refactors or cleanup that do not add new features.
+title: "[TECH-DEBT] <short title>"
+labels: ["tech-debt"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What part of the codebase needs refactoring or cleanup?
+      placeholder: e.g. Simplify ChannelManager responsibilities
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is wrong with the current code?
+      placeholder: e.g. ChannelManager mixes network I/O and business logic
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should the code look like after this refactor?
+      placeholder: e.g. ChannelManager handles only channel state, network I/O moved to Network module
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      options:
+        - label: Code compiles with no warnings
+        - label: CI (build + cppcheck) is green
+        - label: No behavior change for existing features

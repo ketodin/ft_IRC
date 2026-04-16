@@ -1,0 +1,31 @@
+name: Docs
+description: Documentation work (README, architecture, runbook, ADRs).
+title: "[DOCS] <short title>"
+labels: ["docs"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What needs to be documented or updated?
+      placeholder: e.g. Document the single poll-based event loop in docs/architecture.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should be documented by the end?
+      placeholder: e.g. High-level overview of modules and data flow for the IRC server
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      options:
+        - label: Documentation is pushed to docs/
+        - label: References to relevant RFCs or subject sections are included
+        - label: README or runbook updated if needed
