@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/16 19:39:33 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/16 19:39:47 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/16 20:55:44 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,11 +33,10 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
+  - type: textarea
     id: acceptance
     attributes:
       label: Acceptance criteria
-      options:
-        - label: Documentation is pushed to docs/
-        - label: References to relevant RFCs or subject sections are included
-        - label: README or runbook updated if needed
+      placeholder: |
+        - [ ] Write example usage in README
+        - [ ] Add diagram to docs/architecture.md

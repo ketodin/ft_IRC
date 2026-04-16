@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/16 19:39:36 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/16 19:39:41 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/16 20:57:07 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,11 +42,11 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
+  - type: textarea
     id: acceptance
     attributes:
       label: Acceptance criteria
-      options:
-        - label: Code compiles with no warnings
-        - label: CI (build + cppcheck) is green
-        - label: No behavior change for existing features
+      placeholder: |
+        - [ ] Code compiles with no warnings
+        - [ ] CI (build + cppcheck) is green
+        - [ ] No behavior change for existing features
