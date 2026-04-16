@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/16 17:51:42 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/16 17:57:10 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/16 18:23:24 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ jobs:
         run: make
 
       - name: Check no relinking
-        run: ./scripts/check_no_relink.sh
+        run: ./github/scripts/check_no_relink.sh
 
       - name: Clean build
         run: make fclean && make
