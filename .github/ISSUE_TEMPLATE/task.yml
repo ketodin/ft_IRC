@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/16 19:17:16 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/16 19:20:57 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/16 20:56:46 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,16 +33,16 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
+  - type: textarea
     id: acceptance
     attributes:
       label: Acceptance criteria
-      options:
-        - label: Behavior matches the 42 subject and/or RFC
-        - label: Error cases and edge cases are handled
-        - label: Manual test with nc passes
-        - label: Manual test with the reference IRC client passes
-        - label: CI (build + cppcheck) is green
+      placeholder: |
+        - [ ] Behavior matches the 42 subject and/or RFC
+        - [ ] Error cases and edge cases are handled
+        - [ ] Manual test with nc passes
+        - [ ] Manual test with the reference IRC client passes
+        - [ ] CI (build + cppcheck) is green
 
   - type: textarea
     id: dependencies
