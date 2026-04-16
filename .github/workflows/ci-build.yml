@@ -1,0 +1,38 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ci-build.yml                                       :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/04/16 17:51:42 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/16 18:29:14 by jaubry--         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+name: CI - BUILD
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: make
+
+      - name: Check no relinking
+        run: ./.github/scripts/check_no_relink.sh
+
+      - name: Clean build
+        run: make fclean && make
