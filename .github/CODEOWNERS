@@ -1,0 +1,13 @@
+# CODEOWNERS for ft_IRC
+
+# Github repository configuration and actions
+/.github/			@eterrale @ketodin
+
+# Documentation
+/docs/adr/			@lcalero42
+
+# Build system and make includes
+/Makefile			@ketodin
+/includes.mk		@ketodin
+/mkdir/				@ketodin
+.gitmodules			@ketodin
