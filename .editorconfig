@@ -1,0 +1,34 @@
+root = true  # Stop searching parent directories for more .editorconfig files
+             # This file is the single source of truth for the whole repo
+
+
+# Defaults for all files
+[*]
+charset = utf-8                  # All files saved as UTF-8 — prevents Latin-1 or UTF-16 from editors
+end_of_line = lf                 # Unix line endings (\n) — prevents Windows CRLF (\r\n) in commits
+trim_trailing_whitespace = true  # Removes invisible spaces/tabs at end of lines on save
+insert_final_newline = true      # Every file ends with a newline — POSIX standard, avoids git diff noise
+indent_style = tab   # Uses real tab chars
+                     # UseTab: Never in .clang-format, otherwise every file fails CI immediately
+indent_size = 4      # Logical indent unit = 4
+tab_width = 4        # Tab renders as 4 columns wide in the editor UI
+
+
+# C and C++ source and header files
+[*.{c,cc,cpp,cxx,h,hpp,hxx,tpp,ipp}, Makefile]
+indent_style = tab   # Uses real tab chars
+                     # UseTab: Never in .clang-format, otherwise every file fails CI immediately
+indent_size = 4      # Logical indent unit = 4
+tab_width = 4        # Tab renders as 4 columns wide in the editor UI
+
+
+# YAML (CI workflows, GitHub Actions)
+[*.{yml,yaml}]
+indent_style = space  # YAML forbids tabs — spaces only
+indent_size = 4       # Standard YAML indent (GitHub Actions, Docker Compose etc.)
+
+
+# Markdown documentation
+[*.md]
+trim_trailing_whitespace = false  # Exception to the global rule — two trailing spaces
+                                  # in Markdown = intentional <br> line break, must be preserved
