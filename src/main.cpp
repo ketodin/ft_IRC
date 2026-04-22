@@ -12,12 +12,13 @@
 
 #include <iostream>
 
-int	main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
 	if (argc != 3)
 	{
-		std::cerr	<< "Error: invalid number of arguments\n"
-					<< "Usage: " << argv[0] << " <port> <password>\n";
+		std::cerr << "Error: invalid number of arguments\n"
+				  << "Usage: " << argv[0] << " <port> <password>\n";
 		return (1);
 	}
 	return (0);
