@@ -17,6 +17,8 @@ IndentPPDirectives:      AfterHash    # Indents preprocessor directives based on
                                       # e.g.: #  define MY_MACRO inside a nested #ifdef block
 IndentAccessModifiers:   true
 
+
+
 # --- Line length ---
 ColumnLimit:        80      # Lines longer than 120 chars will be wrapped
 
@@ -57,13 +59,14 @@ SpaceAfterCStyleCast:           false              # (int)x not (int) x
 SpaceAfterLogicalNot:           false
 SpaceAfterTemplateKeyword:      false
 
+
+
 # --- Pointers & References ---
 PointerAlignment: Left       # int* ptr and int& ref — star/ampersand attached to the type
 
 
 
 # --- Includes ---
-
 IncludeBlocks: Preserve      # Keeps existing #include groups separated by blank lines as-is
                              # Does not merge or reorder groups
 
@@ -84,9 +87,7 @@ AllowShortLoopsOnASingleLine:        false  # for/while body always on its own l
 
 
 # --- Alignment ---
-#AlignConsecutiveAssignments:  true  # Does NOT align '=' in consecutive assignments
-                                     # Avoids noisy diffs when one variable name changes
-#AlignConsecutiveDeclarations: true  # Does NOT align types/names in consecutive declarations
+AlignConsecutiveDeclarations: true  # Does NOT align types/names in consecutive declarations
                                      # Same reason — avoids full-block realignment noise
 AlignTrailingComments:        true   # Aligns '//' end-of-line comments vertically in a block
 
@@ -96,29 +97,9 @@ AlignConsecutiveAssignments:
     AlignFunctionDeclarations: true
     PadOperators: true
 
-#AlignConsecutiveBitFields:
-#    Enabled: true
-#    AlignCompound: true
-#    AlignFunctionDeclarations: true
-#    PadOperators: true
-
-#AlignConsecutiveDeclarations:
-#    Enabled: true
-#    AcrossComments: true
-#    AlignCompound: true
-#    AlignFunctionDeclarations: true
-#    PadOperators: true
-
-#AlignConsecutiveMacros:
-#    Enabled: true
-#    AcrossComments: true
-#    AlignCompound: true
-#    AlignFunctionDeclarations: true
-#    PadOperators: true
-
 AlignArrayOfStructures: Left
-
 AlignConsecutiveAssignments: true
+
 
 
 # --- Misc ---
