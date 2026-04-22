@@ -36,9 +36,9 @@
 class Server
 {
 	private:
-		int _epoll_fd;
-		int _listen_sock;
-		int _port;
+		int				  _epoll_fd;
+		int				  _listen_sock;
+		int				  _port;
 		const std::string _password;
 
 	public:

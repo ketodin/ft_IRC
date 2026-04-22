@@ -24,7 +24,7 @@ main(int argc, char** argv)
 		return (1);
 	}
 	std::stringstream ss;
-	int n;
+	int				  n;
 	ss << argv[1];
 	ss >> n;
 	Server serv(n, argv[2]);
