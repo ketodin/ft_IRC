@@ -1,0 +1,131 @@
+# --- ft_irc | clang-format 14.0.0 ---
+---
+Language:       Cpp          # Apply these rules to C++ files
+Standard:       Cpp03        # Parse code as C++03 (= C++98 compatible)
+BasedOnStyle:   GNU          # Start from GNU defaults, override below
+
+
+
+# --- Indentation ---
+IndentWidth:             4   # Each indent level = 4 spaces
+TabWidth:                4   # A tab character = 4 columns wide (used in calculations)
+UseTab:                  Always        # Always emits real tabs
+ContinuationIndentWidth: 4   # Wrapped lines are indented 4 spaces from their parent
+IndentCaseLabels:        true # 'case' and 'default' are indented inside 'switch' blocks
+IndentPPDirectives:      AfterHash    # Indents preprocessor directives based on #if/#ifdef depth
+                                      # '#' stays at col 0, directive keyword is indented after it
+                                      # e.g.: #  define MY_MACRO inside a nested #ifdef block
+IndentAccessModifiers:   true
+
+# --- Line length ---
+ColumnLimit:        80      # Lines longer than 120 chars will be wrapped
+
+
+
+# --- Braces ---
+BreakBeforeBraces: Allman    # Opening '{' always goes on its own line (Allman style)
+
+
+
+# --- Parameters & arguments ---
+BinPackParameters: false     # When params overflow, each goes on its own line (no cramming)
+BinPackArguments:  false     # Same rule at call sites for arguments
+
+
+
+# --- Constructor initializer list ---
+BreakConstructorInitializers: AfterColon  # ':' starts on a new line before member list
+                                           # Foo() \n : member(val), other(val)
+PackConstructorInitializers: Never  # forces one initializer per line always, even if they'd fit on one line.
+                                     # Without this, clang-format still collapses them when they fit within 120 cols
+
+
+
+# --- Const placement ---
+SortIncludes: true
+QualifierAlignment: Left     # Left' = west const (const std::string &)
+#QualifierOrder: [const, static, inline]
+
+
+# --- Spaces ---
+SpaceBeforeParens:              ControlStatements  # Space in if( for( while( — not in foo(
+SpaceBeforeAssignmentOperators: true               # a = b, not a=b
+SpacesInParentheses:            false              # (x) not ( x )
+SpacesInAngles:                 false              # <int> not < int >
+SpacesInSquareBrackets:         false              # arr[i] not arr[ i ]
+SpaceAfterCStyleCast:           false              # (int)x not (int) x
+SpaceAfterLogicalNot:           false
+SpaceAfterTemplateKeyword:      false
+
+# --- Pointers & References ---
+PointerAlignment: Left       # int* ptr and int& ref — star/ampersand attached to the type
+
+
+
+# --- Includes ---
+
+IncludeBlocks: Preserve      # Keeps existing #include groups separated by blank lines as-is
+                             # Does not merge or reorder groups
+
+
+
+# --- Empty lines ---
+SeparateDefinitionBlocks:          Always  # Blank line between each function/class/struct definition
+MaxEmptyLinesToKeep:               1       # Collapses multiple consecutive blank lines into one
+KeepEmptyLinesAtTheStartOfBlocks:  false   # Removes blank line immediately after opening '{'
+
+
+
+# --- Functions ---
+AllowShortFunctionsOnASingleLine:    None   # All functions must be multi-line, even int foo() { return 0; }
+AllowShortIfStatementsOnASingleLine: false  # if body always on its own line
+AllowShortLoopsOnASingleLine:        false  # for/while body always on its own line
+
+
+
+# --- Alignment ---
+#AlignConsecutiveAssignments:  true  # Does NOT align '=' in consecutive assignments
+                                     # Avoids noisy diffs when one variable name changes
+#AlignConsecutiveDeclarations: true  # Does NOT align types/names in consecutive declarations
+                                     # Same reason — avoids full-block realignment noise
+AlignTrailingComments:        true   # Aligns '//' end-of-line comments vertically in a block
+
+AlignConsecutiveAssignments:
+    Enabled: true
+    AlignCompound: true
+    AlignFunctionDeclarations: true
+    PadOperators: true
+
+#AlignConsecutiveBitFields:
+#    Enabled: true
+#    AlignCompound: true
+#    AlignFunctionDeclarations: true
+#    PadOperators: true
+
+#AlignConsecutiveDeclarations:
+#    Enabled: true
+#    AcrossComments: true
+#    AlignCompound: true
+#    AlignFunctionDeclarations: true
+#    PadOperators: true
+
+#AlignConsecutiveMacros:
+#    Enabled: true
+#    AcrossComments: true
+#    AlignCompound: true
+#    AlignFunctionDeclarations: true
+#    PadOperators: true
+
+AlignArrayOfStructures: Left
+
+AlignConsecutiveAssignments: true
+
+
+# --- Misc ---
+Cpp11BracedListStyle:            false  # Keeps spaces inside { } initializer lists — correct for C++98
+AlwaysBreakTemplateDeclarations: true   # template <typename T> always on its own line
+BreakBeforeTernaryOperators:     true   # '?' and ':' go at the start of new lines, not end of previous
+BreakBeforeBinaryOperators:      NonAssignment  # '<<', '+', '-' etc. go at start of new line when wrapping
+                                                # Assignment operators '=', '+=' stay at end of line
+AlignOperands:                   Align  # When a binary expression wraps, operands align vertically
+                                        # under the first operand
