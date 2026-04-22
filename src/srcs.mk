@@ -3,14 +3,15 @@
 #                                                         :::      ::::::::    #
 #    srcs.mk                                            :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/14 17:51:47 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/14 17:51:52 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/22 17:14:51 by lcalero          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		= main.cpp
+SRCS		= main.cpp \
+				Server.cpp
 SRCS		:= $(addprefix $(SRCDIR)/, $(SRCS))
 
 vpath %.cpp	$(SRCDIR)
