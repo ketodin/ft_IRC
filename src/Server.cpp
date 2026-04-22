@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/22 21:00:24 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/22 23:13:48 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <iostream>
+#include <netinet/in.h>
+#include <stdexcept>
+#include <string>
+#include <sys/epoll.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 Server::Server(int port, const std::string& password) :
 	_epoll_fd(-1),
@@ -22,8 +29,61 @@ Server::Server(int port, const std::string& password) :
 	LOG_INFO(this->_password);
 	LOG_INFO(this->_epoll_fd);
 	LOG_INFO(this->_listen_sock);
+	this->setupSocket();
 }
 
 Server::~Server()
 {
+	if (_listen_sock != -1)
+		close(_listen_sock);
+	if (_epoll_fd != -1)
+		close(_epoll_fd);
+}
+
+void
+Server::setupSocket()
+{
+	struct sockaddr_in addr;
+	int				   opt = 1;
+
+	this->_listen_sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (this->_listen_sock < 0)
+		throw std::runtime_error("socket() failed");
+
+	setsockopt(this->_listen_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+	addr.sin_family		 = AF_INET;
+	addr.sin_port		 = htons(this->_port);
+	addr.sin_addr.s_addr = INADDR_ANY;
+
+	if (bind(this->_listen_sock, (struct sockaddr*)&addr, sizeof(addr)) < 0)
+		throw std::runtime_error("bind() failed");
+
+	if (listen(this->_listen_sock, MAX_EVENTS) < 0)
+		throw std::runtime_error("listen() failed");
+
+	LOG_INFO("Server listening on port " << _port);
+}
+
+int
+Server::acceptClient()
+{
+	struct sockaddr_in clientAddr;
+	socklen_t		   clientLen = sizeof(clientAddr);
+
+	int clientFd =
+		accept(this->_listen_sock, (struct sockaddr*)&clientAddr, &clientLen);
+	if (clientFd < 0)
+		throw std::runtime_error("accept() failed");
+
+	LOG_INFO("New client connected, fd=" << clientFd);
+	return (clientFd);
+}
+
+int
+Server::listenSockets()
+{
+	int clientFd = this->acceptClient();
+
+	return (clientFd);
 }

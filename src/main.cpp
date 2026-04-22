@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/22 17:45:06 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/22 23:23:14 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,24 @@ main(int argc, char** argv)
 				  << "Usage: " << argv[0] << " <port> <password>\n";
 		return (1);
 	}
+
+	// TEST PARSING
 	std::stringstream ss;
 	int				  n;
+
 	ss << argv[1];
 	ss >> n;
 	Server serv(n, argv[2]);
+
+	// TESTING CLIENT CONNEXION (nc -C 127.0.0.1 6667)
+	while (true)
+	{
+		int fd = serv.acceptClient();
+		if (fd > 0)
+			std::cout << "client accepted" << std::endl;
+		else
+			std::cout << "client not accepted" << std::endl;
+	}
+
 	return (0);
 }
