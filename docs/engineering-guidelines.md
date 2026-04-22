@@ -41,3 +41,32 @@ Rules per file type:
 | `*.md` | Tab | 4 | Trailing whitespace **preserved** (two spaces = intentional `<br>`) |
 
 > Code style expectations and formatting requirements are detailed in [§5 – Code Standards](./docs/IRC-workflow.md#5-norme-décriture-du-code).
+
+---
+
+## `check_format.sh`
+
+A `check_format.sh` script is committed at the root of the repository.
+It is a local formatting checker that runs `clang-format` in dry-run mode
+against all C++ source and header files and reports any diff in a
+human-readable, colour-coded output.
+
+Key behaviours:
+
+- **Scope**: scans `src/` and `include/` recursively for `*.cpp`, `*.hpp`, `*.tpp`, `*.ipp`
+- **Diff output**: prints the original line (magenta) vs the expected line (blue) for each hunk, grouped per file
+- **Exit code**: exits `1` if any file is incorrectly formatted, `0` if all files pass — suitable for CI
+- **No side effects**: never writes to disk, read-only check only
+
+### Usage
+
+```bash
+# Run locally before pushing
+bash check_format.sh
+```
+
+Run this script before every push to catch formatting issues before the CI lint job does.
+The script relies on `.clang-format` being present at the root — do not move or rename it.
+
+> This script is the local counterpart of the `lint` CI job described in
+> [§9.3 – Recommended CI jobs](./IRC-workflow.md#9-ci-avec-github-actions).
