@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/22 19:57:08 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/22 20:06:03 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #define MAX_EVENTS 50
 
 #ifndef DEBUG
-# define DEBUG 0
+#	define DEBUG 0
 #endif
 
 #if DEBUG
