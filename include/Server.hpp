@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/22 18:50:56 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/22 19:57:08 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define DEBUG 0
 #endif
 
-#ifdef DEBUG
+#if DEBUG
 #	define LOG_INFO(msg) std::cout << "[DEBUG] " << msg << std::endl
 #else
 #	define LOG_INFO(msg)                                                      \
