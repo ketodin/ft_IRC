@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/22 20:06:03 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/22 21:00:13 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class Server
 		const std::string _password;
 
 	public:
-		Server(int port, const std::string password);
+		Server(int port, const std::string& password);
 		~Server();
 
 		// returns client's fd

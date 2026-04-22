@@ -6,13 +6,13 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/22 18:24:23 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/22 21:00:24 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(int port, const std::string password) :
+Server::Server(int port, const std::string& password) :
 	_epoll_fd(-1),
 	_listen_sock(-1),
 	_port(port),
