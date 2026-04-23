@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/22 17:45:06 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/23 17:40:28 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include <iostream>
-#include <sstream>
 
 int
 main(int argc, char** argv)
@@ -23,10 +22,37 @@ main(int argc, char** argv)
 				  << "Usage: " << argv[0] << " <port> <password>\n";
 		return (1);
 	}
-	std::stringstream ss;
-	int				  n;
-	ss << argv[1];
-	ss >> n;
-	Server serv(n, argv[2]);
+
+	// TESTING SERV INIT + CLIENT CONNEXION (nc -C 127.0.0.1 6667)
+	try
+	{
+		int port = Server::parsePort(argv[1]);
+
+		std::string password(argv[2]);
+		if (password.empty())
+		{
+			std::cerr << "Error: password cannot be empty\n";
+			return (1);
+		}
+
+		Server serv(port, password);
+
+		while (true)
+		{
+			int fd = serv.listenSockets();
+			if (fd > 0)
+				std::cout << "client accepted" << std::endl;
+			else
+			{
+				std::cerr << "client not accepted" << std::endl;
+				return (1);
+			}
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+
 	return (0);
 }
