@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 21:13:07 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/23 22:52:48 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,19 @@
 #define SERVER_HPP
 
 #include "Client.hpp"
+#include "Utils.hpp"
+#include <cerrno>
+#include <cstring>
 #include <iostream>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <vector>
 
 #define MAX_EVENTS 50
+
 #define MAX_PORT 65535
+#define MAX_PORT_STR "65535"
+
 #define BUFFER_SIZE 1024
 
 #ifndef DEBUG
@@ -44,6 +50,22 @@ enum ReadStatus
 	READ_ERROR		 // n < 0 with a real error
 };
 
+struct HasFd
+{
+		int _fd;
+
+		explicit HasFd(int fd) :
+			_fd(fd)
+		{
+		}
+
+		bool
+		operator()(const Client* client) const
+		{
+			return client->getFd() == _fd;
+		}
+};
+
 class Server
 {
 	private:
@@ -53,11 +75,19 @@ class Server
 		const std::string	 _password;
 		std::vector<Client*> _clients;
 
+		// socket handling.
 		void setupSocket();
 		int	 acceptClient();
+		int	 listenSockets();
+
+		// client handling
 		void addNewClient(struct epoll_event ev);
-		bool removeClient(int fd); // returns if the client we try to remove is found in the vector
-		void handleEvents(struct epoll_event ev, struct epoll_event events[MAX_EVENTS], int nfds);
+		bool removeClient(int fd); // returns if the client we try to remove is
+								   // found in the vector
+		void handleEvents(struct epoll_event ev,
+						  struct epoll_event events[MAX_EVENTS],
+						  int				 nfds);
+		void setNonBlocking(int fd);
 
 		ReadStatus getReadStatus(int fd, char* buffer, ssize_t& n) const;
 
@@ -66,8 +96,130 @@ class Server
 		~Server();
 
 		static int parsePort(const char* str);
-		int		   listenSockets();
 		void	   start();
+
+		class ServerException : public std::runtime_error
+		{
+			public:
+				explicit ServerException(const std::string& msg) :
+					std::runtime_error("[Server Error]: " + msg)
+				{
+				}
+
+				virtual ~ServerException() throw()
+				{
+				}
+		};
+
+		class EpollCreateException : public ServerException
+		{
+			public:
+				explicit EpollCreateException() :
+					ServerException("epoll_create() failed: "
+									+ std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class FcntlException : public ServerException
+		{
+			public:
+				explicit FcntlException(const std::string& flag) :
+					ServerException("fcntl() failed with flag: " + flag + ": "
+									+ std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class EpollCtlException : public ServerException
+		{
+			public:
+				explicit EpollCtlException(const std::string& op) :
+					ServerException("epoll_ctl() failed on operation: " + op
+									+ ": " + std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class EpollWaitException : public ServerException
+		{
+			public:
+				explicit EpollWaitException() :
+					ServerException("epoll_wait() failed: "
+									+ std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class CreateSocketException : public ServerException
+		{
+			public:
+				explicit CreateSocketException() :
+					ServerException("socket() failed: "
+									+ std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class SocketOptException : public ServerException
+		{
+			public:
+				explicit SocketOptException(const std::string& opt) :
+					ServerException("setsockopt() failed on option: " + opt
+									+ ": " + std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class BindException : public ServerException
+		{
+			public:
+				explicit BindException(int port) :
+					ServerException("bind() failed on port: " + toString(port)
+									+ ": " + std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class ListenException : public ServerException
+		{
+			public:
+				explicit ListenException(int port) :
+					ServerException("listen() failed on port: " + toString(port)
+									+ ": " + std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class AcceptException : public ServerException
+		{
+			public:
+				explicit AcceptException() :
+					ServerException("accept() failed: "
+									+ std::string(strerror(errno)))
+				{
+				}
+		};
+
+		class PortNumberException : public ServerException
+		{
+			public:
+				explicit PortNumberException(const std::string& port) :
+					ServerException("invalid port number: '" + port + "'")
+				{
+				}
+		};
+
+		class InvalidPortRangeException : public ServerException
+		{
+			public:
+				explicit InvalidPortRangeException(const std::string& port) :
+					ServerException("port must be between 1 and "
+									+ std::string(MAX_PORT_STR) + ", got: '"
+									+ port + "'")
+				{
+				}
+		};
 };
 
 #endif

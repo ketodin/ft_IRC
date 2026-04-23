@@ -6,13 +6,13 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 21:15:16 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/23 22:55:29 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <algorithm>
 #include <bitset>
-#include <cerrno>
 #include <climits>
 #include <cstdlib>
 #include <cstring>
@@ -63,11 +63,11 @@ Server::setupSocket()
 
 	this->_listen_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_listen_sock < 0)
-		throw std::runtime_error("socket() failed");
+		throw CreateSocketException();
 
 	if (setsockopt(
 			this->_listen_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
-		throw std::runtime_error("setsockopt() failure");
+		throw SocketOptException("SO_REUSEADDR");
 
 	addr.sin_family		 = AF_INET;
 	addr.sin_port		 = htons(this->_port);
@@ -77,10 +77,10 @@ Server::setupSocket()
 			 reinterpret_cast<struct sockaddr*>(&addr),
 			 sizeof(addr))
 		< 0)
-		throw std::runtime_error("bind() failed");
+		throw BindException(this->_listen_sock);
 
 	if (listen(this->_listen_sock, MAX_EVENTS) < 0)
-		throw std::runtime_error("listen() failed");
+		throw ListenException(this->_listen_sock);
 
 	LOG_INFO("Server listening on port " << _port);
 }
@@ -95,7 +95,7 @@ Server::acceptClient()
 						  reinterpret_cast<struct sockaddr*>(&clientAddr),
 						  &clientLen);
 	if (clientFd < 0)
-		throw std::runtime_error("accept() failed");
+		throw AcceptException();
 
 	LOG_INFO("New client connected, fd=" << clientFd);
 	return (clientFd);
@@ -125,31 +125,25 @@ Server::parsePort(const char* str)
 	for (int i = 0; str[i]; i++)
 	{
 		if (str[i] < '0' || str[i] > '9')
-			throw std::runtime_error("Error: invalid port number '"
-									 + std::string(str) + "'");
+			throw PortNumberException(std::string(str));
 	}
 
 	errno = 0;
 	n	  = std::strtol(str, &end, 10);
 
 	if ((errno == ERANGE) || (n <= 0) || (n > MAX_PORT))
-	{
-		std::ostringstream oss;
-		oss << "Error: port must be between 1 and " << MAX_PORT << ", got: '"
-			<< str << "'";
-		throw std::runtime_error(oss.str());
-	}
+		throw InvalidPortRangeException(str);
 	return (static_cast<int>(n));
 }
 
-static void
-setNonBlocking(int fd)
+void
+Server::setNonBlocking(int fd)
 {
 	int flags = fcntl(fd, F_GETFL, 0);
 	if (flags < 0)
-		throw std::runtime_error("fcntl(F_GETFL) failed");
+		throw FcntlException("F_GETFL");
 	if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
-		throw std::runtime_error("fcntl(F_SETFL) failed");
+		throw FcntlException("F_SETFL");
 }
 
 void
@@ -164,7 +158,7 @@ Server::addNewClient(struct epoll_event ev)
 	ev.events  = EPOLLIN;
 	ev.data.fd = clientFd;
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, clientFd, &ev) < 0)
-		throw std::runtime_error("failed to add client to epoll");
+		throw EpollCtlException("EPOLL_CTL_ADD");
 }
 
 ReadStatus
@@ -187,23 +181,23 @@ Server::removeClient(int fd)
 {
 	epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
-	for (std::vector<Client*>::iterator it =
-			 this->_clients.begin();
-		 it != this->_clients.end();
-		 ++it)
+
+	std::vector<Client*>::iterator it =
+		std::find_if(this->_clients.begin(), this->_clients.end(), HasFd(fd));
+
+	if (it != this->_clients.end())
 	{
-		if ((*it)->getFd() == fd)
-		{
-			delete *it;
-			this->_clients.erase(it);
-			return (true);
-		}
+		delete *it;
+		this->_clients.erase(it);
+		return true;
 	}
-	return (false);
+	return false;
 }
 
 void
-Server::handleEvents(struct epoll_event ev, struct epoll_event events[MAX_EVENTS], int nfds)
+Server::handleEvents(struct epoll_event ev,
+					 struct epoll_event events[MAX_EVENTS],
+					 int				nfds)
 {
 	for (int i = 0; i < nfds; ++i)
 	{
@@ -225,6 +219,8 @@ Server::handleEvents(struct epoll_event ev, struct epoll_event events[MAX_EVENTS
 					break;
 				continue;
 			}
+			/* This printing version is still bad because of CRLF, printing will
+			be handled in Client buffer */
 			buffer[n] = '\0';
 			std::cout << "Received from client: " << buffer << std::endl;
 		}
@@ -239,7 +235,7 @@ Server::start()
 
 	this->_epoll_fd = epoll_create1(0);
 	if (this->_epoll_fd < 0)
-		throw std::runtime_error("epoll_create() error");
+		throw EpollCreateException();
 
 	setNonBlocking(this->_listen_sock);
 
@@ -247,7 +243,7 @@ Server::start()
 	ev.events  = EPOLLIN;
 	ev.data.fd = this->_listen_sock;
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_listen_sock, &ev) < 0)
-		throw std::runtime_error("failed to add socket to server");
+		throw EpollCtlException("EPOLL_CTL_ADD");
 
 	while (true)
 	{
@@ -256,7 +252,7 @@ Server::start()
 		{
 			if (errno == EINTR)
 				continue;
-			throw std::runtime_error("epoll_wait() failure");
+			throw EpollWaitException();
 		}
 		handleEvents(ev, events, nfds);
 	}
