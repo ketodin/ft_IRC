@@ -1,0 +1,21 @@
+name: Set state:needs-review on PR open
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  needs-review:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Swap to state:needs-review on linked issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fn = require('./.github/scripts/state-on-pr-open.js');
+            await fn({ github, context });
