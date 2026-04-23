@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 10:53:31 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 14:51:16 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ Server::setupSocket()
 	addr.sin_port		 = htons(this->_port);
 	addr.sin_addr.s_addr = INADDR_ANY;
 
-	if (bind(this->_listen_sock, (struct sockaddr*)&addr, sizeof(addr)) < 0)
+	if (bind(this->_listen_sock,
+			 reinterpret_cast<struct sockaddr*>(&addr),
+			 sizeof(addr))
+		< 0)
 		throw std::runtime_error("bind() failed");
 
 	if (listen(this->_listen_sock, MAX_EVENTS) < 0)
@@ -71,8 +74,9 @@ Server::acceptClient()
 	struct sockaddr_in clientAddr;
 	socklen_t		   clientLen = sizeof(clientAddr);
 
-	int clientFd =
-		accept(this->_listen_sock, (struct sockaddr*)&clientAddr, &clientLen);
+	int clientFd = accept(this->_listen_sock,
+						  reinterpret_cast<struct sockaddr*>(&clientAddr),
+						  &clientLen);
 	if (clientFd < 0)
 		throw std::runtime_error("accept() failed");
 
