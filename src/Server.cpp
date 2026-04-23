@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/22 23:13:48 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 10:53:31 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,13 @@ int
 Server::listenSockets()
 {
 	int clientFd = this->acceptClient();
+
+	/* Refusal logic will be implemented with Client authentication
+	When _clients.size() > MAX_EVENT()
+	At the IRC Protocol Level Later :
+	Wrong password,
+	Banned client (if  needed in the subject),
+	No more conneciton allowd, Registration Timeout */
 
 	return (clientFd);
 }

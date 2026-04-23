@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/22 23:23:14 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 10:38:55 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,28 @@ main(int argc, char** argv)
 	int				  n;
 
 	ss << argv[1];
-	ss >> n;
-	Server serv(n, argv[2]);
-
-	// TESTING CLIENT CONNEXION (nc -C 127.0.0.1 6667)
-	while (true)
+	if (ss.fail())
 	{
-		int fd = serv.acceptClient();
-		if (fd > 0)
-			std::cout << "client accepted" << std::endl;
-		else
-			std::cout << "client not accepted" << std::endl;
+		std::cerr << "Parsing argv[1] failed" << std::endl;
 	}
+	ss >> n;
 
+	// TESTING SERV INIT + CLIENT CONNEXION (nc -C 127.0.0.1 6667)
+	try
+	{
+		Server serv(n, argv[2]);
+		while (true)
+		{
+			int fd = serv.acceptClient();
+			if (fd > 0)
+				std::cout << "client accepted" << std::endl;
+			else
+				std::cout << "client not accepted" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 	return (0);
 }
