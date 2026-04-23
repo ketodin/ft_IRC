@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 15:41:07 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 16:54:42 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <vector>
 
 #define MAX_EVENTS 50
+#define MAX_PORT 65535
 
 #ifndef DEBUG
 #	define DEBUG 0
@@ -48,8 +49,8 @@ class Server
 		Server(int port, const std::string& password);
 		~Server();
 
-		// returns client's fd
-		int listenSockets();
+		static int parsePort(const char* str);
+		int		   listenSockets();
 };
 
 #endif

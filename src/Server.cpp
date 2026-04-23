@@ -6,13 +6,17 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 15:57:42 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 16:58:54 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <cerrno>
+#include <climits>
+#include <cstdlib>
 #include <iostream>
 #include <netinet/in.h>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <sys/epoll.h>
@@ -97,4 +101,30 @@ Server::listenSockets()
 	No more conneciton allowd, Registration Timeout */
 
 	return (clientFd);
+}
+
+int
+Server::parsePort(const char* str)
+{
+	char* end;
+	long  n;
+
+	for (int i = 0; str[i]; i++)
+	{
+		if (str[i] < '0' || str[i] > '9')
+			throw std::runtime_error("Error: invalid port number '"
+									 + std::string(str) + "'");
+	}
+
+	errno = 0;
+	n	  = std::strtol(str, &end, 10);
+
+	if ((errno == ERANGE) || (n <= 0) || (n > MAX_PORT))
+	{
+		std::ostringstream oss;
+		oss << "Error: port must be between 1 and " << MAX_PORT << ", got: '"
+			<< str << "'";
+		throw std::runtime_error(oss.str());
+	}
+	return (static_cast<int>(n));
 }
