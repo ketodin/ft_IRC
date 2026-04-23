@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 03:26:18 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/23 16:04:32 by ekeisler         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,6 +93,11 @@ help:
 	@echo -e "\tclean\t\t\t\t: Remove object files"
 	@echo -e "\tfclean\t\t\t\t: Remove object files, libraries and program"
 	@echo
+	@echo "Quality checks:"
+	@echo -e "\tcheck-format\t\t\t: Check clang-format compliance on src/ and include/"
+	@echo -e "\tcheck-cpp\t\t\t: Run cppcheck static analysis"
+	@echo -e "\tcheck-all\t\t\t: Run check-format and check-cpp"
+	@echo
 	@echo -e "\tprint-%\t\t\t\t: Prints makefile variable content when replacing '%'"
 
 clean:
@@ -105,4 +110,4 @@ fclean:
 	$(call rm-bin-msg)
 	@rm -f $(NAME)
 
-.PHONY: check-cpp check-format check submodules
+.PHONY: check-cpp check-format check-all submodules
