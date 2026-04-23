@@ -1,0 +1,19 @@
+name: CI — clang-format check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get install -y clang-format-14
+          sudo ln -sf /usr/bin/clang-format-14 /usr/local/bin/clang-format
+
+      - name: Run clang-format check
+        run: bash .github/scripts/check_format.sh
