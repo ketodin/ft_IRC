@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 03:24:16 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/23 03:24:59 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,11 @@ cppcheck:
 
 formatcheck:
 	@./.github/scripts/check_format.sh src include
+
+submodules:
+	git submodule init
+	git submodule sync
+	git submodule update --remote
 
 help:
 	@echo "Available targets:"
