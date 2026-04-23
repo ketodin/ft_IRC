@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 03:02:13 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/23 03:23:35 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,6 +68,9 @@ else
 	@$(CF) $(OBJS) -o $@
 endif
 	$(call bin-finish-msg)
+
+cppcheck:
+	@./.github/scripts/run_cppcheck.sh
 
 help:
 	@echo "Available targets:"
