@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 17:34:36 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/23 19:26:34 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@ class Client
 		std::string _username;
 		std::string _realname;
 		std::string _hostname;
-
-		// writing and reading buffer of the clients
-		std::string _readBuffer;
-		std::string _writeBuffer;
 
 		void printClientData();
 

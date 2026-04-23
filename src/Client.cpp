@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 17:24:50 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/23 19:28:18 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ Client::Client(int fd) :
 
 Client::~Client()
 {
-	if (_fd >= 0)
-		close(_fd);
+	if (this->_fd >= 0)
+		close(this->_fd);
 }
 
 void
 Client::printClientData()
 {
-	std::cout << _fd << std::endl;
-	std::cout << _nickname << std::endl;
-	std::cout << _username << std::endl;
-	std::cout << _realname << std::endl;
+	std::cout << this->_fd << std::endl;
+	std::cout << this->_nickname << std::endl;
+	std::cout << this->_username << std::endl;
+	std::cout << this->_realname << std::endl;
 }
