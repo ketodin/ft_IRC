@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 14:51:16 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 15:57:42 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ Server::Server(int port, const std::string& password) :
 
 Server::~Server()
 {
-	if (_listen_sock != -1)
+	if (this->_listen_sock != -1)
 		close(_listen_sock);
-	if (_epoll_fd != -1)
+	if (this->_epoll_fd != -1)
 		close(_epoll_fd);
 }
 
