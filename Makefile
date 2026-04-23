@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/14 18:15:00 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/23 03:02:13 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,10 @@ INCLUDES	= $(INCDIRS_IRC)
 # Output
 NAME		= ircserv
 
+# Variables
+
+VARS		= DEBUG=$(DEBUG)
+
 # Compiler and flags
 CXX			= c++
 
@@ -38,7 +42,7 @@ IFLAGS		= $(addprefix -I,$(INCLUDES))
 
 VFLAGS		= $(addprefix -D ,$(VARS))
 
-CFLAGS		+= $(INSPECT_FLAGS) $(PROFILE_FLAGS) $(FAST_FLAGS) $(VFLAGS)
+CXXFLAGS	+= $(INSPECT_FLAGS) $(PROFILE_FLAGS) $(FAST_FLAGS) $(VFLAGS)
 
 CF			= $(CXX) $(CXXFLAGS) $(IFLAGS)
 
@@ -58,7 +62,7 @@ include	$(ROOTDIR)/mkidir/make_rules.mk
 
 $(NAME): $(OBJS) $(HEADERS)
 	$(call bin-link-msg)
-ifeq ($(VERBOS),1)
+ifeq ($(VERBOSE),1)
 	$(CF) $(OBJS) -o $@
 else
 	@$(CF) $(OBJS) -o $@
