@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 19:40:21 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 20:06:24 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,8 @@ main(int argc, char** argv)
 		}
 
 		Server serv(port, password);
-		Client randomClient(41);
 
-		while (true)
-		{
-			int fd = serv.listenSockets();
-			if (fd > 0)
-				std::cout << "client accepted" << std::endl;
-			else
-			{
-				std::cerr << "client not accepted" << std::endl;
-				return (1);
-			}
-		}
+		serv.start();
 	}
 	catch (const std::exception& e)
 	{
