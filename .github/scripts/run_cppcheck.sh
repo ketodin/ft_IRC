@@ -22,6 +22,7 @@ cppcheck \
 	--language=c++ \
 	--inline-suppr \
 	--error-exitcode=1 \
+	--check-level=exhaustive \
 	--suppress=missingIncludeSystem \
 	${INCLUDE_FLAGS} \
 	src
