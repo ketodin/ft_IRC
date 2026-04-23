@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 10:38:55 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 15:41:35 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ main(int argc, char** argv)
 		Server serv(n, argv[2]);
 		while (true)
 		{
-			int fd = serv.acceptClient();
+			int fd = serv.listenSockets();
 			if (fd > 0)
 				std::cout << "client accepted" << std::endl;
 			else

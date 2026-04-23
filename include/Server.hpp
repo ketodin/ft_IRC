@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 10:49:55 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/23 15:41:07 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,15 @@ class Server
 		int				  _port;
 		const std::string _password;
 
+		void setupSocket();
+		int	 acceptClient();
+
 	public:
 		Server(int port, const std::string& password);
 		~Server();
 
 		// returns client's fd
-		void setupSocket();
-		int	 acceptClient();
-		int	 listenSockets();
+		int listenSockets();
 };
 
 #endif
