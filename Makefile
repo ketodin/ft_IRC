@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 03:02:13 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/23 03:26:18 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,19 @@ else
 endif
 	$(call bin-finish-msg)
 
+check-cpp:
+	@./.github/scripts/run_cppcheck.sh
+
+check-format:
+	@./.github/scripts/check_format.sh src include
+
+check-all: check-cpp check-format
+
+submodules:
+	git submodule init
+	git submodule sync
+	git submodule update --remote
+
 help:
 	@echo "Available targets:"
 	@echo -e "\tall, $(NAME)\t\t: Build the program"
@@ -91,3 +104,5 @@ fclean:
 	@rm -rf $(OBJDIR) $(DEPDIR)
 	$(call rm-bin-msg)
 	@rm -f $(NAME)
+
+.PHONY: check-cpp check-format check submodules
