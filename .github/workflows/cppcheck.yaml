@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/16 18:40:05 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/24 16:45:13 by jaubry--         ###   ########.fr        #
+#    Created: 2026/04/24 17:23:42 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/24 17:23:44 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,27 +28,39 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Cache cppcheck 2.20.0 build
+      - name: Restore cppcheck 2.20.0 cache
         id: cache-cppcheck
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
-          path: /usr/local/bin/cppcheck
-          key: cppcheck-2.20.0-ubuntu-latest
+          path: /tmp/cppcheck-install
+          key: cppcheck-2.20.0-${{ runner.os }}
 
-      - name: Install cppcheck 2.20.0 from source
+      - name: Install build dependencies
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        run: sudo apt-get update && sudo apt-get install -y cmake make libpcre3-dev
+
+      - name: Build cppcheck 2.20.0 from source
         if: steps.cache-cppcheck.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake make libpcre3-dev
-          git clone https://github.com/danmar/cppcheck.git /tmp/cppcheck
-          cd /tmp/cppcheck
+          git clone https://github.com/danmar/cppcheck.git /tmp/cppcheck-src
+          cd /tmp/cppcheck-src
           git checkout 2.20.0
           cmake -S . -B build \
-            -DHAVE_RULES=ON \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr/local
+          -DHAVE_RULES=ON \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=/tmp/cppcheck-install
           cmake --build build -j$(nproc)
-          sudo cmake --install build
+          cmake --install build
+
+      - name: Save cppcheck 2.20.0 cache
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/cppcheck-install
+          key: cppcheck-2.20.0-${{ runner.os }}
+
+      - name: Symlink cppcheck to PATH
+        run: sudo ln -sf /tmp/cppcheck-install/bin/cppcheck /usr/local/bin/cppcheck
 
       - name: Verify cppcheck version
         run: cppcheck --version
