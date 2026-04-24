@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/24 17:23:42 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/24 17:23:44 by jaubry--         ###   ########.fr        #
+#    Created: 2026/04/24 17:47:14 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/24 17:47:16 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,9 +46,11 @@ jobs:
           cd /tmp/cppcheck-src
           git checkout 2.20.0
           cmake -S . -B build \
-          -DHAVE_RULES=ON \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_INSTALL_PREFIX=/tmp/cppcheck-install
+            -DHAVE_RULES=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/tmp/cppcheck-install \
+            -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++" \
+            -DPCRE_STATIC=ON
           cmake --build build -j$(nproc)
           cmake --install build
 
