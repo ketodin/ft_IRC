@@ -6,21 +6,17 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 14:07:56 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 14:23:00 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include <algorithm>
-#include <bitset>
-#include <climits>
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
 #include <iostream>
 #include <netinet/in.h>
-#include <sstream>
-#include <stdexcept>
 #include <string>
 #include <sys/epoll.h>
 #include <sys/socket.h>
@@ -33,12 +29,15 @@ Server::Server(int port, const std::string& password) :
 	_password(password),
 	_clients()
 {
+	// logging
 	LOG_INFO(this->_port);
 	LOG_INFO(this->_password);
 	LOG_INFO(this->_epoll_fd);
 	LOG_INFO(this->_listen_sock);
+
+	// logic
+	this->_clients.reserve(MAX_EVENTS);
 	this->setupSocket();
-	_clients.reserve(MAX_EVENTS);
 }
 
 Server::~Server()
@@ -62,7 +61,8 @@ void
 Server::setupSocket()
 {
 	struct sockaddr_in addr;
-	int				   opt = 1;
+	memset(&addr, 0, sizeof(addr));
+	int opt = 1;
 
 	this->_listen_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_listen_sock < 0)
@@ -100,6 +100,8 @@ Server::acceptClient()
 						  &clientLen);
 	if (clientFd < 0)
 		throw AcceptException();
+
+	// clientAddr currently unused - will be needed for IP logging/banning
 
 	LOG_INFO("New client connected, fd=" << clientFd);
 	return (clientFd);
@@ -163,13 +165,14 @@ Server::addNewClient()
 	struct epoll_event ev;
 
 	setNonBlocking(clientFd);
-	this->_clients.push_back(new Client(clientFd));
 
 	memset(&ev, 0, sizeof(ev));
 	ev.events  = EPOLLIN;
 	ev.data.fd = clientFd;
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, clientFd, &ev) < 0)
 		throw EpollCtlException("EPOLL_CTL_ADD");
+
+	this->_clients.push_back(new Client(clientFd));
 }
 
 /* This function returns the read status depending on the number
@@ -200,7 +203,8 @@ Server::removeClient(int fd)
 	if (it == _clients.end())
 		return (false);
 
-	epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, fd, NULL) < 0)
+		throw EpollCtlException("EPOLL_CTL_DEL");
 	close(fd);
 	delete (*it);
 	this->_clients.erase(it);
