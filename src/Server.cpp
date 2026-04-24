@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 14:41:12 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 22:23:50 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ Server::addNewClient()
 /* This function returns the read status depending on the number
 of bytes read in the fd and the value of errno */
 ReadStatus
-Server::getReadStatus(int fd, char* buffer, ssize_t& n) const
+Server::getReadStatus(int fd, char* buffer, ssize_t& n)
 {
 	n = read(fd, buffer, BUFFER_SIZE - 1);
 	if (n < 0)
