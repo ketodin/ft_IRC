@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 14:23:00 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 14:41:12 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ Server::acceptClient()
 						  reinterpret_cast<struct sockaddr*>(&clientAddr),
 						  &clientLen);
 	if (clientFd < 0)
+	{
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+        	return (-1); // no client actually ready, not a real error
 		throw AcceptException();
+	}
 
 	// clientAddr currently unused - will be needed for IP logging/banning
 
@@ -205,6 +209,7 @@ Server::removeClient(int fd)
 
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, fd, NULL) < 0)
 		throw EpollCtlException("EPOLL_CTL_DEL");
+	shutdown(fd, SHUT_RDWR);
 	close(fd);
 	delete (*it);
 	this->_clients.erase(it);
