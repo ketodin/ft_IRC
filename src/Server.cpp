@@ -101,7 +101,7 @@ Server::acceptClient()
 	if (clientFd < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-        	return (-1); // no client actually ready, not a real error
+			return (-1); // no client actually ready, not a real error
 		throw AcceptException();
 	}
 
