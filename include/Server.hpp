@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 22:53:45 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 23:05:10 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <vector>
-
-#define MAX_EVENTS 50
-#define MAX_PORT 65535
-#define BUFFER_SIZE 1024
 
 #ifndef DEBUG
 #	define DEBUG 0
@@ -57,25 +53,11 @@ struct HasFd
 
 class Server
 {
-	private:
-		int					 _epoll_fd;
-		int					 _listen_sock;
-		int					 _port;
-		const std::string	 _password;
-		std::vector<Client*> _clients;
-
-		void setupSocket();
-		int	 acceptClient();
-		int	 listenSockets();
-
-		void addNewClient();
-		bool removeClient(int fd);
-		void handleEvents(struct epoll_event events[MAX_EVENTS], int nfds);
-		static void setNonBlocking(int fd);
-
-		static ReadStatus getReadStatus(int fd, char* buffer, ssize_t& n);
-
 	public:
+		static const int MAX_EVENTS	 = 50;
+		static const int MAX_PORT	 = 65535;
+		static const int BUFFER_SIZE = 1024;
+
 		Server(int port, const std::string& password);
 		~Server();
 
@@ -154,6 +136,24 @@ class Server
 			public:
 				explicit InvalidPortRangeException(const std::string& port);
 		};
+
+	private:
+		int					 _epoll_fd;
+		int					 _listen_sock;
+		int					 _port;
+		const std::string	 _password;
+		std::vector<Client*> _clients;
+
+		void setupSocket();
+		int	 acceptClient();
+		int	 listenSockets();
+
+		void addNewClient();
+		bool removeClient(int fd);
+		void handleEvents(struct epoll_event events[MAX_EVENTS], int nfds);
+		static void setNonBlocking(int fd);
+
+		static ReadStatus getReadStatus(int fd, char* buffer, ssize_t& n);
 };
 
 #endif
