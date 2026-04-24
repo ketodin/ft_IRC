@@ -1,21 +1,25 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    includes.mk                                        :+:      :+:    :+:    #
+#    auth.mk                                            :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/14 17:50:57 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 17:35:27 by jaubry--         ###   ########.fr        #
+#    Created: 2026/04/23 17:30:48 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/23 17:32:48 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-INCDIR		= include \
-			  include/commands \
-			  include/commands/auth \
-			  include/commands/channel \
-			  include/commands/operator
+# Directories
+AUTH_DIR      = $(COMMANDS_DIR)/auth
 
-INCDIRS_IRC	:= $(INCDIR)
+# Source files
+AUTH_SRCS     = PassCommand.cpp \
+				NickCommand.cpp \
+				UserCommand.cpp
 
-HEADERS		= $(shell find $(INCDIRS_IRC) -type f \( -name '*.h' -o -name '*.hpp' \))
+SRCS            += $(addprefix $(AUTH_DIR)/, $(AUTH_SRCS))
+
+
+# VPATH
+vpath %.cpp $(AUTH_DIR)

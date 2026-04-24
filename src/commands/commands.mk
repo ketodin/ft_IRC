@@ -1,21 +1,29 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    includes.mk                                        :+:      :+:    :+:    #
+#    commands.mk                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/14 17:50:57 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 17:35:27 by jaubry--         ###   ########.fr        #
+#    Created: 2026/04/23 17:26:29 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/23 17:29:41 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-INCDIR		= include \
-			  include/commands \
-			  include/commands/auth \
-			  include/commands/channel \
-			  include/commands/operator
+# Directories
 
-INCDIRS_IRC	:= $(INCDIR)
+COMMANDS_DIR	= $(SRCDIR)/commands
 
-HEADERS		= $(shell find $(INCDIRS_IRC) -type f \( -name '*.h' -o -name '*.hpp' \))
+COMMANDS_SRCS	= ACommand.cpp \
+				  CommandParser.cpp \
+				  CommandDispatcher.cpp
+SRCS			+= $(addprefix $(COMMANDS_DIR)/, $(COMMANDS_SRCS))
+
+COMMANDS_MKS	= auth/auth.mk \
+				  channel/channel.mk \
+				  operator/operator.mk
+
+include $(addprefix $(COMMANDS_DIR)/, $(COMMANDS_MKS))
+
+# VPATH
+vpath %.cpp $(COMMANDS_DIR)

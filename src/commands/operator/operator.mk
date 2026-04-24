@@ -1,21 +1,26 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    includes.mk                                        :+:      :+:    :+:    #
+#    operator.mk                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/14 17:50:57 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 17:35:27 by jaubry--         ###   ########.fr        #
+#    Created: 2026/04/23 17:33:21 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/23 17:33:59 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-INCDIR		= include \
-			  include/commands \
-			  include/commands/auth \
-			  include/commands/channel \
-			  include/commands/operator
+# Directories
+OPERATOR_DIR      = $(COMMANDS_DIR)/operator
 
-INCDIRS_IRC	:= $(INCDIR)
+# Source files
+OPERATOR_SRCS     = InviteCommand.cpp \
+					KickCommand.cpp \
+					ModeCommand.cpp \
+					TopicCommand.cpp
 
-HEADERS		= $(shell find $(INCDIRS_IRC) -type f \( -name '*.h' -o -name '*.hpp' \))
+SRCS            += $(addprefix $(OPERATOR_DIR)/, $(OPERATOR_SRCS))
+
+
+# VPATH
+vpath %.cpp $(OPERATOR_DIR)
