@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 19:24:24 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/24 20:58:44 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/24 21:14:27 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ is_digits(const std::string& str)
 }
 
 void
-ft_atou(const std::string& str, int& num) // cppcheck-suppress unusedFunction
+ft_atou(const std::string& str, int& num)
 {
 	if (str.empty() || !is_digits(str))
 		throw std::invalid_argument("Invalid input: not all digits or empty");
@@ -79,7 +79,7 @@ escape_char(char ch)
 }
 
 std::string
-escape_str(const std::string& str) // cppcheck-suppress unusedFunction
+escape_str(const std::string& str)
 {
 	std::string result;
 
