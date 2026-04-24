@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 13:49:14 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 14:07:56 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ Server::Server(int port, const std::string& password) :
 
 Server::~Server()
 {
+	// closing opened fds
 	if (this->_listen_sock != -1)
 		close(this->_listen_sock);
 	if (this->_epoll_fd != -1)
@@ -52,9 +53,11 @@ Server::~Server()
 	for (std::vector<Client*>::const_iterator i = this->_clients.begin();
 		 i != this->_clients.end();
 		 ++i)
-		delete *i;
+		delete (*i);
 }
 
+/* This function creates the listening socket of the server and binds
+it to an adress */
 void
 Server::setupSocket()
 {
@@ -85,6 +88,7 @@ Server::setupSocket()
 	LOG_INFO("Server listening on port " << _port);
 }
 
+/* This function tries to accept a client and returns his associated fd */
 int
 Server::acceptClient()
 {
@@ -116,6 +120,8 @@ Server::listenSockets()
 	return (clientFd);
 }
 
+/* This function parses the port and checks its validity
+(first parameter of the binary) */
 int
 Server::parsePort(const char* str)
 {
@@ -136,6 +142,8 @@ Server::parsePort(const char* str)
 	return (static_cast<int>(n));
 }
 
+/* This function sets the fd entered as non-blocking using
+fcntl() */
 void
 Server::setNonBlocking(int fd)
 {
@@ -146,6 +154,8 @@ Server::setNonBlocking(int fd)
 		throw FcntlException("F_SETFL");
 }
 
+/* This function adds a new client not known by the server
+using the epoll_ctl() with flag EPOLL_CTL_ADD */
 void
 Server::addNewClient()
 {
@@ -162,6 +172,8 @@ Server::addNewClient()
 		throw EpollCtlException("EPOLL_CTL_ADD");
 }
 
+/* This function returns the read status depending on the number
+of bytes read in the fd and the value of errno */
 ReadStatus
 Server::getReadStatus(int fd, char* buffer, ssize_t& n) const
 {
@@ -169,14 +181,16 @@ Server::getReadStatus(int fd, char* buffer, ssize_t& n) const
 	if (n < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return READ_AGAIN;
-		return READ_ERROR;
+			return (READ_AGAIN);
+		return (READ_ERROR);
 	}
 	if (n == 0)
-		return READ_DISCONNECT;
-	return READ_OK;
+		return (READ_DISCONNECT);
+	return (READ_OK);
 }
 
+/* This function removes a client from epoll, closes its fd,
+and deletes it from the clients list */
 bool
 Server::removeClient(int fd)
 {
@@ -194,6 +208,9 @@ Server::removeClient(int fd)
 	return (true);
 }
 
+/* This function handles all the events received in a loop iterating
+over all the events received and deciding logic to adapt according
+to what it has received */
 void
 Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 {
@@ -224,6 +241,8 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 	}
 }
 
+/* This function initializes epoll, registers the listening socket,
+and runs the main event loop */
 void
 Server::start()
 {
