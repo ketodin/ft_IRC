@@ -6,11 +6,11 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 19:42:09 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/24 19:42:22 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/24 19:46:07 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_HPP
-# define UTILS_HPP
+#define UTILS_HPP
 
-#endif//UTILS_HPP
+#endif // UTILS_HPP
