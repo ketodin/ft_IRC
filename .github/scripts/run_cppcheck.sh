@@ -23,6 +23,6 @@ cppcheck \
 	--inline-suppr \
 	--error-exitcode=1 \
 	--check-level=exhaustive \
-	--suppress=missingIncludeSystem \
+	--suppressions-list=suppressions.txt \
 	${INCLUDE_FLAGS} \
 	src
