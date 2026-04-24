@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 19:28:18 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/23 20:57:49 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ Client::Client(int fd) :
 	_fd(fd),
 	_nickname("*"),
 	_username(""),
-	_realname("")
+	_realname(""),
+	_inputBuffer("")
 {
 	printClientData();
 }
@@ -35,4 +36,24 @@ Client::printClientData()
 	std::cout << this->_nickname << std::endl;
 	std::cout << this->_username << std::endl;
 	std::cout << this->_realname << std::endl;
+}
+
+void
+Client::appendToBuffer(const std::string& data)
+{
+	this->_inputBuffer += data;
+}
+
+std::vector<std::string>
+Client::extractMessages()
+{
+	std::vector<std::string> messages;
+	std::string::size_type	 pos;
+
+	while ((pos = this->_inputBuffer.find("\r\n")) != std::string::npos)
+	{
+		messages.push_back(this->_inputBuffer.substr(0, pos));
+		this->_inputBuffer.erase(0, pos + 2);
+	}
+	return (messages);
 }
