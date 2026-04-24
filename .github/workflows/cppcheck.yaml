@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/24 18:07:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/24 18:07:31 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/24 18:11:46 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,12 +57,12 @@ jobs:
           cd /tmp/cppcheck-src
           git checkout 2.20.0
           cmake -S . -B build \
-          -DHAVE_RULES=ON \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_INSTALL_PREFIX=/tmp/cppcheck-install \
-          -DPCRE_INCLUDE_DIR=/tmp/pcre-static/include \
-          -DPCRE_LIBRARY=/tmp/pcre-static/lib/libpcre.a \
-          -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++"
+            -DHAVE_RULES=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/tmp/cppcheck-install \
+            -DPCRE_INCLUDE_DIR=/tmp/pcre-static/include \
+            -DPCRE_LIBRARY=/tmp/pcre-static/lib/libpcre.a \
+            -DCMAKE_EXE_LINKER_FLAGS='-static-libgcc -static-libstdc++'
           cmake --build build -j$(nproc)
           cmake --install build
 
@@ -71,11 +71,11 @@ jobs:
         run: |
           result=$(ldd /tmp/cppcheck-install/bin/cppcheck | grep pcre || true)
           if [ -n "$result" ]; then
-        echo "ERROR: pcre is still dynamically linked:"
-        echo "$result"
-        exit 1
-        fi
-        echo "OK: pcre is statically linked"
+            echo "ERROR: pcre is still dynamically linked:"
+            echo "$result"
+            exit 1
+          fi
+          echo "OK: pcre is statically linked"
 
       - name: Save cppcheck 2.20.0 cache
         if: steps.cache-cppcheck.outputs.cache-hit != 'true'
