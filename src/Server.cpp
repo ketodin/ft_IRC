@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 22:55:29 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 13:49:14 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ Server::~Server()
 
 	// deleting client pointers
 	for (std::vector<Client*>::const_iterator i = this->_clients.begin();
-		 i < this->_clients.end();
+		 i != this->_clients.end();
 		 ++i)
 		delete *i;
 }
@@ -77,10 +77,10 @@ Server::setupSocket()
 			 reinterpret_cast<struct sockaddr*>(&addr),
 			 sizeof(addr))
 		< 0)
-		throw BindException(this->_listen_sock);
+		throw BindException(this->_port);
 
 	if (listen(this->_listen_sock, MAX_EVENTS) < 0)
-		throw ListenException(this->_listen_sock);
+		throw ListenException(this->_port);
 
 	LOG_INFO("Server listening on port " << _port);
 }
@@ -147,9 +147,10 @@ Server::setNonBlocking(int fd)
 }
 
 void
-Server::addNewClient(struct epoll_event ev)
+Server::addNewClient()
 {
-	int clientFd = this->listenSockets();
+	int				   clientFd = this->listenSockets();
+	struct epoll_event ev;
 
 	setNonBlocking(clientFd);
 	this->_clients.push_back(new Client(clientFd));
@@ -179,30 +180,27 @@ Server::getReadStatus(int fd, char* buffer, ssize_t& n) const
 bool
 Server::removeClient(int fd)
 {
-	epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, fd, NULL);
-	close(fd);
-
 	std::vector<Client*>::iterator it =
 		std::find_if(this->_clients.begin(), this->_clients.end(), HasFd(fd));
 
-	if (it != this->_clients.end())
-	{
-		delete *it;
-		this->_clients.erase(it);
-		return true;
-	}
-	return false;
+	if (it == _clients.end())
+		return (false);
+
+	epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+	close(fd);
+	delete (*it);
+	this->_clients.erase(it);
+
+	return (true);
 }
 
 void
-Server::handleEvents(struct epoll_event ev,
-					 struct epoll_event events[MAX_EVENTS],
-					 int				nfds)
+Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 {
 	for (int i = 0; i < nfds; ++i)
 	{
 		if (events[i].data.fd == this->_listen_sock)
-			addNewClient(ev);
+			addNewClient();
 		else
 		{
 			int		fd = events[i].data.fd;
@@ -215,8 +213,7 @@ Server::handleEvents(struct epoll_event ev,
 				continue;
 			if (status == READ_ERROR || status == READ_DISCONNECT)
 			{
-				if (removeClient(fd))
-					break;
+				removeClient(fd);
 				continue;
 			}
 			/* This printing version is still bad because of CRLF, printing will
@@ -254,6 +251,6 @@ Server::start()
 				continue;
 			throw EpollWaitException();
 		}
-		handleEvents(ev, events, nfds);
+		handleEvents(events, nfds);
 	}
 }

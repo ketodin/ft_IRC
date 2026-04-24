@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 22:52:48 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 13:44:54 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 #define MAX_EVENTS 50
 
 #define MAX_PORT 65535
-#define MAX_PORT_STR "65535"
 
 #define BUFFER_SIZE 1024
 
@@ -81,12 +80,10 @@ class Server
 		int	 listenSockets();
 
 		// client handling
-		void addNewClient(struct epoll_event ev);
+		void addNewClient();
 		bool removeClient(int fd); // returns if the client we try to remove is
 								   // found in the vector
-		void handleEvents(struct epoll_event ev,
-						  struct epoll_event events[MAX_EVENTS],
-						  int				 nfds);
+		void handleEvents(struct epoll_event events[MAX_EVENTS], int nfds);
 		void setNonBlocking(int fd);
 
 		ReadStatus getReadStatus(int fd, char* buffer, ssize_t& n) const;
@@ -215,8 +212,8 @@ class Server
 			public:
 				explicit InvalidPortRangeException(const std::string& port) :
 					ServerException("port must be between 1 and "
-									+ std::string(MAX_PORT_STR) + ", got: '"
-									+ port + "'")
+									+ toString(MAX_PORT) + ", got: '" + port
+									+ "'")
 				{
 				}
 		};
