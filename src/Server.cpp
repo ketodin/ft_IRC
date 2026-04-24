@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 23:03:12 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/24 23:08:56 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ of bytes read in the fd and the value of errno */
 ReadStatus
 Server::getReadStatus(int fd, char* buffer, ssize_t& n)
 {
-	n = read(fd, buffer, BUFFER_SIZE - 1);
+	n = recv(fd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
 	if (n < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
