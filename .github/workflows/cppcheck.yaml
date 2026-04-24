@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/24 17:23:42 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/24 17:23:44 by jaubry--         ###   ########.fr        #
+#    Created: 2026/04/24 18:07:20 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/24 18:15:21 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,11 +33,22 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: /tmp/cppcheck-install
-          key: cppcheck-2.20.0-${{ runner.os }}
+          key: cppcheck-2.20.0-selfcontained-${{ runner.os }}
 
       - name: Install build dependencies
         if: steps.cache-cppcheck.outputs.cache-hit != 'true'
-        run: sudo apt-get update && sudo apt-get install -y cmake make libpcre3-dev
+        run: sudo apt-get update && sudo apt-get install -y cmake make wget
+
+      - name: Build PCRE from source (static)
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        run: |
+          cd /tmp
+          wget -q https://sourceforge.net/projects/pcre/files/pcre/8.45/pcre-8.45.tar.gz
+          tar -xzf pcre-8.45.tar.gz
+          cd pcre-8.45
+          ./configure --prefix=/tmp/pcre-static --disable-shared --enable-static
+          make -j$(nproc)
+          make install
 
       - name: Build cppcheck 2.20.0 from source
         if: steps.cache-cppcheck.outputs.cache-hit != 'true'
@@ -46,18 +57,32 @@ jobs:
           cd /tmp/cppcheck-src
           git checkout 2.20.0
           cmake -S . -B build \
-          -DHAVE_RULES=ON \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_INSTALL_PREFIX=/tmp/cppcheck-install
+            -DHAVE_RULES=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/tmp/cppcheck-install \
+            -DPCRE_INCLUDE=/tmp/pcre-static/include \
+            -DPCRE_LIBRARY=/tmp/pcre-static/lib/libpcre.a \
+            -DCMAKE_EXE_LINKER_FLAGS='-static-libgcc -static-libstdc++'
           cmake --build build -j$(nproc)
           cmake --install build
+
+      - name: Verify binary is self-contained
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        run: |
+          result=$(ldd /tmp/cppcheck-install/bin/cppcheck | grep pcre || true)
+          if [ -n "$result" ]; then
+            echo "ERROR: pcre is still dynamically linked:"
+            echo "$result"
+            exit 1
+          fi
+          echo "OK: pcre is statically linked"
 
       - name: Save cppcheck 2.20.0 cache
         if: steps.cache-cppcheck.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: /tmp/cppcheck-install
-          key: cppcheck-2.20.0-${{ runner.os }}
+          key: cppcheck-2.20.0-selfcontained-${{ runner.os }}
 
       - name: Symlink cppcheck to PATH
         run: sudo ln -sf /tmp/cppcheck-install/bin/cppcheck /usr/local/bin/cppcheck
