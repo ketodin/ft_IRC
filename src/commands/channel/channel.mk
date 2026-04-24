@@ -1,26 +1,24 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    srcs.mk                                            :+:      :+:    :+:    #
+#    channel.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+         #
+#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/14 17:51:47 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/24 20:02:00 by jaubry--         ###   ########.fr        #
+#    Created: 2026/04/23 17:32:03 by jaubry--          #+#    #+#              #
+#    Updated: 2026/04/23 17:33:08 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# Directories
+CHANNEL_DIR      = $(COMMANDS_DIR)/channel
+
 # Source files
-IRC_SRCS	= main.cpp \
-			  Server.cpp \
-			  Client.cpp \
-			  utils.cpp
-SRCS		+= $(addprefix $(SRCDIR)/, $(IRC_SRCS))
+CHANNEL_SRCS     = JoinCommand.cpp \
+				   PrivmsgCommand.cpp
 
-# MKs
-MKS			= commands/commands.mk
+SRCS            += $(addprefix $(CHANNEL_DIR)/, $(CHANNEL_SRCS))
 
-include $(addprefix $(SRCDIR)/, $(MKS))
 
 # VPATH
-vpath %.cpp	$(SRCDIR)
+vpath %.cpp $(CHANNEL_DIR)
