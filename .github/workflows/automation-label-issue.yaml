@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# automation-label-issue.yaml
+#
+# Applies a type:* label to an issue based on its [TYPE] title prefix.
+# Removes any stale type:* label if the prefix changed on edit.
+#
+# Triggers : issues — opened, edited
+# Script   : .github/scripts/automation-label-issue.js
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: "Automation — Label Issue"
+
+on:
+  issues:
+    types: [opened, edited]
+
+concurrency:
+  group: automation-label-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  label-issue:
+    name: "Apply type:* label from [TYPE] title prefix"
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Apply type:* label from issue title"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fn = require('./.github/scripts/automation-label-issue.js');
+            await fn({ github, context });

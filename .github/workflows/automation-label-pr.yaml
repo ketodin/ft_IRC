@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# automation-label-pr.yaml
+#
+# Applies a type:* label from the PR title prefix, then copies any
+# priority:* labels from the linked issue to the PR.
+#
+# Both operations run in a single script to guarantee sequential label writes
+# and prevent conflicts from concurrent github-script steps.
+#
+# Triggers : pull_request — opened, edited
+# Script   : .github/scripts/automation-label-pr.js
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: "Automation — Label PR"
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+concurrency:
+  group: automation-label-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  label-pr:
+    name: "Apply type:* label + copy priority:* from linked issue"
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Apply type:* from PR title — copy priority:* from linked issue"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fn = require('./.github/scripts/automation-label-pr.js');
+            await fn({ github, context });
