@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 05:06:59 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 18:50:31 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "CommandDispatcher.hpp"
 #include "CommandParser.hpp"
+#include "utils.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -246,23 +247,29 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 				removeClient(fd);
 				continue;
 			}
-			/* This printing version is still bad because of CRLF, printing will
-			be handled in Client buffer */
-			buffer[n] = '\0';
-			/* This implementation is still irrelevant and only made for testing
-			purposes knowing that CRLF is not handled yet by Client class*/
+			std::vector<Client*>::iterator it = std::find_if(
+				this->_clients.begin(),
+				this->_clients.end(),
+				utils::HasMemberValue<Client, int>(&Client::getFd, fd));
+
+			if (it == this->_clients.end())
+				continue;
+
+			(*it)->appendToBuffer(std::string(buffer, n));
+
+			std::vector<std::string> messages = (*it)->extractMessages();
+
 			CommandDispatcher disp;
 			CommandParser	  parser(disp);
 			try
 			{
-				parser.parse(buffer);
+				for (size_t j = 0; j < messages.size(); j++)
+					parser.parse(messages[j]);
 			}
 			catch (const std::exception& e)
 			{
 				std::cerr << e.what() << std::endl;
 			}
-
-			std::cout << "Received from client: " << buffer << std::endl;
 		}
 	}
 }
