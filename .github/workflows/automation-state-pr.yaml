@@ -1,0 +1,85 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# automation-state-pr.yaml
+#
+# Handles the full PR lifecycle state machine. Each event type routes to a
+# dedicated script via conditional steps.
+#
+# Event → Script mapping:
+#   opened / ready_for_review / edited (base changed)
+#                         → automation-state-pr-open.js
+#                           Applies state:needs-review (+ state:blocked if stacked)
+#
+#   converted_to_draft    → automation-state-pr-draft.js
+#                           Reverts PR and issue to state:in-progress
+#
+#   closed                → automation-state-pr-close.js
+#                           merged=true  → clear state labels, retarget and unblock
+#                                          any stacked PRs and their issues
+#                           merged=false → clear PR state, revert issue to in-progress
+#
+# Consolidating all PR events into one workflow eliminates the race condition
+# from having separate workflows both listening on pull_request.closed.
+#
+# Triggers : pull_request — opened, closed, converted_to_draft,
+#                           ready_for_review, edited
+# Scripts  : .github/scripts/automation-state-pr-{open,draft,close}.js
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: "Automation — PR State"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - closed
+      - converted_to_draft
+      - ready_for_review
+      - edited
+
+# Serialise all state changes per PR.
+# cancel-in-progress: false ensures closed events are never dropped.
+concurrency:
+  group: automation-state-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  state-pr:
+    name: "Update state labels — ${{ github.event.action }}"
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      # ── opened | ready_for_review | edited (base changed) ─────────────────
+      - name: "PR opened / ready for review / base changed — set needs-review (± blocked)"
+        if: >
+          github.event.action == 'opened' ||
+          github.event.action == 'ready_for_review' ||
+          github.event.action == 'edited'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fn = require('./.github/scripts/automation-state-pr-open.js');
+            await fn({ github, context });
+
+      # ── converted_to_draft ────────────────────────────────────────────────
+      - name: "PR converted to draft — revert to state:in-progress"
+        if: github.event.action == 'converted_to_draft'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fn = require('./.github/scripts/automation-state-pr-draft.js');
+            await fn({ github, context });
+
+      # ── closed (merged or abandoned) ──────────────────────────────────────
+      - name: "PR closed — clear state labels and unblock stacked PRs if merged"
+        if: github.event.action == 'closed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fn = require('./.github/scripts/automation-state-pr-close.js');
+            await fn({ github, context });

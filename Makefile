@@ -6,7 +6,7 @@
 #    By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/25 03:10:01 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/25 18:56:50 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,10 +72,10 @@ endif
 	$(call bin-finish-msg)
 
 check-cpp:
-	@./.github/scripts/run_cppcheck.sh
+	@./.github/scripts/ci-run-cppcheck.sh
 
 check-format:
-	@./.github/scripts/check_format.sh src include
+	@./.github/scripts/ci-check-format.sh src include
 
 check-all: check-cpp check-format
 

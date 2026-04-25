@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ci-format.yaml
+#
+# Checks that every C++ source file conforms to the project's .clang-format
+# rules. Produces inline PR annotations for each offending file.
+# Does NOT auto-format — use check-format.sh --format locally for that.
+#
+# Triggers : pull_request → main
+# Scripts  : .github/scripts/ci-check-format.sh
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: "CI — Format"
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-format-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: "Check clang-format compliance"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Install clang-format-14 and register as clang-format"
+        run: |
+          echo "::group::apt-get install clang-format-14"
+          sudo apt-get update -qq
+          sudo apt-get install -y clang-format-14
+          echo "::endgroup::"
+          sudo ln -sf /usr/bin/clang-format-14 /usr/local/bin/clang-format
+          echo "  → $(clang-format --version)"
+
+      - name: "ci-check-format — diff all source files against .clang-format rules"
+        run: bash .github/scripts/ci-check-format.sh

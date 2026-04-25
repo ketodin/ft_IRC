@@ -1,0 +1,136 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ci-cppcheck.yaml
+#
+# Runs static analysis with cppcheck 2.20.0, built from source with PCRE
+# rules support (statically linked). The binary is cached after the first
+# build; all build steps are skipped on cache hits.
+#
+# Produces inline PR annotations for every error and warning found.
+#
+# Triggers : pull_request → main  |  push → main
+# Scripts  : .github/scripts/ci-run-cppcheck.sh
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: "CI — Cppcheck"
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-cppcheck-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CPPCHECK_VERSION:    "2.20.0"
+  CPPCHECK_CACHE_PATH: /tmp/cppcheck-install
+  PCRE_VERSION:        "8.45"
+  PCRE_CACHE_PATH:     /tmp/pcre-static
+
+jobs:
+  cppcheck:
+    name: "Run cppcheck 2.20.0 static analysis"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout repository (with submodules)"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # ── Cache ─────────────────────────────────────────────────────────────
+      - name: "Restore cppcheck ${{ env.CPPCHECK_VERSION }} binary cache"
+        id: cache-cppcheck
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.CPPCHECK_CACHE_PATH }}
+          key: cppcheck-${{ env.CPPCHECK_VERSION }}-pcre-${{ env.PCRE_VERSION }}-${{ runner.os }}
+
+      # ── Build dependencies (cache miss only) ──────────────────────────────
+      - name: "Install build dependencies — cmake, make, wget"
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        run: |
+          echo "::group::apt-get install cmake make wget"
+          sudo apt-get update -qq
+          sudo apt-get install -y cmake make wget
+          echo "::endgroup::"
+
+      - name: "Build PCRE ${{ env.PCRE_VERSION }} from source (static, no shared lib)"
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        run: |
+          echo "::group::Download pcre-${{ env.PCRE_VERSION }}.tar.gz"
+          cd /tmp
+          wget -q https://sourceforge.net/projects/pcre/files/pcre/${{ env.PCRE_VERSION }}/pcre-${{ env.PCRE_VERSION }}.tar.gz
+          tar -xzf pcre-${{ env.PCRE_VERSION }}.tar.gz
+          echo "::endgroup::"
+
+          echo "::group::Configure PCRE (--disable-shared --enable-static)"
+          cd /tmp/pcre-${{ env.PCRE_VERSION }}
+          ./configure --prefix=${{ env.PCRE_CACHE_PATH }} --disable-shared --enable-static
+          echo "::endgroup::"
+
+          echo "::group::Build and install PCRE"
+          make -j$(nproc)
+          make install
+          echo "::endgroup::"
+
+          echo "  → PCRE static lib: ${{ env.PCRE_CACHE_PATH }}/lib/libpcre.a"
+
+      - name: "Build cppcheck ${{ env.CPPCHECK_VERSION }} from source"
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        run: |
+          echo "::group::Clone and checkout cppcheck ${{ env.CPPCHECK_VERSION }}"
+          git clone https://github.com/danmar/cppcheck.git /tmp/cppcheck-src
+          cd /tmp/cppcheck-src
+          git checkout ${{ env.CPPCHECK_VERSION }}
+          echo "::endgroup::"
+
+          echo "::group::CMake configure"
+          cmake -S . -B build \
+            -DHAVE_RULES=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=${{ env.CPPCHECK_CACHE_PATH }} \
+            -DPCRE_INCLUDE=${{ env.PCRE_CACHE_PATH }}/include \
+            -DPCRE_LIBRARY=${{ env.PCRE_CACHE_PATH }}/lib/libpcre.a \
+            -DCMAKE_EXE_LINKER_FLAGS='-static-libgcc -static-libstdc++'
+          echo "::endgroup::"
+
+          echo "::group::CMake build"
+          cmake --build build -j$(nproc)
+          echo "::endgroup::"
+
+          echo "::group::CMake install"
+          cmake --install build
+          echo "::endgroup::"
+
+          echo "  → cppcheck binary: ${{ env.CPPCHECK_CACHE_PATH }}/bin/cppcheck"
+
+      - name: "Verify cppcheck binary has no dynamic PCRE dependency"
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        run: |
+          result=$(ldd ${{ env.CPPCHECK_CACHE_PATH }}/bin/cppcheck | grep pcre || true)
+          if [ -n "$result" ]; then
+            echo "::error::cppcheck binary has dynamic PCRE dependency — static build failed."
+            echo "$result"
+            exit 1
+          fi
+          echo "  → ldd check passed: PCRE is statically linked."
+
+      - name: "Save cppcheck ${{ env.CPPCHECK_VERSION }} binary cache"
+        if: steps.cache-cppcheck.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.CPPCHECK_CACHE_PATH }}
+          key: cppcheck-${{ env.CPPCHECK_VERSION }}-pcre-${{ env.PCRE_VERSION }}-${{ runner.os }}
+
+      # ── Setup ─────────────────────────────────────────────────────────────
+      - name: "Symlink cppcheck ${{ env.CPPCHECK_VERSION }} binary to PATH"
+        run: |
+          sudo ln -sf ${{ env.CPPCHECK_CACHE_PATH }}/bin/cppcheck /usr/local/bin/cppcheck
+          echo "  → $(cppcheck --version)"
+
+      # ── Analysis ──────────────────────────────────────────────────────────
+      - name: "ci-run-cppcheck — static analysis with inline PR annotations"
+        run: bash .github/scripts/ci-run-cppcheck.sh
