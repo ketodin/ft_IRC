@@ -1,38 +1,51 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ci-build.yml                                       :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/16 17:51:42 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/16 18:29:14 by jaubry--         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+# ─────────────────────────────────────────────────────────────────────────────
+# ci-build.yaml
+#
+# Compiles the project from scratch, verifies the Makefile does not relink on
+# a second run, then confirms a full fclean + make cycle works cleanly.
+#
+# Triggers : pull_request → main  |  push → main
+# Scripts  : .github/scripts/ci-check-relink.sh
+# ─────────────────────────────────────────────────────────────────────────────
 
-name: CI - BUILD
+name: "CI — Build"
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   push:
-    branches: [ main ]
+    branches: [main]
+
+concurrency:
+  group: ci-build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
+    name: "Compile, verify no-relink, clean rebuild"
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: "Checkout repository (with submodules)"
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Build
-        run: make
+      - name: "make — initial build"
+        run: |
+          echo "::group::make output"
+          make
+          echo "::endgroup::"
 
-      - name: Check no relinking
-        run: ./.github/scripts/check_no_relink.sh
+      - name: "ci-check-relink — second make must produce no compiler invocation"
+        run: bash .github/scripts/ci-check-relink.sh
 
-      - name: Clean build
-        run: make fclean && make
+      - name: "make fclean && make — verify clean rebuild from scratch"
+        run: |
+          echo "::group::make fclean"
+          make fclean
+          echo "::endgroup::"
+
+          echo "::group::make (clean rebuild)"
+          make
+          echo "::endgroup::"
