@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 20:44:30 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:17:21 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ CommandDispatcher::displayCommand(const std::string&			  name,
 }
 
 void
-CommandDispatcher::dispatch(const std::string&				name,
+CommandDispatcher::dispatch(Client&							client,
+							const std::string&				name,
 							const std::vector<std::string>& args) const
 {
 	HandlerMap::const_iterator it = this->_handlers.find(name);
@@ -62,7 +63,7 @@ CommandDispatcher::dispatch(const std::string&				name,
 	if (it == this->_handlers.end())
 		throw std::runtime_error("Unknown command: " + name);
 
-	it->second(args);
+	it->second(client, args);
 }
 
 /*

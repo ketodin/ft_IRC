@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:15:26 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 19:59:49 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:16:42 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ CommandParser::~CommandParser(void)
 }
 
 void
-CommandParser::parse(const std::string& line) const
+CommandParser::parse(Client& client, const std::string& line) const
 {
 	const std::string trimmed = this->trim(line);
 
@@ -38,7 +38,7 @@ CommandParser::parse(const std::string& line) const
 
 	const std::vector<std::string> args(tokens.begin() + 1, tokens.end());
 
-	this->_dispatcher.dispatch(tokens[0], args);
+	this->_dispatcher.dispatch(client, tokens[0], args);
 }
 
 std::vector<std::string>

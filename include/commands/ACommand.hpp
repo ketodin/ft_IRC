@@ -6,13 +6,14 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:24:26 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 22:37:39 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:45:39 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ACOMMAND_HPP
 #define ACOMMAND_HPP
 
+#include "Server.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <string>

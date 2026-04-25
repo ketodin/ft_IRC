@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:24:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 23:15:09 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:22:31 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 #include <string>
 #include <vector>
 
-typedef void (*CommandHandler)(const std::vector<std::string>& args);
+typedef void (*CommandHandler)(Client&						   client,
+							   const std::vector<std::string>& args);
 
 // Maps uppercased command names to their handler function pointer.
 // Owns nothing — all pointers are to static methods with static storage.
@@ -66,7 +67,8 @@ class CommandDispatcher
 		// ─────────────────────────────────────────────────────────── Call the
 		// handler registered under 'name' with 'args'. Throws
 		// std::runtime_error if 'name' is not registered.
-		void dispatch(const std::string&			  name,
+		void dispatch(Client&						  client,
+					  const std::string&			  name,
 					  const std::vector<std::string>& args) const;
 
 		/*

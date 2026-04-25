@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:46 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 17:36:45 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:21:14 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ class PassCommand : public ACommand
 		static const std::string NAME; // = "PASS"
 
 		// PASS <password>
-		static void execute(const std::vector<std::string>& args);
+		static void execute(Client&							client,
+							const std::vector<std::string>& args);
 };
 
 #endif // PASS_COMMAND_HPP

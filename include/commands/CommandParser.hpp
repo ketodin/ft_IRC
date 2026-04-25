@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:09 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 19:59:37 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:20:55 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class CommandParser
 		// and dispatch one complete IRC line. Throws std::runtime_error on
 		// unknown command. Throws std::invalid_argument on malformed arguments
 		// (from ACommand validators).
-		void parse(const std::string& line) const;
+		void parse(Client& client, const std::string& line) const;
 };
 
 #endif // COMMAND_PARSER_HPP

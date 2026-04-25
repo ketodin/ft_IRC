@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 20:44:14 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:44:26 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 const std::string PassCommand::NAME = "PASS";
 
 void
-PassCommand::execute(const std::vector<std::string>& args)
+PassCommand::execute(Client& client, const std::vector<std::string>& args)
 {
 	requireArgsNum(args, 1, "PASS <password>");
 	requireWord(args, 0, "password");
@@ -24,4 +24,12 @@ PassCommand::execute(const std::vector<std::string>& args)
 
 	std::cout << "[PASS] authenticating with password: " << password
 			  << std::endl;
+
+	std::cout << "Client fd: " << client.getFd();
+	if (Server::getInstance()->isPasswordValid(password))
+	{
+		client.setIsLogged(true);
+		std::cout << " has logged in.";
+	}
+	std::cout << "\n";
 }
