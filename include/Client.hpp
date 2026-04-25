@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 17:48:42 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 18:34:57 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Client
 		std::string _hostname;
 
 		// raw buffer to receive data
-		std::string	_inputBuffer;
+		std::string _inputBuffer;
 
 		void printClientData();
 
@@ -39,8 +39,8 @@ class Client
 		~Client();
 
 		std::vector<std::string> extractMessages();
-		void                     appendToBuffer(const std::string& data);
-		int getFd() const;
+		void					 appendToBuffer(const std::string& data);
+		int						 getFd() const;
 };
 
 #endif
