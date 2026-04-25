@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 02:56:05 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 20:44:30 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 
 CommandDispatcher::CommandDispatcher(void)
 {
-	/*
 	registerCommand(PassCommand::NAME, &PassCommand::execute);
+	/*
 	registerCommand(NickCommand::NAME, &NickCommand::execute);
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
 
