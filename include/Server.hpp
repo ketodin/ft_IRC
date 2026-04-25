@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 03:50:02 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 04:22:42 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ class Server
 		const std::string	 _password;
 		std::vector<Client*> _clients;
 
-		void setupSocket();
-		int	 acceptClient();
-		int	 listenSockets();
+		void setupSocket(void);
+		int	 acceptClient(void);
+		int	 listenSockets(void);
 
-		void addNewClient();
+		void addNewClient(void);
 		bool removeClient(int fd);
 		void handleEvents(struct epoll_event events[ServerConfig::MAX_EVENTS],
 						  int				 nfds);
@@ -76,7 +76,7 @@ class Server
 		~Server();
 
 		static int parsePort(const char* str);
-		void	   start();
+		void	   start(void);
 
 #include "ServerException.inl"
 };

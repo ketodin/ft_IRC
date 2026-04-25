@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 03:36:17 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 04:22:12 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ Server::Server(int port, const std::string& password) :
 	this->setupSocket();
 }
 
-Server::~Server()
+Server::~Server(void)
 {
 	// closing opened fds
 	if (this->_listen_sock != -1)
@@ -58,7 +58,7 @@ Server::~Server()
 /* This function creates the listening socket of the server and binds
 it to an adress */
 void
-Server::setupSocket()
+Server::setupSocket(void)
 {
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -90,7 +90,7 @@ Server::setupSocket()
 
 /* This function tries to accept a client and returns his associated fd */
 int
-Server::acceptClient()
+Server::acceptClient(void)
 {
 	struct sockaddr_in clientAddr;
 	socklen_t		   clientLen = sizeof(clientAddr);
@@ -112,7 +112,7 @@ Server::acceptClient()
 }
 
 int
-Server::listenSockets()
+Server::listenSockets(void)
 {
 	int clientFd = this->acceptClient();
 
@@ -163,7 +163,7 @@ Server::setNonBlocking(int fd)
 /* This function adds a new client not known by the server
 using the epoll_ctl() with flag EPOLL_CTL_ADD */
 void
-Server::addNewClient()
+Server::addNewClient(void)
 {
 	int				   clientFd = this->listenSockets();
 	struct epoll_event ev;
@@ -256,7 +256,7 @@ Server::handleEvents(struct epoll_event events[ServerConfig::MAX_EVENTS],
 /* This function initializes epoll, registers the listening socket,
 and runs the main event loop */
 void
-Server::start()
+Server::start(void)
 {
 	struct epoll_event ev;
 	struct epoll_event events[ServerConfig::MAX_EVENTS];
