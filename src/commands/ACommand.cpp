@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:00:04 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/24 21:19:15 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 02:55:41 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ ACommand::requirePosInt(const std::vector<std::string>& args,
 {
 	int num;
 
-	ft_atou(args[index], num);
+	utils::ft_atou(args[index], num);
 	if (num < 1)
 		throw std::invalid_argument("Argument '" + argName + "' is too low");
 }
