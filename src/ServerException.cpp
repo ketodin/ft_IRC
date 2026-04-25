@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ServerExceptions.cpp                               :+:      :+:    :+:   */
+/*   ServerException.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 22:31:11 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 02:55:14 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 03:33:54 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ Server::PortNumberException::PortNumberException(const std::string& port) :
 
 Server::InvalidPortRangeException::InvalidPortRangeException(
 	const std::string& port) :
-	ServerException("port must be between 1 and " + utils::toString(MAX_PORT)
-					+ ", got: '" + port + "'")
+	ServerException("port must be between 1 and "
+					+ utils::toString(ServerConfig::MAX_PORT) + ", got: '"
+					+ port + "'")
 {
 }
