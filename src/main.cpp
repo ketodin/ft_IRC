@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 19:13:16 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:36:38 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,13 @@ main(int argc, char** argv)
 			return (1);
 		}
 
-		Server serv(port, password);
+		Server::init(port, password);
 
-		serv.start();
+		// setup signal here for sigint and sigterm, to destroy server singleton
+		// manually
+
+		Server::getInstance()->start();
+		Server::destroy();
 	}
 	catch (const std::exception& e)
 	{

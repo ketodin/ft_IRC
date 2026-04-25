@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 18:34:57 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:43:19 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ class Client
 		// raw buffer to receive data
 		std::string _inputBuffer;
 
+		// has entered correct password
+		bool _isLogged;
+
 		void printClientData();
 
 	public:
@@ -41,6 +44,8 @@ class Client
 		std::vector<std::string> extractMessages();
 		void					 appendToBuffer(const std::string& data);
 		int						 getFd() const;
+		bool					 getIsLogged() const;
+		void					 setIsLogged(bool status);
 };
 
 #endif

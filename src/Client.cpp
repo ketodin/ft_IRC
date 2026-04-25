@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 19:07:02 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:42:59 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ Client::Client(int fd) :
 	_nickname("*"),
 	_username(""),
 	_realname(""),
-	_inputBuffer("")
+	_inputBuffer(""),
+	_isLogged(false)
 {
 	printClientData();
 }
@@ -83,4 +84,16 @@ int
 Client::getFd() const
 {
 	return (this->_fd);
+}
+
+bool
+Client::getIsLogged() const
+{
+	return (this->_isLogged);
+}
+
+void
+Client::setIsLogged(bool status)
+{
+	this->_isLogged = status;
 }
