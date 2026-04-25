@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 23:05:10 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 03:14:52 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define SERVER_HPP
 
 #include "Client.hpp"
-#include "Utils.hpp"
+#include "utils.hpp"
 #include <cerrno>
 #include <cstring>
 #include <iostream>
@@ -41,14 +41,6 @@ enum ReadStatus
 	READ_AGAIN,
 	READ_DISCONNECT,
 	READ_ERROR
-};
-
-struct HasFd
-{
-		int _fd;
-
-		explicit HasFd(int fd);
-		bool operator()(const Client* client) const;
 };
 
 class Server

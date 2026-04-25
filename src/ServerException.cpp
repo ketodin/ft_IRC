@@ -6,22 +6,11 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 22:31:11 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 23:03:29 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 02:55:14 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-
-HasFd::HasFd(int fd) :
-	_fd(fd)
-{
-}
-
-bool
-HasFd::operator()(const Client* client) const
-{
-	return client->getFd() == _fd;
-}
 
 // ServerException
 
@@ -82,7 +71,7 @@ Server::SocketOptException::SocketOptException(const std::string& opt) :
 // BindException
 
 Server::BindException::BindException(int port) :
-	ServerException("bind() failed on port: " + toString(port) + ": "
+	ServerException("bind() failed on port: " + utils::toString(port) + ": "
 					+ std::string(strerror(errno)))
 {
 }
@@ -90,7 +79,7 @@ Server::BindException::BindException(int port) :
 // ListenException
 
 Server::ListenException::ListenException(int port) :
-	ServerException("listen() failed on port: " + toString(port) + ": "
+	ServerException("listen() failed on port: " + utils::toString(port) + ": "
 					+ std::string(strerror(errno)))
 {
 }
@@ -113,7 +102,7 @@ Server::PortNumberException::PortNumberException(const std::string& port) :
 
 Server::InvalidPortRangeException::InvalidPortRangeException(
 	const std::string& port) :
-	ServerException("port must be between 1 and " + toString(MAX_PORT)
+	ServerException("port must be between 1 and " + utils::toString(MAX_PORT)
 					+ ", got: '" + port + "'")
 {
 }

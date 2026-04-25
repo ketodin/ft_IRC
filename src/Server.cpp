@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/24 23:08:56 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 02:52:22 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,9 @@ bool
 Server::removeClient(int fd)
 {
 	std::vector<Client*>::iterator it =
-		std::find_if(this->_clients.begin(), this->_clients.end(), HasFd(fd));
+		std::find_if(this->_clients.begin(),
+					 this->_clients.end(),
+					 utils::HasMemberValue<Client, int>(&Client::getFd, fd));
 
 	if (it == _clients.end())
 		return (false);
