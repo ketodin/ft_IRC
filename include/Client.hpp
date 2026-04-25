@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 19:26:34 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/23 20:27:39 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class Client
 		// explicit keyword to prevent from implicit conversions
 		explicit Client(int fd);
 		~Client();
+
+		int getFd() const;
 };
 
 #endif

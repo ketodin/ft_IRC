@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/24 21:50:57 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 02:56:05 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ CommandDispatcher::displayCommand(const std::string&			  name,
 {
 	std::cout << "cmd: [" << name << "]\n";
 	for (std::size_t i = 0; i < args.size(); ++i)
-		std::cout << "arg" << i << ": `" << escape_str(args[i]) << "`\n";
+		std::cout << "arg" << i << ": `" << utils::escape_str(args[i]) << "`\n";
 }
 
 void
