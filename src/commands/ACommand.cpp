@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:00:04 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 02:55:41 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/25 17:55:58 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ ACommand::validWord(const std::string& str)
 bool
 ACommand::validStr(const std::string& str)
 {
-	return (str.find_first_of(std::string("\x00\r", 2)) == std::string::npos);
+	return (str.find_first_of(std::string("\x00\r\n", 3)) == std::string::npos);
 }
 
 /*
