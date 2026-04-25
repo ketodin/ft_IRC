@@ -15,7 +15,7 @@ BG_DARK='\033[48;5;235m'
 
 # ── Config ────────────────────────────────────────────────────────────────────
 SRC_DIRS=("src" "include")
-EXTENSIONS=("*.cpp" "*.hpp" "*.tpp" "*.ipp")
+EXTENSIONS=("*.cpp" "*.hpp" "*.tpp" "*.ipp" "*.inl")
 
 # ── Build find name filter from config ───────────────────────────────────────
 FIND_NAMES=()
