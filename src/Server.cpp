@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 04:48:57 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 05:06:59 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ Server::Server(int port, const std::string& password) :
 	LOG_INFO(this->_listen_sock);
 
 	// logic
-	this->_clients.reserve(ServerConfig::MAX_EVENTS);
+	this->_clients.reserve(MAX_EVENTS);
 	this->setupSocket();
 }
 
@@ -84,7 +84,7 @@ Server::setupSocket(void)
 		< 0)
 		throw BindException(this->_port);
 
-	if (listen(this->_listen_sock, ServerConfig::MAX_EVENTS) < 0)
+	if (listen(this->_listen_sock, MAX_EVENTS) < 0)
 		throw ListenException(this->_port);
 
 	LOG_INFO("Server listening on port " << _port);
@@ -145,7 +145,7 @@ Server::parsePort(const char* str)
 	errno = 0;
 	n	  = std::strtol(str, &end, 10);
 
-	if ((errno == ERANGE) || (n <= 0) || (n > ServerConfig::MAX_PORT))
+	if ((errno == ERANGE) || (n <= 0) || (n > MAX_PORT))
 		throw InvalidPortRangeException(str);
 	return (static_cast<int>(n));
 }
@@ -186,7 +186,7 @@ of bytes read in the fd and the value of errno */
 Server::ReadStatus
 Server::getReadStatus(int fd, char* buffer, ssize_t& n)
 {
-	n = recv(fd, buffer, ServerConfig::BUFFER_SIZE - 1, MSG_DONTWAIT);
+	n = recv(fd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
 	if (n < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -225,8 +225,7 @@ Server::removeClient(int fd)
 over all the events received and deciding logic to adapt according
 to what it has received */
 void
-Server::handleEvents(struct epoll_event events[ServerConfig::MAX_EVENTS],
-					 int				nfds)
+Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 {
 	for (int i = 0; i < nfds; ++i)
 	{
@@ -235,7 +234,7 @@ Server::handleEvents(struct epoll_event events[ServerConfig::MAX_EVENTS],
 		else
 		{
 			int		fd = events[i].data.fd;
-			char	buffer[ServerConfig::BUFFER_SIZE];
+			char	buffer[BUFFER_SIZE];
 			ssize_t n;
 
 			ReadStatus status = this->getReadStatus(fd, buffer, n);
@@ -274,7 +273,7 @@ void
 Server::start(void)
 {
 	struct epoll_event ev;
-	struct epoll_event events[ServerConfig::MAX_EVENTS];
+	struct epoll_event events[MAX_EVENTS];
 
 	this->_epoll_fd = epoll_create1(0);
 	if (this->_epoll_fd < 0)
@@ -290,8 +289,7 @@ Server::start(void)
 
 	while (true)
 	{
-		int nfds =
-			epoll_wait(this->_epoll_fd, events, ServerConfig::MAX_EVENTS, -1);
+		int nfds = epoll_wait(this->_epoll_fd, events, MAX_EVENTS, -1);
 		if (nfds < 0)
 		{
 			if (errno == EINTR)

@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 04:22:42 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 05:06:44 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,19 @@
 		} while (0)
 #endif
 
-namespace ServerConfig
-{
-static const int MAX_EVENTS	 = 50;
-static const int MAX_PORT	 = 65535;
-static const int BUFFER_SIZE = 1024;
-}
-
 class Server
 {
+	public:
+		static const int MAX_EVENTS	 = 50;
+		static const int MAX_PORT	 = 65535;
+		static const int BUFFER_SIZE = 1024;
+
+		Server(int port, const std::string& password);
+		~Server();
+
+		static int parsePort(const char* str);
+		void	   start(void);
+
 	private:
 		enum ReadStatus
 		{
@@ -65,18 +69,10 @@ class Server
 
 		void addNewClient(void);
 		bool removeClient(int fd);
-		void handleEvents(struct epoll_event events[ServerConfig::MAX_EVENTS],
-						  int				 nfds);
+		void handleEvents(struct epoll_event events[MAX_EVENTS], int nfds);
 		static void setNonBlocking(int fd);
 
 		static ReadStatus getReadStatus(int fd, char* buffer, ssize_t& n);
-
-	public:
-		Server(int port, const std::string& password);
-		~Server();
-
-		static int parsePort(const char* str);
-		void	   start(void);
 
 #include "ServerException.inl"
 };
