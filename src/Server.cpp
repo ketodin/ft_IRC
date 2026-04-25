@@ -6,11 +6,13 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 04:22:12 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/25 04:48:57 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "CommandDispatcher.hpp"
+#include "CommandParser.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -248,6 +250,19 @@ Server::handleEvents(struct epoll_event events[ServerConfig::MAX_EVENTS],
 			/* This printing version is still bad because of CRLF, printing will
 			be handled in Client buffer */
 			buffer[n] = '\0';
+			/* This implementation is still irrelevant and only made for testing
+			purposes knowing that CRLF is not handled yet by Client class*/
+			CommandDispatcher disp;
+			CommandParser	  parser(disp);
+			try
+			{
+				parser.parse(buffer);
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << e.what() << std::endl;
+			}
+
 			std::cout << "Received from client: " << buffer << std::endl;
 		}
 	}
