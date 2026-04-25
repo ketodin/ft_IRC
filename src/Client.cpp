@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 20:57:49 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 17:33:33 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,17 @@ Client::appendToBuffer(const std::string& data)
 std::vector<std::string>
 Client::extractMessages()
 {
-	std::vector<std::string> messages;
-	std::string::size_type	 pos;
+    std::vector<std::string>    messages;
+    std::string::size_type      pos;
 
-	while ((pos = this->_inputBuffer.find("\r\n")) != std::string::npos)
-	{
-		messages.push_back(this->_inputBuffer.substr(0, pos));
-		this->_inputBuffer.erase(0, pos + 2);
-	}
-	return (messages);
+    while ((pos = this->_inputBuffer.find("\n")) != std::string::npos)
+    {
+        std::string msg = this->_inputBuffer.substr(0, pos);
+        // strip trailing \r if present (handles both \r\n and \n)
+        if (!msg.empty() && msg[msg.size() - 1] == '\r')
+            msg.erase(msg.size() - 1);
+        messages.push_back(msg);
+        this->_inputBuffer.erase(0, pos + 1);
+    }
+    return messages;
 }
