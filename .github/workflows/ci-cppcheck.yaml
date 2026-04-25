@@ -31,7 +31,7 @@ env:
 
 jobs:
   cppcheck:
-    name: "Run cppcheck ${{ env.CPPCHECK_VERSION }} static analysis"
+    name: "Run cppcheck 2.20.0 static analysis"
     runs-on: ubuntu-latest
 
     steps:
