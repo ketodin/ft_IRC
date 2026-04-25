@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 17:33:33 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 17:49:18 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,10 @@ Client::extractMessages()
         this->_inputBuffer.erase(0, pos + 1);
     }
     return messages;
+}
+
+int
+Client::getFd() const
+{
+	return (this->_fd);
 }

@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/23 20:58:11 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 17:48:42 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class Client
 
 		std::vector<std::string> extractMessages();
 		void                     appendToBuffer(const std::string& data);
+		int getFd() const;
 };
 
 #endif

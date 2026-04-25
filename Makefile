@@ -6,7 +6,7 @@
 #    By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 17:10:08 by ekeisler         ###   ########.fr        #
+#    Updated: 2026/04/25 03:10:01 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,10 +53,12 @@ OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.cpp=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.cpp=.d)))
 
 # VPATH
-vpath %.hpp $(INCLUDES)
-vpath %.h $(INCLUDES)
-vpath %.o $(OBJDIR)
-vpath %.d $(DEPDIR)
+vpath %.hpp	$(INCLUDES)
+vpath %.tpp	$(INCLUDES)
+vpath %.inl	$(INCLUDES)
+vpath %.h	$(INCLUDES)
+vpath %.o	$(OBJDIR)
+vpath %.d	$(DEPDIR)
 
 include	$(ROOTDIR)/mkidir/make_rules.mk
 

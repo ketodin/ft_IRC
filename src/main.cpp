@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/24 14:30:25 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 17:46:55 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,40 +39,8 @@ main(int argc, char** argv)
 		}
 
 		Server serv(port, password);
-		Client randomClient(41);
 
-		// TESTING CONSTRUCTING CLIENT MESSAGE
-		randomClient.appendToBuffer("PRIV");
-		randomClient.appendToBuffer("MSG #chan :hello\r\n");
-		randomClient.appendToBuffer("NICK terr");
-		randomClient.appendToBuffer("ale\r\n");
-		randomClient.appendToBuffer("PASS incomplete");
-
-		std::vector<std::string> messages = randomClient.extractMessages();
-
-		for (size_t i = 0; i < messages.size(); i++)
-        	std::cout << "[msg " << i << "] " << messages[i] << std::endl;
-
-		randomClient.appendToBuffer("\r\n");
-    	messages = randomClient.extractMessages();
-
-    	// Should print 1 message: "PASS incomplete"
-    	for (size_t i = 0; i < messages.size(); i++)
-		{
-        	std::cout << "[msg " << i << "] " << messages[i] << std::endl;
-		}
-
-		while (true)
-		{
-			int fd = serv.listenSockets();
-			if (fd > 0)
-				std::cout << "client accepted" << std::endl;
-			else
-			{
-				std::cerr << "client not accepted" << std::endl;
-				return (1);
-			}
-		}
+		serv.start();
 	}
 	catch (const std::exception& e)
 	{
