@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
 /*   Updated: 2026/04/27 18:26:03 by jaubry--         ###   ########.fr       */
@@ -13,6 +13,7 @@
 #include "Server.hpp"
 #include "CommandDispatcher.hpp"
 #include "CommandParser.hpp"
+#include "signals.hpp"
 #include "utils.hpp"
 #include <algorithm>
 #include <cstdlib>
@@ -313,7 +314,7 @@ Server::start(void)
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_listen_sock, &ev) < 0)
 		throw EpollCtlException("EPOLL_CTL_ADD");
 
-	while (true)
+	while (g_running)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, events, MAX_EVENTS, -1);
 		if (nfds < 0)
