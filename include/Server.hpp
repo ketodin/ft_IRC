@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:29:08 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 22:20:15 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ class Server
 		static int parsePort(const char* str);
 		void	   start(void);
 		bool	   isPasswordValid(const std::string& password);
+
+		std::vector<Client*> getClients(void) const;
 
 	private:
 		enum ReadStatus

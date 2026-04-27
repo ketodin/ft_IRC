@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:26:03 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 22:18:42 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,4 +331,10 @@ bool
 Server::isPasswordValid(const std::string& password)
 {
 	return (password == this->_password);
+}
+
+std::vector<Client*>
+Server::getClients() const
+{
+	return (this->_clients);
 }

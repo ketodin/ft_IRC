@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 21:17:21 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 21:59:54 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 CommandDispatcher::CommandDispatcher(void)
 {
 	registerCommand(PassCommand::NAME, &PassCommand::execute);
-	/*
 	registerCommand(NickCommand::NAME, &NickCommand::execute);
+	/*
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
 
 	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
