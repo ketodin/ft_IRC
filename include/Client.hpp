@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:46:48 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:51:06 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Client
 		bool	_userSet;
 		bool	_registered;
 
-		void printClientData();
+		void printClientData() const;
 
 	public:
 		// explicit keyword to prevent from implicit conversions
@@ -47,11 +47,11 @@ class Client
 		std::vector<std::string> extractMessages();
 		void					 appendToBuffer(const std::string& data);
 		int						 getFd() const;
-		bool					 getIsLogged() const;
-		void					 setIsLogged(bool status);
+		bool					 getPassAccepted() const;
+		void					 setPassAccepted(bool status);
 
-		std::string				getPrefix(void);
-		bool					isRegistered(void);
+		std::string				getPrefix(void) const;
+		bool					isRegistered(void) const;
 };
 
 #endif

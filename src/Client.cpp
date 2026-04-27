@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:46:35 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:51:11 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ Client::~Client()
 }
 
 void
-Client::printClientData()
+Client::printClientData() const
 {
 	std::cout << this->_fd << std::endl;
 	std::cout << this->_nickname << std::endl;
@@ -91,25 +91,25 @@ Client::getFd() const
 }
 
 bool
-Client::getIsLogged() const
+Client::getPassAccepted() const
 {
 	return (this->_passAccepted);
 }
 
 void
-Client::setIsLogged(bool status)
+Client::setPassAccepted(bool status)
 {
 	this->_passAccepted = status;
 }
 
 std::string
-Client::getPrefix(void)
+Client::getPrefix(void) const
 {
 	return (this->_nickname + "!" + this->_username + "@" + this->_hostname);
 }
 
 bool
-Client::isRegistered(void)
+Client::isRegistered(void) const
 {
 	return ((this->_passAccepted && this->_nickSet && this->_userSet) || this->_registered);
 }
