@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 21:45:09 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:26:03 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,41 +118,28 @@ Server::setupSocket(void)
 }
 
 /* This function tries to accept a client and returns his associated fd */
-int
-Server::acceptClient(void)
+void
+Server::acceptClient(int& clientFd, std::string& clientHostname)
 {
 	struct sockaddr_in clientAddr;
 	socklen_t		   clientLen = sizeof(clientAddr);
 
-	int clientFd = accept(this->_listen_sock,
+	clientFd = accept(this->_listen_sock,
 						  reinterpret_cast<struct sockaddr*>(&clientAddr),
 						  &clientLen);
 	if (clientFd < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return (-1); // no client actually ready, not a real error
+			return ; // no client actually ready, not a real error
 		throw AcceptException();
 	}
+	char ipBuf[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &clientAddr.sin_addr, ipBuf, sizeof(ipBuf));
+    clientHostname = std::string(ipBuf);
 
 	// clientAddr currently unused - will be needed for IP logging/banning
 
 	LOG_INFO("New client connected, fd=" << clientFd);
-	return (clientFd);
-}
-
-int
-Server::listenSockets(void)
-{
-	int clientFd = this->acceptClient();
-
-	/* Refusal logic will be implemented with Client authentication
-	When _clients.size() > MAX_EVENT()
-	At the IRC Protocol Level Later :
-	Wrong password,
-	Banned client (if  needed in the subject),
-	No more conneciton allowd, Registration Timeout */
-
-	return (clientFd);
 }
 
 /* This function parses the port and checks its validity
@@ -194,8 +181,14 @@ using the epoll_ctl() with flag EPOLL_CTL_ADD */
 void
 Server::addNewClient(void)
 {
-	int				   clientFd = this->listenSockets();
-	struct epoll_event ev;
+	int				 	clientFd;
+	std::string			clientHostname;
+	struct epoll_event	ev;
+
+	this->acceptClient(clientFd, clientHostname);
+
+	if (clientFd < 0)
+		return ;
 
 	setNonBlocking(clientFd);
 
@@ -205,7 +198,7 @@ Server::addNewClient(void)
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, clientFd, &ev) < 0)
 		throw EpollCtlException("EPOLL_CTL_ADD");
 
-	this->_clients.push_back(new Client(clientFd));
+	this->_clients.push_back(new Client(clientFd, clientHostname));
 }
 
 /* This function returns the read status depending on the number
