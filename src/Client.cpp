@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 21:42:59 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 22:15:01 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,10 @@ void
 Client::setIsLogged(bool status)
 {
 	this->_isLogged = status;
+}
+
+std::string
+Client::getNickname(void) const
+{
+	return (this->_nickname);
 }
