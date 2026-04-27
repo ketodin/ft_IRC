@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 21:46:08 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:29:08 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "Client.hpp"
 #include "utils.hpp"
+#include <arpa/inet.h>
 #include <cerrno>
 #include <cstring>
 #include <iostream>
@@ -73,8 +74,7 @@ class Server
 		Server& operator=(const Server& other);
 
 		void setupSocket(void);
-		int	 acceptClient(void);
-		int	 listenSockets(void);
+		void acceptClient(int& clientFd, std::string& clientHostname);
 
 		void addNewClient(void);
 		bool removeClient(int fd);

@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 21:43:19 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:51:06 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,35 @@ class Client
 		int _fd;
 
 		// all client names that will later be used in the commands
+		std::string _hostname;
 		std::string _nickname;
 		std::string _username;
 		std::string _realname;
-		std::string _hostname;
 
 		// raw buffer to receive data
 		std::string _inputBuffer;
 
 		// has entered correct password
-		bool _isLogged;
+		bool _passAccepted;
+		bool _nickSet;
+		bool _userSet;
+		bool _registered;
 
-		void printClientData();
+		void printClientData() const;
 
 	public:
 		// explicit keyword to prevent from implicit conversions
-		explicit Client(int fd);
+		explicit Client(int fd, std::string hostname);
 		~Client();
 
 		std::vector<std::string> extractMessages();
 		void					 appendToBuffer(const std::string& data);
 		int						 getFd() const;
-		bool					 getIsLogged() const;
-		void					 setIsLogged(bool status);
+		bool					 getPassAccepted() const;
+		void					 setPassAccepted(bool status);
+
+		std::string getPrefix(void) const;
+		bool		isRegistered(void) const;
 };
 
 #endif
