@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 21:17:21 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:33:28 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandDispatcher.hpp"
+#include "CapCommand.hpp"
 #include "utils.hpp"
 #include <iostream>
 #include <stdexcept>
@@ -18,6 +19,8 @@
 CommandDispatcher::CommandDispatcher(void)
 {
 	registerCommand(PassCommand::NAME, &PassCommand::execute);
+	registerCommand(CapCommand::NAME,
+					reinterpret_cast<CommandHandler>(&CapCommand::execute));
 	/*
 	registerCommand(NickCommand::NAME, &NickCommand::execute);
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
