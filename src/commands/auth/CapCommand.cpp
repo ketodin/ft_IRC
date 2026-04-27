@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 17:36:26 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/04/27 18:35:26 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/27 19:27:42 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 const std::string CapCommand::NAME = "CAP";
 
 void
-CapCommand::execute(const Client& client, const std::vector<std::string>& args)
+CapCommand::execute(Client& client, // cppcheck-suppress constParameterReference
+					const std::vector<std::string>& args)
 {
 	// Ignoring "CAP END" from irssi client sending his own answer
 	if (args[0] == "END")

@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 17:35:09 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/04/27 18:31:30 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/27 19:23:05 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class CapCommand : public ACommand
 
 		// Reply to "CAP <LS> <302>" (Tell to the client our features
 		// implemented in the server)
-		static void execute(const Client&					client,
+		static void execute(Client&							client,
 							const std::vector<std::string>& args);
 };
 
