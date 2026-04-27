@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:49 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 22:42:28 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 01:30:21 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ class NickCommand : public ACommand
 		NickCommand(const NickCommand& other);
 		NickCommand& operator=(const NickCommand& other);
 
-		static bool checkOnUseNickname(const std::string& nickname);
+		static bool checkOnUseNickname(const std::string&	nickname,
+									   std::vector<Client*> registredClients);
 
 	public:
 		static const std::string NAME; // = "NICK"
