@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:33:31 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:46:35 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,16 @@ void
 Client::setIsLogged(bool status)
 {
 	this->_passAccepted = status;
+}
+
+std::string
+Client::getPrefix(void)
+{
+	return (this->_nickname + "!" + this->_username + "@" + this->_hostname);
+}
+
+bool
+Client::isRegistered(void)
+{
+	return ((this->_passAccepted && this->_nickSet && this->_userSet) || this->_registered);
 }

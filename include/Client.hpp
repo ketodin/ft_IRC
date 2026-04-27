@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:33:56 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:46:48 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class Client
 		bool					 getIsLogged() const;
 		void					 setIsLogged(bool status);
 
-		std::string&			getPrefix(void);
+		std::string				getPrefix(void);
 		bool					isRegistered(void);
 };
 
