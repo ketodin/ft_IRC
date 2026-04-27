@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 18:32:05 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:46:08 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@ class Server
 		static const int MAX_PORT	 = 65535;
 		static const int BUFFER_SIZE = 512;
 
-		Server(int port, const std::string& password);
-		~Server();
+		static Server* getInstance(void);
+		static void	   init(int port, const std::string& password);
+		static void	   destroy(void);
 
 		static int parsePort(const char* str);
 		void	   start(void);
+		bool	   isPasswordValid(const std::string& password);
 
 	private:
 		enum ReadStatus
@@ -62,6 +64,13 @@ class Server
 		int					 _port;
 		const std::string	 _password;
 		std::vector<Client*> _clients;
+
+		static Server* _instance;
+
+		Server(int port, const std::string& password);
+		~Server(void);
+		Server(const Server& other);
+		Server& operator=(const Server& other);
 
 		void setupSocket(void);
 		int	 acceptClient(void);

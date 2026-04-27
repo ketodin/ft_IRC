@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 18:50:31 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/25 21:45:09 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,32 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+Server* Server::_instance = NULL; // NULL, not nullptr (C++98)
+
+Server*
+Server::getInstance(void)
+{
+	if (_instance == NULL)
+		throw std::runtime_error(
+			"Server not initialized. Call Server::init() first.");
+	return _instance;
+}
+
+void
+Server::init(int port, const std::string& password)
+{
+	if (_instance != NULL)
+		throw std::runtime_error("Server already initialized.");
+	_instance = new Server(port, password);
+}
+
+void
+Server::destroy(void)
+{
+	delete _instance;
+	_instance = NULL;
+}
 
 Server::Server(int port, const std::string& password) :
 	_epoll_fd(-1),
@@ -264,7 +290,7 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 			try
 			{
 				for (size_t j = 0; j < messages.size(); j++)
-					parser.parse(messages[j]);
+					parser.parse(**it, messages[j]);
 			}
 			catch (const std::exception& e)
 			{
@@ -305,4 +331,10 @@ Server::start(void)
 		}
 		handleEvents(events, nfds);
 	}
+}
+
+bool
+Server::isPasswordValid(const std::string& password)
+{
+	return (password == this->_password);
 }
