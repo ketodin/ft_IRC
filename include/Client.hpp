@@ -32,10 +32,10 @@ class Client
 		std::string _inputBuffer;
 
 		// has entered correct password
-		bool	_passAccepted;
-		bool	_nickSet;
-		bool	_userSet;
-		bool	_registered;
+		bool _passAccepted;
+		bool _nickSet;
+		bool _userSet;
+		bool _registered;
 
 		void printClientData() const;
 
@@ -50,8 +50,8 @@ class Client
 		bool					 getPassAccepted() const;
 		void					 setPassAccepted(bool status);
 
-		std::string				getPrefix(void) const;
-		bool					isRegistered(void) const;
+		std::string getPrefix(void) const;
+		bool		isRegistered(void) const;
 };
 
 #endif

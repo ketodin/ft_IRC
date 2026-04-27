@@ -15,13 +15,13 @@
 
 #include "Client.hpp"
 #include "utils.hpp"
+#include <arpa/inet.h>
 #include <cerrno>
 #include <cstring>
 #include <iostream>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <vector>
-#include <arpa/inet.h>
 
 #ifndef DEBUG
 #	define DEBUG 0

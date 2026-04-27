@@ -111,5 +111,6 @@ Client::getPrefix(void) const
 bool
 Client::isRegistered(void) const
 {
-	return ((this->_passAccepted && this->_nickSet && this->_userSet) || this->_registered);
+	return ((this->_passAccepted && this->_nickSet && this->_userSet)
+			|| this->_registered);
 }

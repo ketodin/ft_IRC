@@ -125,17 +125,17 @@ Server::acceptClient(int& clientFd, std::string& clientHostname)
 	socklen_t		   clientLen = sizeof(clientAddr);
 
 	clientFd = accept(this->_listen_sock,
-						  reinterpret_cast<struct sockaddr*>(&clientAddr),
-						  &clientLen);
+					  reinterpret_cast<struct sockaddr*>(&clientAddr),
+					  &clientLen);
 	if (clientFd < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return ; // no client actually ready, not a real error
+			return; // no client actually ready, not a real error
 		throw AcceptException();
 	}
 	char ipBuf[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &clientAddr.sin_addr, ipBuf, sizeof(ipBuf));
-    clientHostname = std::string(ipBuf);
+	inet_ntop(AF_INET, &clientAddr.sin_addr, ipBuf, sizeof(ipBuf));
+	clientHostname = std::string(ipBuf);
 
 	// clientAddr currently unused - will be needed for IP logging/banning
 
@@ -181,14 +181,14 @@ using the epoll_ctl() with flag EPOLL_CTL_ADD */
 void
 Server::addNewClient(void)
 {
-	int				 	clientFd;
-	std::string			clientHostname;
-	struct epoll_event	ev;
+	int				   clientFd;
+	std::string		   clientHostname;
+	struct epoll_event ev;
 
 	this->acceptClient(clientFd, clientHostname);
 
 	if (clientFd < 0)
-		return ;
+		return;
 
 	setNonBlocking(clientFd);
 
