@@ -47,7 +47,7 @@ class Client
 		bool					 getIsLogged() const;
 		void					 setIsLogged(bool status);
 
-		std::string				getNickname() const;
+		std::string getNickname() const;
 };
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 22:33:26 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 23:58:33 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-Channel::Channel(const std::string& name):
+Channel::Channel(const std::string& name) :
 	_name(name),
 	_topic(""),
 	_inviteOnly(false),
@@ -26,31 +26,38 @@ Channel::~Channel(void)
 {
 }
 
-void	Channel::addMember(const Client& client)
+void
+Channel::addMember(const Client& client)
 {
 	if (!this->isMember(client))
 	{
-		if ((this->_userLimit == 0) || (this->_userLimit > this->_members.size()))
+		if ((this->_userLimit == 0)
+			|| (this->_userLimit > this->_members.size()))
 			this->_members.push_back(const_cast<Client*>(&client));
 		else
 			std::cout << "no more place inside channel\n";
 	}
 }
 
-void	Channel::removeMember(const Client& client)
+void
+Channel::removeMember(const Client& client)
 {
-	std::vector<Client*>::iterator	it = std::find(this->_members.begin(), this->_members.end(), &client);
+	std::vector<Client*>::iterator it =
+		std::find(this->_members.begin(), this->_members.end(), &client);
 
 	if (it != this->_members.end())
 		this->_members.erase(it);
 }
 
-bool	Channel::isMember(const Client& client) const
+bool
+Channel::isMember(const Client& client) const
 {
-	return (std::find(this->_members.begin(), this->_members.end(), &client) != this->_members.end());
+	return (std::find(this->_members.begin(), this->_members.end(), &client)
+			!= this->_members.end());
 }
 
-void	Channel::addOperator(const Client& client)
+void
+Channel::addOperator(const Client& client)
 {
 	if (!this->isOperator(client))
 	{
@@ -58,20 +65,25 @@ void	Channel::addOperator(const Client& client)
 	}
 }
 
-void	Channel::removeOperator(const Client& client)
+void
+Channel::removeOperator(const Client& client)
 {
-	std::vector<Client*>::iterator	it = std::find(this->_operators.begin(), this->_operators.end(), &client);
+	std::vector<Client*>::iterator it =
+		std::find(this->_operators.begin(), this->_operators.end(), &client);
 
 	if (it != this->_operators.end())
 		this->_operators.erase(it);
 }
 
-bool	Channel::isOperator(const Client& client) const
+bool
+Channel::isOperator(const Client& client) const
 {
-	return (std::find(this->_operators.begin(), this->_operators.end(), &client) != this->_operators.end());
+	return (std::find(this->_operators.begin(), this->_operators.end(), &client)
+			!= this->_operators.end());
 }
 
-void	Channel::addInvite(const Client& client)
+void
+Channel::addInvite(const Client& client)
 {
 	if (!this->isInvited(client))
 	{
@@ -79,45 +91,51 @@ void	Channel::addInvite(const Client& client)
 	}
 }
 
-bool	Channel::isInvited(const Client& client) const
+bool
+Channel::isInvited(const Client& client) const
 {
-	return (std::find(this->_invites.begin(), this->_invites.end(), &client) != this->_invites.end());
+	return (std::find(this->_invites.begin(), this->_invites.end(), &client)
+			!= this->_invites.end());
 }
 
+/*
 void	Channel::broadcast(const std::string& msg, const Client* except)
 {
 	(void)msg;
 	(void)except;
 }
+*/
 
-std::string	Channel::getModeString(void) const
+std::string
+Channel::getModeString(void) const
 {
-	std::string flags = "+";
-    std::string params = "";
+	std::string flags  = "+";
+	std::string params = "";
 
-    if (this->_inviteOnly)
-        flags += "i";
-    if (this->_topicRestricted)
-        flags += "t";
-    if (!this->_key.empty())
-    {
-        flags += "k";
-        params += " " + this->_key;
-    }
-    if (this->_userLimit > 0)
-    {
-        flags += "l";
-        std::ostringstream oss;
-        oss << this->_userLimit;
-        params += " " + oss.str();
-    }
+	if (this->_inviteOnly)
+		flags += "i";
+	if (this->_topicRestricted)
+		flags += "t";
+	if (!this->_key.empty())
+	{
+		flags += "k";
+		params += " " + this->_key;
+	}
+	if (this->_userLimit > 0)
+	{
+		flags += "l";
+		std::ostringstream oss;
+		oss << this->_userLimit;
+		params += " " + oss.str();
+	}
 
-    return (flags + params);
+	return (flags + params);
 }
 
-std::string	Channel::buildNamesReply(void) const
+std::string
+Channel::buildNamesReply(void) const
 {
-	std::string	names = "";
+	std::string names = "";
 
 	for (std::size_t i = 0; i < this->_members.size(); i++)
 	{
