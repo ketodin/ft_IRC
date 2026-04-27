@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 21:36:38 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:53:22 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 #include "Server.hpp"
+#include "signals.hpp"
 #include <iostream>
 #include <string>
 
@@ -39,8 +40,7 @@ main(int argc, char** argv)
 
 		Server::init(port, password);
 
-		// setup signal here for sigint and sigterm, to destroy server singleton
-		// manually
+		setupSignals();
 
 		Server::getInstance()->start();
 		Server::destroy();
