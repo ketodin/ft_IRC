@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 01:33:54 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 02:02:17 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 	requireArgsNum(args, 1, "NICK <nickname>");
 	requireWord(args, 0, "nickname");
 
-	if (checkOnUseNickname(args[0], Server::getInstance()->getClients()))
+	if (checkRegisteredNicknames(args[0], Server::getInstance()->getClients()))
 	{
 		std::cout << "Nickname already taken" << std::endl;
 		return;
@@ -35,7 +35,7 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 }
 
 bool
-NickCommand::checkOnUseNickname(const std::string&	 nickname,
+NickCommand::checkRegisteredNicknames(const std::string&	 nickname,
 								std::vector<Client*> registredClients)
 {
 	return (std::find_if(registredClients.begin(),
