@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 23:58:33 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 02:09:58 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@ Channel::addMember(const Client& client)
 	{
 		if ((this->_userLimit == 0)
 			|| (this->_userLimit > this->_members.size()))
+		{
+			if (this->_members.size() == 0)
+				this->addOperator(client);
 			this->_members.push_back(const_cast<Client*>(&client));
+		}
 		else
 			std::cout << "no more place inside channel\n";
 	}
@@ -147,4 +151,10 @@ Channel::buildNamesReply(void) const
 	}
 
 	return (names);
+}
+
+std::string
+Channel::getName(void) const
+{
+	return (this->_name);
 }
