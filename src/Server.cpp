@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:26:03 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 02:18:20 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,14 @@ Server::destroy(void)
 }
 
 Server::Server(int port, const std::string& password) :
+	_serverName("ft_irc.42lyon.fr"),
+	_creationDate(utils::getCurrentTime()),
 	_epoll_fd(-1),
 	_listen_sock(-1),
 	_port(port),
 	_password(password),
-	_clients()
+	_clients(),
+	_channels()
 {
 	// logging
 	LOG_INFO(this->_port);
@@ -81,6 +84,11 @@ Server::~Server(void)
 	// deleting client pointers
 	for (std::vector<Client*>::const_iterator i = this->_clients.begin();
 		 i != this->_clients.end();
+		 ++i)
+		delete (*i);
+	// deleting channels pointers
+	for (std::vector<Channel*>::const_iterator i = this->_channels.begin();
+		 i != this->_channels.end();
 		 ++i)
 		delete (*i);
 }
@@ -242,6 +250,56 @@ Server::removeClient(int fd)
 	return (true);
 }
 
+Client*
+Server::getClientByFd(const int fd) const
+{
+	std::vector<Client*>::const_iterator it =
+		std::find_if(this->_clients.begin(),
+					 this->_clients.end(),
+					 utils::HasMemberValue<Client, int>(&Client::getFd, fd));
+	if (it == this->_clients.end())
+		return (NULL);
+	return (*it);
+}
+
+Client*
+Server::getClientByNick(const std::string& nick) const
+{
+	std::vector<Client*>::const_iterator it = std::find_if(
+		this->_clients.begin(),
+		this->_clients.end(),
+		utils::HasMemberValue<Client, std::string>(&Client::getNickname, nick));
+	if (it == this->_clients.end())
+		return (NULL);
+	return (*it);
+}
+
+Channel*
+Server::getChannelByName(const std::string& name) const
+{
+	std::vector<Channel*>::const_iterator it = std::find_if(
+		this->_channels.begin(),
+		this->_channels.end(),
+		utils::HasMemberValue<Channel, std::string>(&Channel::getName, name));
+	if (it == this->_channels.end())
+		return (NULL);
+	return (*it);
+}
+
+Channel*
+Server::getOrCreateChannel(const std::string& name)
+{
+	Channel* channel;
+
+	channel = this->getChannelByName(name);
+	if (channel == NULL)
+	{
+		channel = new Channel(name);
+		this->_channels.push_back(channel);
+	}
+	return (channel);
+}
+
 /* This function handles all the events received in a loop iterating
 over all the events received and deciding logic to adapt according
 to what it has received */
@@ -267,24 +325,21 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 				removeClient(fd);
 				continue;
 			}
-			std::vector<Client*>::iterator it = std::find_if(
-				this->_clients.begin(),
-				this->_clients.end(),
-				utils::HasMemberValue<Client, int>(&Client::getFd, fd));
 
-			if (it == this->_clients.end())
+			Client* client = this->getClientByFd(fd);
+			if (client == NULL)
 				continue;
 
-			(*it)->appendToBuffer(std::string(buffer, n));
+			client->appendToBuffer(std::string(buffer, n));
 
-			std::vector<std::string> messages = (*it)->extractMessages();
+			std::vector<std::string> messages = client->extractMessages();
 
 			CommandDispatcher disp;
 			CommandParser	  parser(disp);
 			try
 			{
 				for (size_t j = 0; j < messages.size(); j++)
-					parser.parse(**it, messages[j]);
+					parser.parse(*client, messages[j]);
 			}
 			catch (const std::exception& e)
 			{

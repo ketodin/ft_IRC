@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 02:44:21 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 02:44:52 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 01:48:50 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ struct HasMemberValue
 		HasMemberValue(Getter getter, ReturnType expected);
 		bool operator()(const ClassType* obj) const;
 };
+
+std::string getCurrentTime(void);
 
 }
 

@@ -6,14 +6,15 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 23:59:26 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 02:14:12 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
-#include "Server.hpp"
+#include <Client.hpp>
 #include <algorithm>
+#include <sstream>
 
 class Channel
 {
@@ -48,6 +49,8 @@ class Channel
 		// void	broadcast(const std::string& msg, const Client* except = NULL);
 		std::string getModeString(void) const;
 		std::string buildNamesReply(void) const;
+
+		std::string getName(void) const;
 };
 
 #endif // CHANNEL_HPP
