@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 03:17:48 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 17:56:24 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,24 @@ Client::setNickname(const std::string& nickname)
 	this->_nickname = nickname;
 }
 
+void
+Client::setUsername(const std::string& username)
+{
+	this->_username = username;
+}
+
+void
+Client::setRealName(const std::string& realname)
+{
+	this->_realname = realname;
+}
+
+void
+Client::setHostName(const std::string& hostname)
+{
+	this->_hostname = hostname;
+}
+
 std::string
 Client::getPrefix(void) const
 {
@@ -133,8 +151,37 @@ Client::getHostname() const
 }
 
 bool
-Client::isRegistered(void) const
+Client::getRegistered(void) const
 {
-	return ((this->_passAccepted && this->_nickSet && this->_userSet)
-			|| this->_registered);
+	return (this->_registered);
+}
+
+void
+Client::setRegistered(bool registered)
+{
+	this->_registered = registered;
+}
+
+void
+Client::setNickSet(bool nickset)
+{
+	this->_nickSet = nickset;
+}
+
+void
+Client::setUserSet(bool userset)
+{
+	this->_userSet = userset;
+}
+
+bool
+Client::getNickSet() const
+{
+	return (this->_nickSet);
+}
+
+bool
+Client::getUserSet() const
+{
+	return (this->_userSet);
 }

@@ -3,11 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   UserCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:31:47 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/24 19:44:51 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 17:56:39 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "UserCommand.hpp"
+
+const std::string UserCommand::NAME = "USER";
+
+void
+UserCommand::execute(Client& client, const std::vector<std::string>& args)
+{
+	if (client.getRegistered())
+	{
+		// send ERR_ALREADYREGISTRED 462
+		std::cout << "Client already registered" << std::endl;
+		return;
+	}
+
+	try
+	{
+		requireArgsNum(args, 4, "USER <username> <hostname> <real name>");
+	}
+	catch (const std::exception& e)
+	{
+		// send ERR_NEEDMOREPARAMS 461
+		std::cerr << e.what() << '\n';
+		return;
+	}
+
+	client.setUsername(args[0]);
+	client.setHostName(args[1]);
+	client.setRealName(args[2]);
+	client.setUserSet(true);
+
+	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
+		&& !client.getRegistered())
+	{
+		const Server* instance = Server::getInstance();
+		client.setRegistered(true);
+		instance->sendWelcomeBurst(client);
+	}
+}

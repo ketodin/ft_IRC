@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 04:28:31 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 18:04:16 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ class Server
 		Channel* getChannelByName(const std::string& name) const;
 		Channel* getOrCreateChannel(const std::string& name);
 
+		void sendWelcomeBurst(const Client& client) const;
+
 	private:
 		enum ReadStatus
 		{
@@ -87,6 +89,12 @@ class Server
 
 		void setupSocket(void);
 		void acceptClient(int& clientFd, std::string& clientHostname);
+
+		std::string buildReply(int				  code,
+							   const std::string& nick,
+							   const std::string& msg) const;
+
+		static std::string numericCode(int code);
 
 		void addNewClient(void);
 		bool removeClient(int fd);

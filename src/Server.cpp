@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 04:28:43 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 18:04:23 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,71 @@ Server::setNonBlocking(int fd)
 		throw FcntlException("F_GETFL");
 	if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
 		throw FcntlException("F_SETFL");
+}
+
+std::string
+Server::numericCode(int code)
+{
+	std::string		   s;
+	std::ostringstream oss;
+	oss << code;
+	s = oss.str();
+	while (s.size() < 3)
+		s = "0" + s;
+	return s;
+}
+
+std::string
+Server::buildReply(int				  code,
+				   const std::string& nick,
+				   const std::string& msg) const
+{
+	return (":" + this->_serverName + " " + numericCode(code) + " " + nick
+			+ " :" + msg + "\r\n");
+}
+
+/* This function send  reply to the client when a user is done
+registering */
+void
+Server::sendWelcomeBurst(const Client& client) const
+{
+	std::string replies[5];
+	std::string nickname = client.getNickname();
+
+	// 001 RPL_WELCOME
+	replies[0] = buildReply(
+		1, nickname, "Welcome to the IRC Network " + client.getPrefix());
+
+	// 002 RPL_YOURHOST
+	replies[1] = buildReply(2,
+							nickname,
+							"Your host is " + this->_serverName
+								+ ", running version 1.0");
+
+	// 003 RPL_CREATED
+	time_t now = time(NULL);
+	char   dateBuf[64];
+	strftime(dateBuf, sizeof(dateBuf), "%Y-%m-%d", localtime(&now));
+	replies[2] = buildReply(
+		3, nickname, std::string("This server was created ") + dateBuf);
+
+	// 004 RPL_MYINFO — no trailing colon
+	replies[3] = ":" + this->_serverName + " 004 " + nickname + " "
+				 + this->_serverName + " 1.0 io itkol\r\n";
+
+	// 422 ERR_NOMOTD — required by irssi to unlock the prompt
+	replies[4] = buildReply(422, nickname, "MOTD File is missing");
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (send(client.getFd(), replies[i].c_str(), replies[i].size(), 0)
+			== -1)
+		{
+			std::cerr << "send() failed on welcome burst reply " << i
+					  << std::endl;
+			return;
+		}
+	}
 }
 
 /* This function adds a new client not known by the server
