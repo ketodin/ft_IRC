@@ -19,6 +19,6 @@ PongCommand::execute(Client& client, const std::vector<std::string>& args)
 {
 	// ERR_NOORIGIN (409) — no server token provided
 	if (args.empty())
-        return;
+		return;
 	client.reply("PONG " + args[0] + "\r\n");
 }

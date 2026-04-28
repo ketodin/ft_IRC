@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 00:54:44 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 01:35:23 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,12 @@ Client::extractMessages()
 void
 Client::reply(const std::string& msg)
 {
-    if (send(this->_fd, msg.c_str(), msg.size(), 0) == -1)
-        std::cerr << "send() failed for client " << _nickname << std::endl;
+	ssize_t sent = send(this->getFd(), msg.c_str(), msg.size(), 0);
+
+	if (sent == -1)
+		std::cout << "send(): failed" << std::endl;
+	else if (sent < static_cast<ssize_t>(msg.size()))
+		std::cout << "send(): message partially sent" << std::endl;
 }
 
 int

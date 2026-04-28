@@ -20,8 +20,8 @@
 #include "JoinCommand.hpp"
 #include "PrivmsgCommand.hpp"
 
-#include "PongCommand.hpp"
 #include "CapCommand.hpp"
+#include "PongCommand.hpp"
 
 #include "InviteCommand.hpp"
 #include "KickCommand.hpp"
