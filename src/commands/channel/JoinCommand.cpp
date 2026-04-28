@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 21:57:51 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 22:27:55 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ JoinCommand::execute(
 	Client& client, // cppcheck-suppress constParameterReference
 	const std::vector<std::string>& args)
 {
-	if (!client.isRegistered())
+	if (!client.getRegistered())
 		return; // ERR_NOTREGISTERED 451
 
 	requireArgsNum(args, 1, 2, "JOIN <channel> <key>");
