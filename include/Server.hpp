@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 02:08:44 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 04:28:31 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ class Server
 		static int parsePort(const char* str);
 		void	   start(void);
 		bool	   isPasswordValid(const std::string& password);
+
+		void broadcast(const std::string& msg,
+					   const Client*	  except = NULL) const;
 
 		Client*	 getClientByFd(const int fd) const;
 		Client*	 getClientByNick(const std::string& name) const;
