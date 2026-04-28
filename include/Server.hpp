@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 03:42:22 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 04:28:31 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,10 @@ class Server
 		void broadcast(const std::string& msg,
 					   const Client*	  except = NULL) const;
 
-		std::vector<Client*> getClients(void) const;
-		Client*				 getClientByFd(const int fd) const;
-		Client*				 getClientByNick(const std::string& name) const;
-		Channel*			 getChannelByName(const std::string& name) const;
-		Channel*			 getOrCreateChannel(const std::string& name);
+		Client*	 getClientByFd(const int fd) const;
+		Client*	 getClientByNick(const std::string& name) const;
+		Channel* getChannelByName(const std::string& name) const;
+		Channel* getOrCreateChannel(const std::string& name);
 
 	private:
 		enum ReadStatus

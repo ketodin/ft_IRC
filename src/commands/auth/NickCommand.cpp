@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 04:10:01 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 04:28:01 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 	requireWord(args, 0, "nickname");
 
 	const Server* instance = Server::getInstance();
-	if (checkRegisteredNicknames(args[0], instance->getClients()))
+	if (instance->getClientByNick(args[0]))
 	{
 		// send ERR_NICKNAMEINUSE 433
 		std::cout << "Nickname already taken" << std::endl;
@@ -45,15 +45,4 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 							  + client.getHostname() + " NICK " + args[0];
 		instance->broadcast(message);
 	}
-}
-
-bool
-NickCommand::checkRegisteredNicknames(const std::string&   nickname,
-									  std::vector<Client*> registredClients)
-{
-	return (std::find_if(registredClients.begin(),
-						 registredClients.end(),
-						 utils::HasMemberValue<Client, std::string>(
-							 &Client::getNickname, nickname))
-			!= registredClients.end());
 }
