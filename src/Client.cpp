@@ -126,3 +126,9 @@ Client::isRegistered(void) const
 	return ((this->_passAccepted && this->_nickSet && this->_userSet)
 			|| this->_registered);
 }
+
+std::string
+Client::getNickname(void) const
+{
+	return (this->_nickname);
+}

@@ -54,6 +54,8 @@ class Client
 
 		std::string getPrefix(void) const;
 		bool		isRegistered(void) const;
+
+		std::string getNickname(void) const;
 };
 
 #endif
