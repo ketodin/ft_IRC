@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 02:02:17 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 02:22:55 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,16 @@ const std::string NickCommand::NAME = "NICK";
 void
 NickCommand::execute(Client& client, const std::vector<std::string>& args)
 {
-	requireArgsNum(args, 1, "NICK <nickname>");
+	if (args.empty())
+    {
+        // send ERR_NONICKNAMEGIVEN 431
+		std::cout << "NICK command needs at least one argument" << std::endl;
+        return;
+    }
 	requireWord(args, 0, "nickname");
-
 	if (checkRegisteredNicknames(args[0], Server::getInstance()->getClients()))
 	{
+		// send ERR_NICKNAMEINUSE 433
 		std::cout << "Nickname already taken" << std::endl;
 		return;
 	}
