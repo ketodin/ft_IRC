@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 19:23:14 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 21:52:05 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ class Channel
 
 		unsigned int getUserLimit(void) const;
 		std::size_t	 getMemberSize(void) const;
-		std::string	 getKey(void) const;
 
-		bool hasMode(const char &c) const;
+		bool isValidKey(const std::string& key) const;
+
+		bool hasMode(const char& c) const;
 };
 
 #endif // CHANNEL_HPP
