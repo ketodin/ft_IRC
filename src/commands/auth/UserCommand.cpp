@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:31:47 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 17:56:39 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/28 21:40:35 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ UserCommand::execute(Client& client, const std::vector<std::string>& args)
 
 	try
 	{
-		requireArgsNum(args, 4, "USER <username> <hostname> <real name>");
+		requireArgsNum(
+			args, 4, "USER <username> <hostname> <servename> <realname>");
 	}
 	catch (const std::exception& e)
 	{
@@ -37,7 +38,7 @@ UserCommand::execute(Client& client, const std::vector<std::string>& args)
 
 	client.setUsername(args[0]);
 	client.setHostName(args[1]);
-	client.setRealName(args[2]);
+	client.setRealName(args[3]);
 	client.setUserSet(true);
 
 	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
