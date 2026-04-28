@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 04:16:19 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 18:34:30 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,4 +175,22 @@ std::string
 Channel::getName(void) const
 {
 	return (this->_name);
+}
+
+unsigned int
+Channel::getUserLimit(void) const
+{
+	return (this->_userLimit);
+}
+
+std::size_t
+Channel::getMemberSize(void) const
+{
+	return (_members.size());
+}
+
+std::string
+Channel::getKey(void) const
+{
+	return (_key);
 }

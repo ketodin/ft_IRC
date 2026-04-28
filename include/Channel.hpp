@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 03:22:34 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 18:34:18 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ class Channel
 		std::string buildNamesReply(void) const;
 
 		std::string getName(void) const;
+
+		unsigned int getUserLimit(void) const;
+		std::size_t  getMemberSize(void) const;
+		std::string  getKey(void) const;
 };
 
 #endif // CHANNEL_HPP
