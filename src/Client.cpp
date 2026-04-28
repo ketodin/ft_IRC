@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 21:58:50 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 02:44:48 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,10 +125,4 @@ Client::isRegistered(void) const
 {
 	return ((this->_passAccepted && this->_nickSet && this->_userSet)
 			|| this->_registered);
-}
-
-std::string
-Client::getNickname(void) const
-{
-	return (this->_nickname);
 }
