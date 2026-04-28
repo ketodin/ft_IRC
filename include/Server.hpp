@@ -13,8 +13,8 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include "Client.hpp"
 #include "Channel.hpp"
+#include "Client.hpp"
 #include "utils.hpp"
 #include <arpa/inet.h>
 #include <cerrno>
@@ -52,10 +52,10 @@ class Server
 		void	   start(void);
 		bool	   isPasswordValid(const std::string& password);
 
-		Client*    getClientByFd(const int fd) const;
-		Client*    getClientByNick(const std::string& name) const;
-		Channel*   getChannelByName(const std::string& name) const;
-		Channel*   getOrCreateChannel(const std::string& name);
+		Client*	 getClientByFd(const int fd) const;
+		Client*	 getClientByNick(const std::string& name) const;
+		Channel* getChannelByName(const std::string& name) const;
+		Channel* getOrCreateChannel(const std::string& name);
 
 	private:
 		enum ReadStatus

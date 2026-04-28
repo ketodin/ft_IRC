@@ -12,8 +12,8 @@
 
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
-#include <algorithm>
 #include <Client.hpp>
+#include <algorithm>
 #include <sstream>
 
 class Channel

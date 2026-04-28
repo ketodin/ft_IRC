@@ -253,10 +253,10 @@ Server::removeClient(int fd)
 Client*
 Server::getClientByFd(const int fd) const
 {
-	std::vector<Client*>::const_iterator it = std::find_if(
-			this->_clients.begin(),
-			this->_clients.end(),
-			utils::HasMemberValue<Client, int>(&Client::getFd, fd));
+	std::vector<Client*>::const_iterator it =
+		std::find_if(this->_clients.begin(),
+					 this->_clients.end(),
+					 utils::HasMemberValue<Client, int>(&Client::getFd, fd));
 	if (it == this->_clients.end())
 		return (NULL);
 	return (*it);
@@ -266,9 +266,9 @@ Client*
 Server::getClientByNick(const std::string& nick) const
 {
 	std::vector<Client*>::const_iterator it = std::find_if(
-			this->_clients.begin(),
-			this->_clients.end(),
-			utils::HasMemberValue<Client, std::string>(&Client::getNickname, nick));
+		this->_clients.begin(),
+		this->_clients.end(),
+		utils::HasMemberValue<Client, std::string>(&Client::getNickname, nick));
 	if (it == this->_clients.end())
 		return (NULL);
 	return (*it);
@@ -278,9 +278,9 @@ Channel*
 Server::getChannelByName(const std::string& name) const
 {
 	std::vector<Channel*>::const_iterator it = std::find_if(
-			this->_channels.begin(),
-			this->_channels.end(),
-			utils::HasMemberValue<Channel, std::string>(&Channel::getName, name));
+		this->_channels.begin(),
+		this->_channels.end(),
+		utils::HasMemberValue<Channel, std::string>(&Channel::getName, name));
 	if (it == this->_channels.end())
 		return (NULL);
 	return (*it);
@@ -289,7 +289,7 @@ Server::getChannelByName(const std::string& name) const
 Channel*
 Server::getOrCreateChannel(const std::string& name)
 {
-	Channel	*channel;
+	Channel* channel;
 
 	channel = this->getChannelByName(name);
 	if (channel == NULL)
@@ -325,7 +325,7 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 				removeClient(fd);
 				continue;
 			}
-			
+
 			Client* client = this->getClientByFd(fd);
 			if (client == NULL)
 				continue;

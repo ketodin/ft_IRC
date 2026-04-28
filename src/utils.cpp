@@ -12,9 +12,9 @@
 
 #include "utils.hpp"
 
+#include <ctime>
 #include <iomanip>
 #include <sstream>
-#include <ctime>
 
 namespace utils
 {
@@ -102,8 +102,8 @@ ft_atou(const std::string& str, int& num)
 std::string
 getCurrentTime(void)
 {
-	time_t now = time(NULL);
-	std::string t = ctime(&now);
+	time_t		now = time(NULL);
+	std::string t	= ctime(&now);
 	t.erase(t.find_last_not_of("\n\r") + 1);
 	return (t);
 }
