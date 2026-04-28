@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PassCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 18:51:28 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 17:55:45 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,12 @@ PassCommand::execute(Client& client, const std::vector<std::string>& args)
 
 	std::cout << "Client fd: " << client.getFd() << "\n";
 	client.setPassAccepted(Server::getInstance()->isPasswordValid(password));
+
+	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
+		&& !client.getRegistered())
+	{
+		const Server* instance = Server::getInstance();
+		client.setRegistered(true);
+		instance->sendWelcomeBurst(client);
+	}
 }
