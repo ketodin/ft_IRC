@@ -20,11 +20,11 @@ void
 NickCommand::execute(Client& client, const std::vector<std::string>& args)
 {
 	if (args.empty())
-    {
-        // send ERR_NONICKNAMEGIVEN 431
+	{
+		// send ERR_NONICKNAMEGIVEN 431
 		std::cout << "NICK command needs at least one argument" << std::endl;
-        return;
-    }
+		return;
+	}
 	requireWord(args, 0, "nickname");
 	if (checkRegisteredNicknames(args[0], Server::getInstance()->getClients()))
 	{
