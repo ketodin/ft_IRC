@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.hpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:24:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 21:22:31 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:09:37 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 
 typedef void (*CommandHandler)(Client&						   client,
 							   const std::vector<std::string>& args);
+
+// typedef void (*CommandHandler)(const Client&					client,
+//							   const std::vector<std::string>& args);
 
 // Maps uppercased command names to their handler function pointer.
 // Owns nothing — all pointers are to static methods with static storage.
