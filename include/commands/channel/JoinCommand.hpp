@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:40 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 21:56:38 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 23:34:08 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ class JoinCommand : public ACommand
 		// JOIN <username>
 		static void execute(Client&							client,
 							const std::vector<std::string>& args);
+		void		broadcastJoin(const Client& client, const Channel& chan);
+		void		sendJoinBurst(const Client& client, Channel& chan);
 };
 
 #endif // JOIN_COMMAND_HPP

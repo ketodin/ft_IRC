@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 22:27:55 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/29 00:58:31 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ JoinCommand::execute(
 	if (isCreator)
 		chan = instance->getOrCreateChannel(args[0]);
 
+	instance->sendJoinBurst(client, *chan);
 	chan->addMember(client);
 }
 

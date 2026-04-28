@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 18:04:23 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 00:53:38 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ Server::~Server(void)
 }
 
 void
-Server::broadcast(const std::string& msg, const Client* except) const
+Server::broadcast(const std::string& msg, const Client* except)
 {
 	std::string finalMessage = msg + "\r\n";
 	for (std::vector<Client*>::const_iterator it = this->_clients.begin();
@@ -103,19 +103,22 @@ Server::broadcast(const std::string& msg, const Client* except) const
 	{
 		const Client* currentClient = *it;
 
-		if (currentClient->getFd() != except->getFd())
-		{
-			ssize_t sent = send(currentClient->getFd(),
-								finalMessage.c_str(),
-								finalMessage.size(),
-								0);
-
-			if (sent == -1)
-				std::cout << "send(): failed" << std::endl;
-			if (sent < static_cast<ssize_t>(finalMessage.size()))
-				std::cout << "send(): message partially sent" << std::endl;
-		}
+		if (!except)
+			this->sendMsg(*currentClient, finalMessage);
+		else if (currentClient->getFd() != except->getFd())
+			this->sendMsg(*currentClient, finalMessage);
 	}
+}
+
+void
+Server::sendMsg(const Client& client, const std::string& msg)
+{
+	ssize_t sent = send(client.getFd(), msg.c_str(), msg.size(), 0);
+
+	if (sent == -1)
+		std::cout << "send(): failed" << std::endl;
+	else if (sent < static_cast<ssize_t>(msg.size()))
+		std::cout << "send(): message partially sent" << std::endl;
 }
 
 /* This function creates the listening socket of the server and binds
@@ -272,6 +275,45 @@ Server::sendWelcomeBurst(const Client& client) const
 					  << std::endl;
 			return;
 		}
+	}
+}
+
+void
+Server::sendJoinBurst(const Client& client, Channel& chan) const
+{
+	const std::string& nick = client.getNickname();
+	const std::string  name = chan.getName();
+
+	// 1. JOIN broadcast to all members including joining client
+	chan.broadcast(":" + client.getPrefix() + " JOIN :" + name);
+
+	// 2. RPL_TOPIC 332 only if topic is set
+	if (!chan.getTopic().empty())
+	{
+		std::string reply =
+			buildReply(332, nick, name + " :" + chan.getTopic());
+		if (send(client.getFd(), reply.c_str(), reply.size(), 0) == -1)
+		{
+			std::cerr << "send() failed on RPL_TOPIC" << std::endl;
+			return;
+		}
+	}
+
+	// 3. RPL_NAMREPLY 353
+	std::string namesReply = chan.buildNamesReply();
+	if (send(client.getFd(), namesReply.c_str(), namesReply.size(), 0) == -1)
+	{
+		std::cerr << "send() failed on RPL_NAMREPLY" << std::endl;
+		return;
+	}
+
+	// 4. RPL_ENDOFNAMES 366
+	std::string endOfNames =
+		buildReply(366, nick, name + " :End of /NAMES list");
+	if (send(client.getFd(), endOfNames.c_str(), endOfNames.size(), 0) == -1)
+	{
+		std::cerr << "send() failed on RPL_ENDOFNAMES" << std::endl;
+		return;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 21:52:05 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/29 00:28:26 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ class Channel
 		std::vector<Client*> _operators;
 		std::vector<Client*> _invites;
 
+		static void sendMsg(const Client& client, const std::string& msg);
+
 	public:
 		explicit Channel(const std::string& name);
 		~Channel(void);
@@ -47,10 +49,12 @@ class Channel
 		bool isInvited(const Client& client) const;
 
 		void broadcast(const std::string& msg, const Client* except = NULL);
+
 		std::string getModeString(void) const;
 		std::string buildNamesReply(void) const;
 
 		std::string getName(void) const;
+		std::string getTopic(void) const;
 
 		unsigned int getUserLimit(void) const;
 		std::size_t	 getMemberSize(void) const;

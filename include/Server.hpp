@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 18:04:16 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 00:28:38 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ class Server
 		void	   start(void);
 		bool	   isPasswordValid(const std::string& password);
 
-		void broadcast(const std::string& msg,
-					   const Client*	  except = NULL) const;
+		void broadcast(const std::string& msg, const Client* except = NULL);
 
 		Client*	 getClientByFd(const int fd) const;
 		Client*	 getClientByNick(const std::string& name) const;
@@ -61,6 +60,7 @@ class Server
 		Channel* getOrCreateChannel(const std::string& name);
 
 		void sendWelcomeBurst(const Client& client) const;
+		void sendJoinBurst(const Client& client, Channel& chan) const;
 
 	private:
 		enum ReadStatus
@@ -90,18 +90,18 @@ class Server
 		void setupSocket(void);
 		void acceptClient(int& clientFd, std::string& clientHostname);
 
-		std::string buildReply(int				  code,
-							   const std::string& nick,
-							   const std::string& msg) const;
-
 		static std::string numericCode(int code);
 
 		void addNewClient(void);
 		bool removeClient(int fd);
 		void handleEvents(struct epoll_event events[MAX_EVENTS], int nfds);
 		static void setNonBlocking(int fd);
+		static void sendMsg(const Client& client, const std::string& msg);
 
 		static ReadStatus getReadStatus(int fd, char* buffer, ssize_t& n);
+		std::string		  buildReply(int				code,
+									 const std::string& nick,
+									 const std::string& msg) const;
 
 #include "ServerException.inl"
 };
