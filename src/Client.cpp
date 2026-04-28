@@ -6,11 +6,12 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 17:56:24 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/28 23:57:14 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include "sys/socket.h"
 #include <unistd.h>
 
 Client::Client(int fd, std::string hostname) :
@@ -82,6 +83,13 @@ Client::extractMessages()
 		this->_inputBuffer.erase(0, pos + 1);
 	}
 	return (messages);
+}
+
+void
+Client::reply(const std::string& msg)
+{
+    if (send(_fd, msg.c_str(), msg.size(), 0) == -1)
+        std::cerr << "send() failed for client " << _nickname << std::endl;
 }
 
 int

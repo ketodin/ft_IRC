@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:21 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 22:25:32 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 23:36:28 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #define PRIVMSG_COMMAND_HPP
 
 #include "ACommand.hpp"
+#include "Client.hpp"
+#include "Server.hpp"
+#include "Channel.hpp"
 #include <string>
 #include <vector>
 
@@ -28,7 +31,8 @@ class PrivmsgCommand : public ACommand
 		static const std::string NAME; // = "PRIVMSG"
 
 		// PRIVMSG <username>
-		static void execute(const std::vector<std::string>& args);
+		static void execute(Client& 						client,
+							const std::vector<std::string>& args);
 };
 
 #endif // PRIVMSG_COMMAND_HPP
