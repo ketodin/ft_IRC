@@ -6,11 +6,12 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 18:52:37 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 22:10:29 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandDispatcher.hpp"
+#include "CapCommand.hpp"
 #include "utils.hpp"
 #include <iostream>
 #include <stdexcept>
@@ -19,6 +20,8 @@ CommandDispatcher::CommandDispatcher(void)
 {
 	registerCommand(PassCommand::NAME, &PassCommand::execute);
 	registerCommand(NickCommand::NAME, &NickCommand::execute);
+	registerCommand(CapCommand::NAME, &CapCommand::execute);
+
 	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
 	/*
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
