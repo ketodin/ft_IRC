@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 04:28:01 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 17:56:05 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,19 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 	}
 
 	client.setNickname(args[0]);
+	client.setNickSet(true);
 
-	if (client.isRegistered())
+	if (client.getRegistered())
 	{
 		std::string message = ":" + client.getNickname() + "!"
 							  + client.getUsername() + "@"
 							  + client.getHostname() + " NICK " + args[0];
 		instance->broadcast(message);
+	}
+	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
+		&& !client.getRegistered())
+	{
+		client.setRegistered(true);
+		instance->sendWelcomeBurst(client);
 	}
 }

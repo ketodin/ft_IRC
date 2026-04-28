@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 03:16:47 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 17:53:31 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,24 @@ class Client
 
 		std::vector<std::string> extractMessages();
 		void					 appendToBuffer(const std::string& data);
-		int						 getFd() const;
-		bool					 getPassAccepted() const;
 		void					 setPassAccepted(bool status);
-		std::string				 getNickname(void) const;
 		void					 setNickname(const std::string& nickname);
+		void					 setNickSet(bool nickset);
+		void					 setUsername(const std::string& username);
+		void					 setUserSet(bool userset);
+		void					 setRealName(const std::string& realname);
+		void					 setHostName(const std::string& hostname);
+		void					 setRegistered(bool registered);
 
-		std::string getPrefix(void) const;
+		std::string getNickname(void) const;
 		std::string getUsername(void) const;
 		std::string getHostname(void) const;
-		bool		isRegistered(void) const;
+		std::string getPrefix(void) const;
+		bool		getRegistered(void) const;
+		bool		getPassAccepted(void) const;
+		bool		getNickSet(void) const;
+		bool		getUserSet(void) const;
+		int			getFd(void) const;
 };
 
 #endif
