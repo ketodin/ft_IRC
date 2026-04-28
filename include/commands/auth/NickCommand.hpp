@@ -24,8 +24,9 @@ class NickCommand : public ACommand
 		NickCommand(const NickCommand& other);
 		NickCommand& operator=(const NickCommand& other);
 
-		static bool checkRegisteredNicknames(const std::string&	nickname,
-									   std::vector<Client*> registredClients);
+		static bool
+		checkRegisteredNicknames(const std::string&	  nickname,
+								 std::vector<Client*> registredClients);
 
 	public:
 		static const std::string NAME; // = "NICK"

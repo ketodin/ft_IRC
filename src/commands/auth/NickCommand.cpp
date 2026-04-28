@@ -35,8 +35,8 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 }
 
 bool
-NickCommand::checkRegisteredNicknames(const std::string&	 nickname,
-								std::vector<Client*> registredClients)
+NickCommand::checkRegisteredNicknames(const std::string&   nickname,
+									  std::vector<Client*> registredClients)
 {
 	return (std::find_if(registredClients.begin(),
 						 registredClients.end(),
