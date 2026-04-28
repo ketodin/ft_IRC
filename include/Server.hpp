@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 21:46:08 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 04:28:31 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
+#include "Channel.hpp"
 #include "Client.hpp"
 #include "utils.hpp"
+#include <arpa/inet.h>
 #include <cerrno>
 #include <cstring>
 #include <iostream>
@@ -50,6 +52,14 @@ class Server
 		void	   start(void);
 		bool	   isPasswordValid(const std::string& password);
 
+		void broadcast(const std::string& msg,
+					   const Client*	  except = NULL) const;
+
+		Client*	 getClientByFd(const int fd) const;
+		Client*	 getClientByNick(const std::string& name) const;
+		Channel* getChannelByName(const std::string& name) const;
+		Channel* getOrCreateChannel(const std::string& name);
+
 	private:
 		enum ReadStatus
 		{
@@ -59,11 +69,14 @@ class Server
 			READ_ERROR
 		};
 
-		int					 _epoll_fd;
-		int					 _listen_sock;
-		int					 _port;
-		const std::string	 _password;
-		std::vector<Client*> _clients;
+		const std::string	  _serverName;
+		const std::string	  _creationDate;
+		int					  _epoll_fd;
+		int					  _listen_sock;
+		int					  _port;
+		const std::string	  _password;
+		std::vector<Client*>  _clients;
+		std::vector<Channel*> _channels;
 
 		static Server* _instance;
 
@@ -73,8 +86,7 @@ class Server
 		Server& operator=(const Server& other);
 
 		void setupSocket(void);
-		int	 acceptClient(void);
-		int	 listenSockets(void);
+		void acceptClient(int& clientFd, std::string& clientHostname);
 
 		void addNewClient(void);
 		bool removeClient(int fd);

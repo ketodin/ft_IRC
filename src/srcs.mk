@@ -6,7 +6,7 @@
 #    By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/14 17:51:47 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/25 03:09:17 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/27 22:05:10 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ IRC_SRCS	= main.cpp \
 			  Server.cpp \
 			  ServerException.cpp \
 			  Client.cpp \
-			  utils.cpp
+			  Channel.cpp \
+			  utils.cpp \
+			  signals.cpp
 SRCS		+= $(addprefix $(SRCDIR)/, $(IRC_SRCS))
 
 # MKs

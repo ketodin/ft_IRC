@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 21:45:09 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 04:28:43 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "CommandDispatcher.hpp"
 #include "CommandParser.hpp"
+#include "signals.hpp"
 #include "utils.hpp"
 #include <algorithm>
 #include <cstdlib>
@@ -52,11 +53,14 @@ Server::destroy(void)
 }
 
 Server::Server(int port, const std::string& password) :
+	_serverName("ft_irc.42lyon.fr"),
+	_creationDate(utils::getCurrentTime()),
 	_epoll_fd(-1),
 	_listen_sock(-1),
 	_port(port),
 	_password(password),
-	_clients()
+	_clients(),
+	_channels()
 {
 	// logging
 	LOG_INFO(this->_port);
@@ -82,6 +86,36 @@ Server::~Server(void)
 		 i != this->_clients.end();
 		 ++i)
 		delete (*i);
+	// deleting channels pointers
+	for (std::vector<Channel*>::const_iterator i = this->_channels.begin();
+		 i != this->_channels.end();
+		 ++i)
+		delete (*i);
+}
+
+void
+Server::broadcast(const std::string& msg, const Client* except) const
+{
+	std::string finalMessage = msg + "\r\n";
+	for (std::vector<Client*>::const_iterator it = this->_clients.begin();
+		 it != this->_clients.end();
+		 ++it)
+	{
+		const Client* currentClient = *it;
+
+		if (currentClient->getFd() != except->getFd())
+		{
+			ssize_t sent = send(currentClient->getFd(),
+								finalMessage.c_str(),
+								finalMessage.size(),
+								0);
+
+			if (sent == -1)
+				std::cout << "send(): failed" << std::endl;
+			if (sent < static_cast<ssize_t>(finalMessage.size()))
+				std::cout << "send(): message partially sent" << std::endl;
+		}
+	}
 }
 
 /* This function creates the listening socket of the server and binds
@@ -118,41 +152,28 @@ Server::setupSocket(void)
 }
 
 /* This function tries to accept a client and returns his associated fd */
-int
-Server::acceptClient(void)
+void
+Server::acceptClient(int& clientFd, std::string& clientHostname)
 {
 	struct sockaddr_in clientAddr;
 	socklen_t		   clientLen = sizeof(clientAddr);
 
-	int clientFd = accept(this->_listen_sock,
-						  reinterpret_cast<struct sockaddr*>(&clientAddr),
-						  &clientLen);
+	clientFd = accept(this->_listen_sock,
+					  reinterpret_cast<struct sockaddr*>(&clientAddr),
+					  &clientLen);
 	if (clientFd < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return (-1); // no client actually ready, not a real error
+			return; // no client actually ready, not a real error
 		throw AcceptException();
 	}
+	char ipBuf[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &clientAddr.sin_addr, ipBuf, sizeof(ipBuf));
+	clientHostname = std::string(ipBuf);
 
 	// clientAddr currently unused - will be needed for IP logging/banning
 
 	LOG_INFO("New client connected, fd=" << clientFd);
-	return (clientFd);
-}
-
-int
-Server::listenSockets(void)
-{
-	int clientFd = this->acceptClient();
-
-	/* Refusal logic will be implemented with Client authentication
-	When _clients.size() > MAX_EVENT()
-	At the IRC Protocol Level Later :
-	Wrong password,
-	Banned client (if  needed in the subject),
-	No more conneciton allowd, Registration Timeout */
-
-	return (clientFd);
 }
 
 /* This function parses the port and checks its validity
@@ -194,8 +215,14 @@ using the epoll_ctl() with flag EPOLL_CTL_ADD */
 void
 Server::addNewClient(void)
 {
-	int				   clientFd = this->listenSockets();
+	int				   clientFd;
+	std::string		   clientHostname;
 	struct epoll_event ev;
+
+	this->acceptClient(clientFd, clientHostname);
+
+	if (clientFd < 0)
+		return;
 
 	setNonBlocking(clientFd);
 
@@ -205,7 +232,7 @@ Server::addNewClient(void)
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, clientFd, &ev) < 0)
 		throw EpollCtlException("EPOLL_CTL_ADD");
 
-	this->_clients.push_back(new Client(clientFd));
+	this->_clients.push_back(new Client(clientFd, clientHostname));
 }
 
 /* This function returns the read status depending on the number
@@ -248,6 +275,56 @@ Server::removeClient(int fd)
 	return (true);
 }
 
+Client*
+Server::getClientByFd(const int fd) const
+{
+	std::vector<Client*>::const_iterator it =
+		std::find_if(this->_clients.begin(),
+					 this->_clients.end(),
+					 utils::HasMemberValue<Client, int>(&Client::getFd, fd));
+	if (it == this->_clients.end())
+		return (NULL);
+	return (*it);
+}
+
+Client*
+Server::getClientByNick(const std::string& nick) const
+{
+	std::vector<Client*>::const_iterator it = std::find_if(
+		this->_clients.begin(),
+		this->_clients.end(),
+		utils::HasMemberValue<Client, std::string>(&Client::getNickname, nick));
+	if (it == this->_clients.end())
+		return (NULL);
+	return (*it);
+}
+
+Channel*
+Server::getChannelByName(const std::string& name) const
+{
+	std::vector<Channel*>::const_iterator it = std::find_if(
+		this->_channels.begin(),
+		this->_channels.end(),
+		utils::HasMemberValue<Channel, std::string>(&Channel::getName, name));
+	if (it == this->_channels.end())
+		return (NULL);
+	return (*it);
+}
+
+Channel*
+Server::getOrCreateChannel(const std::string& name)
+{
+	Channel* channel;
+
+	channel = this->getChannelByName(name);
+	if (channel == NULL)
+	{
+		channel = new Channel(name);
+		this->_channels.push_back(channel);
+	}
+	return (channel);
+}
+
 /* This function handles all the events received in a loop iterating
 over all the events received and deciding logic to adapt according
 to what it has received */
@@ -273,24 +350,21 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 				removeClient(fd);
 				continue;
 			}
-			std::vector<Client*>::iterator it = std::find_if(
-				this->_clients.begin(),
-				this->_clients.end(),
-				utils::HasMemberValue<Client, int>(&Client::getFd, fd));
 
-			if (it == this->_clients.end())
+			Client* client = this->getClientByFd(fd);
+			if (client == NULL)
 				continue;
 
-			(*it)->appendToBuffer(std::string(buffer, n));
+			client->appendToBuffer(std::string(buffer, n));
 
-			std::vector<std::string> messages = (*it)->extractMessages();
+			std::vector<std::string> messages = client->extractMessages();
 
 			CommandDispatcher disp;
 			CommandParser	  parser(disp);
 			try
 			{
 				for (size_t j = 0; j < messages.size(); j++)
-					parser.parse(**it, messages[j]);
+					parser.parse(*client, messages[j]);
 			}
 			catch (const std::exception& e)
 			{
@@ -320,7 +394,7 @@ Server::start(void)
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_listen_sock, &ev) < 0)
 		throw EpollCtlException("EPOLL_CTL_ADD");
 
-	while (true)
+	while (g_running)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, events, MAX_EVENTS, -1);
 		if (nfds < 0)

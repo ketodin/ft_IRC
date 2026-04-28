@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:49 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 21:36:43 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 04:28:13 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ class NickCommand : public ACommand
 		static const std::string NAME; // = "NICK"
 
 		// NICK <nickname>
-		static void execute(const std::vector<std::string>& args);
+		static void execute(Client&							client,
+							const std::vector<std::string>& args);
 };
 
 #endif // NICK_COMMAND_HPP

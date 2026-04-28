@@ -3,23 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/25 21:42:59 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 03:17:48 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 #include <unistd.h>
 
-Client::Client(int fd) :
+Client::Client(int fd, std::string hostname) :
 	_fd(fd),
+	_hostname(hostname),
 	_nickname("*"),
 	_username(""),
 	_realname(""),
 	_inputBuffer(""),
-	_isLogged(false)
+	_passAccepted(false),
+	_nickSet(false),
+	_userSet(false),
+	_registered(false)
 {
 	printClientData();
 }
@@ -31,7 +35,7 @@ Client::~Client()
 }
 
 void
-Client::printClientData()
+Client::printClientData() const
 {
 	std::cout << this->_fd << std::endl;
 	std::cout << this->_nickname << std::endl;
@@ -87,13 +91,50 @@ Client::getFd() const
 }
 
 bool
-Client::getIsLogged() const
+Client::getPassAccepted() const
 {
-	return (this->_isLogged);
+	return (this->_passAccepted);
 }
 
 void
-Client::setIsLogged(bool status)
+Client::setPassAccepted(bool status)
 {
-	this->_isLogged = status;
+	this->_passAccepted = status;
+}
+
+std::string
+Client::getNickname() const
+{
+	return (this->_nickname);
+}
+
+void
+Client::setNickname(const std::string& nickname)
+{
+	this->_nickname = nickname;
+}
+
+std::string
+Client::getPrefix(void) const
+{
+	return (this->_nickname + "!" + this->_username + "@" + this->_hostname);
+}
+
+std::string
+Client::getUsername() const
+{
+	return (this->_username);
+}
+
+std::string
+Client::getHostname() const
+{
+	return (this->_hostname);
+}
+
+bool
+Client::isRegistered(void) const
+{
+	return ((this->_passAccepted && this->_nickSet && this->_userSet)
+			|| this->_registered);
 }
