@@ -12,8 +12,9 @@
 
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
-#include "Server.hpp"
+#include <Client.hpp>
 #include <algorithm>
+#include <sstream>
 
 class Channel
 {
@@ -48,6 +49,8 @@ class Channel
 		void broadcast(const std::string& msg, const Client* except = NULL);
 		std::string getModeString(void) const;
 		std::string buildNamesReply(void) const;
+
+		std::string getName(void) const;
 };
 
 #endif // CHANNEL_HPP

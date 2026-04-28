@@ -33,7 +33,11 @@ Channel::addMember(const Client& client)
 	{
 		if ((this->_userLimit == 0)
 			|| (this->_userLimit > this->_members.size()))
+		{
+			if (this->_members.size() == 0)
+				this->addOperator(client);
 			this->_members.push_back(const_cast<Client*>(&client));
+		}
 		else
 			std::cout << "no more place inside channel\n";
 	}
@@ -164,4 +168,10 @@ Channel::buildNamesReply(void) const
 	}
 
 	return (names);
+}
+
+std::string
+Channel::getName(void) const
+{
+	return (this->_name);
 }

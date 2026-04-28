@@ -6,12 +6,13 @@
 /*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 02:46:19 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 02:50:04 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 02:14:28 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.hpp"
 
+#include <ctime>
 #include <iomanip>
 #include <sstream>
 
@@ -96,5 +97,14 @@ ft_atou(const std::string& str, int& num)
 		throw std::overflow_error("Input overflows int");
 
 	num = static_cast<int>(tmp);
+}
+
+std::string
+getCurrentTime(void)
+{
+	time_t		now = time(NULL);
+	std::string t	= ctime(&now);
+	t.erase(t.find_last_not_of("\n\r") + 1);
+	return (t);
 }
 }

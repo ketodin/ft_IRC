@@ -13,6 +13,7 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
+#include "Channel.hpp"
 #include "Client.hpp"
 #include "utils.hpp"
 #include <arpa/inet.h>
@@ -55,6 +56,10 @@ class Server
 					   const Client*	  except = NULL) const;
 
 		std::vector<Client*> getClients(void) const;
+		Client*	 getClientByFd(const int fd) const;
+		Client*	 getClientByNick(const std::string& name) const;
+		Channel* getChannelByName(const std::string& name) const;
+		Channel* getOrCreateChannel(const std::string& name);
 
 	private:
 		enum ReadStatus
@@ -65,11 +70,14 @@ class Server
 			READ_ERROR
 		};
 
-		int					 _epoll_fd;
-		int					 _listen_sock;
-		int					 _port;
-		const std::string	 _password;
-		std::vector<Client*> _clients;
+		const std::string	  _serverName;
+		const std::string	  _creationDate;
+		int					  _epoll_fd;
+		int					  _listen_sock;
+		int					  _port;
+		const std::string	  _password;
+		std::vector<Client*>  _clients;
+		std::vector<Channel*> _channels;
 
 		static Server* _instance;
 
