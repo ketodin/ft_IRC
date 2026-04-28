@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:29:08 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 02:08:44 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define SERVER_HPP
 
 #include "Client.hpp"
+#include "Channel.hpp"
 #include "utils.hpp"
 #include <arpa/inet.h>
 #include <cerrno>
@@ -51,6 +52,11 @@ class Server
 		void	   start(void);
 		bool	   isPasswordValid(const std::string& password);
 
+		Client*    getClientByFd(const int fd) const;
+		Client*    getClientByNick(const std::string& name) const;
+		Channel*   getChannelByName(const std::string& name) const;
+		Channel*   getOrCreateChannel(const std::string& name);
+
 	private:
 		enum ReadStatus
 		{
@@ -60,11 +66,14 @@ class Server
 			READ_ERROR
 		};
 
-		int					 _epoll_fd;
-		int					 _listen_sock;
-		int					 _port;
-		const std::string	 _password;
-		std::vector<Client*> _clients;
+		const std::string	  _serverName;
+		const std::string	  _creationDate;
+		int					  _epoll_fd;
+		int					  _listen_sock;
+		int					  _port;
+		const std::string	  _password;
+		std::vector<Client*>  _clients;
+		std::vector<Channel*> _channels;
 
 		static Server* _instance;
 
