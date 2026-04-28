@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 23:58:33 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 04:10:24 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,30 @@ Channel::isInvited(const Client& client) const
 			!= this->_invites.end());
 }
 
-/*
-void	Channel::broadcast(const std::string& msg, const Client* except)
+void
+Channel::broadcast(const std::string& msg, const Client* except)
 {
-	(void)msg;
-	(void)except;
+	std::string finalMessage = msg + "\r\n";
+	for (std::vector<Client*>::const_iterator it = _members.begin();
+		 it != _members.end();
+		 ++it)
+	{
+		const Client* currentClient = *it;
+
+		if (currentClient->getFd() != except->getFd())
+		{
+			ssize_t sent = send(currentClient->getFd(),
+								finalMessage.c_str(),
+								finalMessage.size(),
+								0);
+
+			if (sent == -1)
+				std::cout << "send(): failed" << std::endl;
+			if (sent < static_cast<ssize_t>(finalMessage.size()))
+				std::cout << "send(): message partially sent" << std::endl;
+		}
+	}
 }
-*/
 
 std::string
 Channel::getModeString(void) const

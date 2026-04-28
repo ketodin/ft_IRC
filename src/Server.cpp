@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 22:18:42 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 04:10:28 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,31 @@ Server::~Server(void)
 		 i != this->_clients.end();
 		 ++i)
 		delete (*i);
+}
+
+void
+Server::broadcast(const std::string& msg, const Client* except) const
+{
+	std::string finalMessage = msg + "\r\n";
+	for (std::vector<Client*>::const_iterator it = this->_clients.begin();
+		 it != this->_clients.end();
+		 ++it)
+	{
+		const Client* currentClient = *it;
+
+		if (currentClient->getFd() != except->getFd())
+		{
+			ssize_t sent = send(currentClient->getFd(),
+								finalMessage.c_str(),
+								finalMessage.size(),
+								0);
+
+			if (sent == -1)
+				std::cout << "send(): failed" << std::endl;
+			if (sent < static_cast<ssize_t>(finalMessage.size()))
+				std::cout << "send(): message partially sent" << std::endl;
+		}
+	}
 }
 
 /* This function creates the listening socket of the server and binds

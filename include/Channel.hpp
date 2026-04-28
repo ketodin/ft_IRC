@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 23:59:26 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/28 03:22:34 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class Channel
 		void addInvite(const Client& client);
 		bool isInvited(const Client& client) const;
 
-		// void	broadcast(const std::string& msg, const Client* except = NULL);
+		void broadcast(const std::string& msg, const Client* except = NULL);
 		std::string getModeString(void) const;
 		std::string buildNamesReply(void) const;
 };

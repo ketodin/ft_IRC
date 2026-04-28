@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 22:20:15 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 03:42:22 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ class Server
 		static int parsePort(const char* str);
 		void	   start(void);
 		bool	   isPasswordValid(const std::string& password);
+
+		void broadcast(const std::string& msg,
+					   const Client*	  except = NULL) const;
 
 		std::vector<Client*> getClients(void) const;
 

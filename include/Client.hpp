@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 02:44:17 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 03:16:47 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ class Client
 		void					 setNickname(const std::string& nickname);
 
 		std::string getPrefix(void) const;
+		std::string getUsername(void) const;
+		std::string getHostname(void) const;
 		bool		isRegistered(void) const;
 };
 

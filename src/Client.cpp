@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 02:44:48 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 03:17:48 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,18 @@ std::string
 Client::getPrefix(void) const
 {
 	return (this->_nickname + "!" + this->_username + "@" + this->_hostname);
+}
+
+std::string
+Client::getUsername() const
+{
+	return (this->_username);
+}
+
+std::string
+Client::getHostname() const
+{
+	return (this->_hostname);
 }
 
 bool
