@@ -56,10 +56,10 @@ class Server
 					   const Client*	  except = NULL) const;
 
 		std::vector<Client*> getClients(void) const;
-		Client*	 getClientByFd(const int fd) const;
-		Client*	 getClientByNick(const std::string& name) const;
-		Channel* getChannelByName(const std::string& name) const;
-		Channel* getOrCreateChannel(const std::string& name);
+		Client*				 getClientByFd(const int fd) const;
+		Client*				 getClientByNick(const std::string& name) const;
+		Channel*			 getChannelByName(const std::string& name) const;
+		Channel*			 getOrCreateChannel(const std::string& name);
 
 	private:
 		enum ReadStatus

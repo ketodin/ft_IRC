@@ -6,11 +6,12 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 04:10:24 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/28 04:16:19 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include <sys/socket.h>
 
 Channel::Channel(const std::string& name) :
 	_name(name),
