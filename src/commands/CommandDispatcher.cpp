@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 00:56:59 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 02:17:19 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ CommandDispatcher::CommandDispatcher(void)
 	registerCommand(CapCommand::NAME, &CapCommand::execute);
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
 	registerCommand(PongCommand::NAME, &PongCommand::execute);
-	/*
 	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
+
+	/*
 	registerCommand(PrivmsgCommand::NAME, &PrivmsgCommand::execute);
 
 	registerCommand(InviteCommand::NAME, &InviteCommand::execute);
