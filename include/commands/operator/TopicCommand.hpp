@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TopicCommand.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:59 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 22:26:39 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 00:18:47 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ class TopicCommand : public ACommand
 		static const std::string NAME; // = "TOPIC"
 
 		// TOPIC <username>
-		static void execute(const std::vector<std::string>& args);
+		static void execute(Client&							client,
+							const std::vector<std::string>& args);
 };
 
 #endif // TOPIC_COMMAND_HPP

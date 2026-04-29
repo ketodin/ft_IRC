@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:21:44 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 00:03:34 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ class Channel
 		std::string buildNamesReply(void) const;
 
 		std::string getName(void) const;
+
 		std::string getTopic(void) const;
+		void		setTopic(const std::string& topic);
 
 		unsigned int getUserLimit(void) const;
 		std::size_t	 getMemberSize(void) const;
