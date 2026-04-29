@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    channel.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/23 17:32:03 by jaubry--          #+#    #+#              #
-#    Updated: 2026/04/23 17:33:08 by jaubry--         ###   ########.fr        #
+#    Updated: 2026/04/29 00:40:13 by ekeisler         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ CHANNEL_DIR      = $(COMMANDS_DIR)/channel
 
 # Source files
 CHANNEL_SRCS     = JoinCommand.cpp \
-				   PrivmsgCommand.cpp
+				   PrivmsgCommand.cpp \
+				   PongCommand.cpp
 
 SRCS            += $(addprefix $(CHANNEL_DIR)/, $(CHANNEL_SRCS))
 
