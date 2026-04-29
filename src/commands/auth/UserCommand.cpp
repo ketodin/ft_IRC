@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:31:47 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 00:52:44 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 02:30:40 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ const std::string UserCommand::NAME = "USER";
 void
 UserCommand::execute(Client& client, const std::vector<std::string>& args)
 {
-	std::cout << "LETS GO" << std::endl;
-
 	if (client.getRegistered())
 	{
 		// send ERR_ALREADYREGISTRED 462
