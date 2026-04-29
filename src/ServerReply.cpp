@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerReply.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 01:45:35 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/29 02:52:16 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,104 +34,99 @@ makeReply(const Code&		 code,
 
 	switch (code)
 	{
-		// Registration
-		case RPL_WELCOME:
+		case (RPL_WELCOME):
 			rplMsg = ":Welcome to the IRC network, " + client.getPrefix();
 			break;
-		case RPL_YOURHOST:
+		case (RPL_YOURHOST):
 			rplMsg = ":Your host is " + Server::getInstance()->getServerName()
 					 + ", running version 1.0";
 			break;
-		case RPL_CREATED:
+		case (RPL_CREATED):
 			rplMsg = ":This server was created "
 					 + Server::getInstance()->getCreationDate();
 			break;
-		case RPL_MYINFO:
+		case (RPL_MYINFO):
 			rplMsg = Server::getInstance()->getServerName()
 					 + " 1.0 :Available channel modes: itkol";
 			break;
 
-		// Channel info
-		case RPL_CHANNELMODEIS:
+		case (RPL_CHANNELMODEIS):
 			rplMsg = channel->getName() + " " + channel->getModeString();
 			break;
-		case RPL_NOTOPIC:
+		case (RPL_NOTOPIC):
 			rplMsg = channel->getName() + " :No topic is set";
 			break;
-		case RPL_TOPIC:
+		case (RPL_TOPIC):
 			rplMsg = channel->getName() + " :" + channel->getTopic();
 			break;
-		case RPL_INVITING:
+		case (RPL_INVITING):
 			rplMsg = *extra + " " + channel->getName();
 			break;
-		case RPL_NAMREPLY:
+		case (RPL_NAMREPLY):
 			rplMsg = "= " + channel->getName() + " :" + *extra;
 			break;
-		case RPL_ENDOFNAMES:
+		case (RPL_ENDOFNAMES):
 			rplMsg = channel->getName() + " :End of /NAMES list";
 			break;
 
-		// Errors — no params
-		case ERR_NOTEXTTOSEND:
+		case (ERR_NOTEXTTOSEND):
 			rplMsg = ":No text to send";
 			break;
-		case ERR_NONICKNAMEGIVEN:
+		case (ERR_NONICKNAMEGIVEN):
 			rplMsg = ":No nickname given";
 			break;
-		case ERR_NOTREGISTERED:
+		case (ERR_NOTREGISTERED):
 			rplMsg = ":You have not registered";
 			break;
-		case ERR_ALREADYREGISTERED:
+		case (ERR_ALREADYREGISTERED):
 			rplMsg = ":You may not reregister";
 			break;
-		case ERR_PASSWDMISMATCH:
+		case (ERR_PASSWDMISMATCH):
 			rplMsg = ":Password incorrect";
 			break;
 
-		// Errors — p1 = command or nick or char
-		case ERR_UNKNOWNCOMMAND:
+		case (ERR_UNKNOWNCOMMAND):
 			rplMsg = *extra + " :Unknown command";
 			break;
-		case ERR_NEEDMOREPARAMS:
+		case (ERR_NEEDMOREPARAMS):
 			rplMsg = *extra + " :Not enough parameters";
 			break;
-		case ERR_NOSUCHNICK:
+		case (ERR_NOSUCHNICK):
 			rplMsg = *extra + " :No such nick/channel";
 			break;
-		case ERR_NORECIPIENT:
+		case (ERR_NORECIPIENT):
 			rplMsg = ":No recipient given (PRIVMSG)";
 			break;
-		case ERR_ERRONEUSNICKNAME:
+		case (ERR_ERRONEUSNICKNAME):
 			rplMsg = *extra + " :Erroneous nickname";
 			break;
-		case ERR_NICKNAMEINUSE:
+		case (ERR_NICKNAMEINUSE):
 			rplMsg = *extra + " :Nickname is already in use";
 			break;
-		case ERR_NOTONCHANNEL:
+		case (ERR_NOTONCHANNEL):
 			rplMsg = channel->getName() + " :You're not on that channel";
 			break;
-		case ERR_CHANOPRIVSNEEDED:
+		case (ERR_CHANOPRIVSNEEDED):
 			rplMsg = channel->getName() + " :You're not channel operator";
 			break;
-		case ERR_CHANNELISFULL:
+		case (ERR_CHANNELISFULL):
 			rplMsg = channel->getName() + " :Cannot join channel (+l)";
 			break;
-		case ERR_INVITEONLYCHAN:
+		case (ERR_INVITEONLYCHAN):
 			rplMsg = channel->getName() + " :Cannot join channel (+i)";
 			break;
-		case ERR_BADCHANNELKEY:
+		case (ERR_BADCHANNELKEY):
 			rplMsg = channel->getName() + " :Cannot join channel (+k)";
 			break;
-		case ERR_UNKNOWNMODE:
+		case (ERR_UNKNOWNMODE):
 			rplMsg = *extra + " :is unknown mode char to me";
 			break;
 
-		// Errors — p1 = nick, p2 = channel
-		case ERR_USERNOTINCHANNEL:
+		case (ERR_USERNOTINCHANNEL):
 			rplMsg = *extra + " " + channel->getName()
 					 + " :They aren't on that channel";
 			break;
-		case ERR_USERONCHANNEL:
+		case (ERR_USERONCHANNEL):
 			rplMsg =
 				*extra + " " + channel->getName() + " :is already on channel";
 			break;

@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 02:45:43 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/29 02:58:02 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,12 @@ Client::extractMessages()
 void
 Client::reply(const std::string& msg) const
 {
-	ssize_t sent = send(this->getFd(), msg.c_str(), msg.size(), 0);
+	std::string finalMsg = msg + "\r\n";
+	ssize_t sent = send(this->getFd(), finalMsg.c_str(), finalMsg.size(), 0);
 
 	if (sent == -1)
 		std::cout << "send(): failed" << std::endl;
-	else if (sent < static_cast<ssize_t>(msg.size()))
+	else if (sent < static_cast<ssize_t>(finalMsg.size()))
 		std::cout << "send(): message partially sent" << std::endl;
 }
 
