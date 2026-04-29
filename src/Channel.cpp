@@ -113,19 +113,22 @@ Channel::broadcast(const std::string& msg, const Client* except)
 	{
 		const Client* currentClient = *it;
 
-		if (currentClient->getFd() != except->getFd())
-		{
-			ssize_t sent = send(currentClient->getFd(),
-								finalMessage.c_str(),
-								finalMessage.size(),
-								0);
-
-			if (sent == -1)
-				std::cout << "send(): failed" << std::endl;
-			if (sent < static_cast<ssize_t>(finalMessage.size()))
-				std::cout << "send(): message partially sent" << std::endl;
-		}
+		if (!except)
+			this->sendMsg(*currentClient, finalMessage);
+		else if (currentClient->getFd() != except->getFd())
+			this->sendMsg(*currentClient, finalMessage);
 	}
+}
+
+void
+Channel::sendMsg(const Client& client, const std::string& msg)
+{
+	ssize_t sent = send(client.getFd(), msg.c_str(), msg.size(), 0);
+
+	if (sent == -1)
+		std::cout << "send(): failed" << std::endl;
+	else if (sent < static_cast<ssize_t>(msg.size()))
+		std::cout << "send(): message partially sent" << std::endl;
 }
 
 std::string

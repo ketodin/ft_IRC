@@ -31,6 +31,8 @@ class Channel
 		std::vector<Client*> _operators;
 		std::vector<Client*> _invites;
 
+		static void sendMsg(const Client& client, const std::string& msg);
+
 	public:
 		explicit Channel(const std::string& name);
 		~Channel(void);
@@ -47,6 +49,7 @@ class Channel
 		bool isInvited(const Client& client) const;
 
 		void broadcast(const std::string& msg, const Client* except = NULL);
+
 		std::string getModeString(void) const;
 		std::string buildNamesReply(void) const;
 

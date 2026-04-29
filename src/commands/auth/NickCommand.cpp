@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 17:56:05 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 00:31:26 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,13 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 	}
 	requireWord(args, 0, "nickname");
 
-	const Server* instance = Server::getInstance();
+	Server* instance = Server::getInstance();
 	if (instance->getClientByNick(args[0]))
 	{
 		// send ERR_NICKNAMEINUSE 433
 		std::cout << "Nickname already taken" << std::endl;
 		return;
 	}
-
-	client.setNickname(args[0]);
-	client.setNickSet(true);
 
 	if (client.getRegistered())
 	{
@@ -52,4 +49,6 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 		client.setRegistered(true);
 		instance->sendWelcomeBurst(client);
 	}
+	client.setNickname(args[0]);
+	client.setNickSet(true);
 }
