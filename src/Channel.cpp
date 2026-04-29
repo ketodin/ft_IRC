@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 04:16:19 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/29 00:53:52 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,22 @@ Channel::broadcast(const std::string& msg, const Client* except)
 	{
 		const Client* currentClient = *it;
 
-		if (currentClient->getFd() != except->getFd())
-		{
-			ssize_t sent = send(currentClient->getFd(),
-								finalMessage.c_str(),
-								finalMessage.size(),
-								0);
-
-			if (sent == -1)
-				std::cout << "send(): failed" << std::endl;
-			if (sent < static_cast<ssize_t>(finalMessage.size()))
-				std::cout << "send(): message partially sent" << std::endl;
-		}
+		if (!except)
+			this->sendMsg(*currentClient, finalMessage);
+		else if (currentClient->getFd() != except->getFd())
+			this->sendMsg(*currentClient, finalMessage);
 	}
+}
+
+void
+Channel::sendMsg(const Client& client, const std::string& msg)
+{
+	ssize_t sent = send(client.getFd(), msg.c_str(), msg.size(), 0);
+
+	if (sent == -1)
+		std::cout << "send(): failed" << std::endl;
+	else if (sent < static_cast<ssize_t>(msg.size()))
+		std::cout << "send(): message partially sent" << std::endl;
 }
 
 std::string
@@ -175,4 +178,34 @@ std::string
 Channel::getName(void) const
 {
 	return (this->_name);
+}
+
+unsigned int
+Channel::getUserLimit(void) const
+{
+	return (this->_userLimit);
+}
+
+std::size_t
+Channel::getMemberSize(void) const
+{
+	return (_members.size());
+}
+
+bool
+Channel::isValidKey(const std::string& key) const
+{
+	return (key == _key);
+}
+
+bool
+Channel::hasMode(const char& c) const
+{
+	return (_key.find(c, 0) != std::string::npos);
+}
+
+std::string
+Channel::getTopic(void) const
+{
+	return (this->_topic);
 }
