@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 00:58:31 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/29 02:07:52 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,15 @@ JoinCommand::execute(
 	requireChannel(args, 0, "channel");
 	optionalWord(args, 1, "key");
 
-	Server*	 instance  = Server::getInstance();
-	Channel* chan	   = instance->getChannelByName(args[0]);
-	bool	 isCreator = (chan == NULL);
+	Server*	 instance = Server::getInstance();
+	Channel* chan	  = instance->getChannelByName(args[0]);
 
-	if (!isCreator && !checkAccess(client, *chan, args))
+	if (chan && !checkAccess(client, *chan, args))
 		return;
 
-	if (isCreator)
-		chan = instance->getOrCreateChannel(args[0]);
-
-	instance->sendJoinBurst(client, *chan);
+	chan = instance->getOrCreateChannel(args[0]);
 	chan->addMember(client);
+	instance->sendJoinBurst(client, *chan);
 }
 
 bool
