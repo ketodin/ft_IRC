@@ -6,11 +6,12 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/28 17:55:45 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 01:49:30 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PassCommand.hpp"
+#include "ServerReply.hpp"
 
 const std::string PassCommand::NAME = "PASS";
 
@@ -26,7 +27,10 @@ PassCommand::execute(Client& client, const std::vector<std::string>& args)
 			  << std::endl;
 
 	std::cout << "Client fd: " << client.getFd() << "\n";
-	client.setPassAccepted(Server::getInstance()->isPasswordValid(password));
+	const bool valid = Server::getInstance()->isPasswordValid(password);
+	client.setPassAccepted(valid);
+	if (!valid)
+		ServerReply::reply(client, ServerReply::ERR_PASSWDMISMATCH);
 
 	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
 		&& !client.getRegistered())

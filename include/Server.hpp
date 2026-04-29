@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 00:28:38 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/29 01:12:40 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ class Server
 		Client*	 getClientByNick(const std::string& name) const;
 		Channel* getChannelByName(const std::string& name) const;
 		Channel* getOrCreateChannel(const std::string& name);
+
+		std::string getServerName(void) const;
+		std::string getCreationDate(void) const;
 
 		void sendWelcomeBurst(const Client& client) const;
 		void sendJoinBurst(const Client& client, Channel& chan) const;
