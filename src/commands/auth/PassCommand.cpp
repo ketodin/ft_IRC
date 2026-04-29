@@ -32,7 +32,6 @@ PassCommand::execute(Client& client, const std::vector<std::string>& args)
 	if (!valid)
 		ServerReply::reply(client, ServerReply::ERR_PASSWDMISMATCH);
 
-
 	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
 		&& !client.getRegistered())
 	{

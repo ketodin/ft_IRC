@@ -61,7 +61,7 @@ class Server
 		Channel* getOrCreateChannel(const std::string& name);
 
 		std::string getServerName(void) const;
-		std::string	getCreationDate(void) const;
+		std::string getCreationDate(void) const;
 
 		void sendWelcomeBurst(const Client& client) const;
 
