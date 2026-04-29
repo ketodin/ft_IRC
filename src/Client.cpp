@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 17:56:24 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 01:44:37 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,4 +184,10 @@ bool
 Client::getUserSet() const
 {
 	return (this->_userSet);
+}
+
+void
+Client::reply(const std::string& msg) const
+{
+	std::cout << msg << "\\n\\r\n";
 }
