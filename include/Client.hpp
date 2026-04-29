@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 00:37:01 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 02:45:25 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ class Client
 		void					 setRealName(const std::string& realname);
 		void					 setHostName(const std::string& hostname);
 		void					 setRegistered(bool registered);
-		void					 reply(const std::string& msg);
+		void					 reply(const std::string& msg) const;
 
 		std::string getNickname(void) const;
 		std::string getUsername(void) const;
