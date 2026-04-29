@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 00:35:30 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:23:33 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ makeReply(const Code&		 code,
 			rplMsg = *extra + " :No such channel";
 			break;
 		case (ERR_CANNOTSENDTOCHAN):
-			rplMsg = ":No recipient given (" + *extra + ")";
+			rplMsg = *extra + " :Cannot send to channel";
 			break;
 		case (RPL_NOTOPIC):
 			rplMsg = channel->getName() + " :No topic is set";

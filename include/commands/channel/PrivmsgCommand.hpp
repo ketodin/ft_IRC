@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:21 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:43:04 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:21:02 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,19 @@ class PrivmsgCommand : public ACommand
 		PrivmsgCommand(void);
 		PrivmsgCommand(const PrivmsgCommand& other);
 		PrivmsgCommand& operator=(const PrivmsgCommand& other);
+
+		static bool validateArgs(const Client&					 client,
+								 const std::vector<std::string>& args);
+
+		static void sendToChannel(const Client&		 client,
+								  const std::string& target,
+								  const std::string& msg,
+								  const std::string& prefix);
+
+		static void sendToClient(const Client&		client,
+								 const std::string& target,
+								 const std::string& msg,
+								 const std::string& prefix);
 
 	public:
 		static const std::string NAME; // = "PRIVMSG"

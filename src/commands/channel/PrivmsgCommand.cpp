@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:49:24 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 00:37:45 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:24:49 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,14 @@
 
 const std::string PrivmsgCommand::NAME = "PRIVMSG";
 
-void
-PrivmsgCommand::execute(
-	Client& client, // cppcheck-suppress constParameterReference
-	const std::vector<std::string>& args)
+bool
+PrivmsgCommand::validateArgs(const Client&					 client,
+							 const std::vector<std::string>& args)
 {
 	if (!client.getRegistered())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NOTREGISTERED);
-		return;
+		return false;
 	}
 
 	try
@@ -34,55 +33,80 @@ PrivmsgCommand::execute(
 	{
 		ServerReply::reply(client, ServerReply::ERR_NEEDMOREPARAMS, "PRIVMSG");
 		std::cerr << e.what() << '\n';
-		return;
+		return false;
 	}
 
 	if (args[0].empty())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NORECIPIENT);
-		return;
+		return false;
 	}
 
 	if (args[1].empty())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NOTEXTTOSEND);
+		return false;
+	}
+
+	return true;
+}
+
+void
+PrivmsgCommand::sendToChannel(const Client&		 client,
+							  const std::string& target,
+							  const std::string& msg,
+							  const std::string& prefix)
+{
+	const Server* instance = Server::getInstance();
+	Channel*	  chan	   = instance->getChannelByName(target);
+
+	if (!chan)
+	{
+		ServerReply::reply(client, ServerReply::ERR_NOSUCHCHANNEL, target);
 		return;
 	}
+
+	if (!chan->isMember(client))
+	{
+		ServerReply::reply(client, ServerReply::ERR_CANNOTSENDTOCHAN, target);
+		return;
+	}
+
+	chan->broadcast(prefix + " PRIVMSG " + target + " :" + msg, &client);
+}
+
+void
+PrivmsgCommand::sendToClient(const Client&		client,
+							 const std::string& target,
+							 const std::string& msg,
+							 const std::string& prefix)
+{
+	const Server* instance = Server::getInstance();
+	const Client* dest	   = instance->getClientByNick(target);
+
+	if (!dest)
+	{
+		ServerReply::reply(client, ServerReply::ERR_NOSUCHNICK, target);
+		return;
+	}
+
+	dest->reply(prefix + " PRIVMSG " + target + " :" + msg);
+}
+
+void
+PrivmsgCommand::execute(
+	Client& client, // cppcheck-suppress constParameterReference
+	const std::vector<std::string>& args)
+{
+	if (!validateArgs(client, args))
+		return;
 
 	const std::string& target = args[0];
 	const std::string& msg	  = args[1];
 	const std::string  prefix = ":" + client.getPrefix();
 
-	const Server* instance = Server::getInstance();
 	if (target[0] == '#')
-	{
-		Channel* chan = instance->getChannelByName(target);
-
-		if (!chan)
-		{
-			ServerReply::reply(client, ServerReply::ERR_NOSUCHCHANNEL, target);
-			return;
-		}
-
-		if (!chan->isMember(client))
-		{
-			ServerReply::reply(
-				client, ServerReply::ERR_CANNOTSENDTOCHAN, target);
-			return;
-		}
-		chan->broadcast(prefix + " PRIVMSG " + target + " :" + msg + "\r\n",
-						&client);
-	}
+		sendToChannel(client, target, msg, prefix);
 	else
-	{
-		const Client* dest = instance->getClientByNick(target);
-
-		if (!dest)
-		{
-			ServerReply::reply(client, ServerReply::ERR_NOSUCHNICK, target);
-			return;
-		}
-
-		dest->reply(prefix + " PRIVMSG " + target + " :" + msg + "\r\n");
-	}
+		sendToClient(client, target, msg, prefix);
 }
