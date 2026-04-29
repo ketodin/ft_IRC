@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerReply.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:52:16 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 00:35:30 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ makeReply(const Code&		 code,
 
 		case (RPL_CHANNELMODEIS):
 			rplMsg = channel->getName() + " " + channel->getModeString();
+			break;
+		case (ERR_NOSUCHCHANNEL):
+			rplMsg = *extra + " :No such channel";
+			break;
+		case (ERR_CANNOTSENDTOCHAN):
+			rplMsg = ":No recipient given (" + *extra + ")";
 			break;
 		case (RPL_NOTOPIC):
 			rplMsg = channel->getName() + " :No topic is set";
