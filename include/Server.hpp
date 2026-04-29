@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 18:04:16 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 01:12:40 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ class Server
 		Client*	 getClientByNick(const std::string& name) const;
 		Channel* getChannelByName(const std::string& name) const;
 		Channel* getOrCreateChannel(const std::string& name);
+
+		std::string getServerName(void) const;
+		std::string	getCreationDate(void) const;
 
 		void sendWelcomeBurst(const Client& client) const;
 

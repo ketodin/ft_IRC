@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/28 18:04:23 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/29 01:13:35 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -476,4 +476,16 @@ bool
 Server::isPasswordValid(const std::string& password)
 {
 	return (password == this->_password);
+}
+
+std::string
+Server::getServerName(void) const
+{
+	return (this->_serverName);
+}
+
+std::string
+Server::getCreationDate(void) const
+{
+	return (this->_creationDate);
 }
