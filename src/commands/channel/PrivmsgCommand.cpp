@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:49:24 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 01:24:49 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:35:23 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ PrivmsgCommand::validateArgs(const Client&					 client,
 	if (!client.getRegistered())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NOTREGISTERED);
-		return false;
+		return (false);
 	}
 
 	try
@@ -33,19 +33,19 @@ PrivmsgCommand::validateArgs(const Client&					 client,
 	{
 		ServerReply::reply(client, ServerReply::ERR_NEEDMOREPARAMS, "PRIVMSG");
 		std::cerr << e.what() << '\n';
-		return false;
+		return (false);
 	}
 
 	if (args[0].empty())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NORECIPIENT);
-		return false;
+		return (false);
 	}
 
 	if (args[1].empty())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NOTEXTTOSEND);
-		return false;
+		return (false);
 	}
 
 	return true;
