@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:40 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 01:49:37 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 03:06:06 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ class JoinCommand : public ACommand
 		static bool checkAccess(const Client&					client,
 								const Channel&					chan,
 								const std::vector<std::string>& args);
+
+		static void sendJoinBurst(const Client& client, Channel& chan);
 
 	public:
 		static const std::string NAME; // = "JOIN"

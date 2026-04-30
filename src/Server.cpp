@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 01:13:35 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:07:36 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,45 +275,6 @@ Server::sendWelcomeBurst(const Client& client) const
 					  << std::endl;
 			return;
 		}
-	}
-}
-
-void
-Server::sendJoinBurst(const Client& client, Channel& chan) const
-{
-	const std::string& nick = client.getNickname();
-	const std::string  name = chan.getName();
-
-	// 1. JOIN broadcast to all members including joining client
-	chan.broadcast(":" + client.getPrefix() + " JOIN :" + name);
-
-	// 2. RPL_TOPIC 332 only if topic is set
-	if (!chan.getTopic().empty())
-	{
-		std::string reply =
-			buildReply(332, nick, name + " :" + chan.getTopic());
-		if (send(client.getFd(), reply.c_str(), reply.size(), 0) == -1)
-		{
-			std::cerr << "send() failed on RPL_TOPIC" << std::endl;
-			return;
-		}
-	}
-
-	// 3. RPL_NAMREPLY 353
-	std::string namesReply = chan.buildNamesReply();
-	if (send(client.getFd(), namesReply.c_str(), namesReply.size(), 0) == -1)
-	{
-		std::cerr << "send() failed on RPL_NAMREPLY" << std::endl;
-		return;
-	}
-
-	// 4. RPL_ENDOFNAMES 366
-	std::string endOfNames =
-		buildReply(366, nick, name + " :End of /NAMES list");
-	if (send(client.getFd(), endOfNames.c_str(), endOfNames.size(), 0) == -1)
-	{
-		std::cerr << "send() failed on RPL_ENDOFNAMES" << std::endl;
-		return;
 	}
 }
 

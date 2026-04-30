@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 01:12:40 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:07:15 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ class Server
 		std::string getCreationDate(void) const;
 
 		void sendWelcomeBurst(const Client& client) const;
-		void sendJoinBurst(const Client& client, Channel& chan) const;
 
 	private:
 		enum ReadStatus

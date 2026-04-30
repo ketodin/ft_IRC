@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 01:43:05 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:06:33 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ JoinCommand::execute(
 
 	chan = instance->getOrCreateChannel(args[0]);
 	chan->addMember(client);
-	instance->sendJoinBurst(client, *chan);
+	sendJoinBurst(client, *chan);
 }
 
 bool
@@ -64,4 +64,23 @@ JoinCommand::checkAccess(const Client&					 client,
 		return (false);
 	}
 	return (true);
+}
+
+void
+JoinCommand::sendJoinBurst(const Client& client, Channel& chan)
+{
+    const std::string  name = chan.getName();
+
+    // 1. JOIN broadcast to all members including joining client
+    chan.broadcast(":" + client.getPrefix() + " JOIN :" + name);
+
+    // 2. RPL_TOPIC 332 only if topic is set
+    if (!chan.getTopic().empty())
+        ServerReply::reply(client, chan, ServerReply::RPL_TOPIC);
+
+    // 3. RPL_NAMREPLY 353
+    ServerReply::reply(client, chan, ServerReply::RPL_NAMREPLY, chan.buildNamesReply());
+
+    // 4. RPL_ENDOFNAMES 366
+    ServerReply::reply(client, chan, ServerReply::RPL_ENDOFNAMES);
 }
