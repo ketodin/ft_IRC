@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 03:33:20 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 04:01:37 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,15 @@ namespace ServerReply
 static std::string
 getReplyPrefix(const Code& code, const Client& client)
 {
-	return (":" + Server::getInstance()->getServerName() + " "
-			+ utils::toString(static_cast<int>(code)) + " "
-			+ client.getNickname() + " ");
+    std::string rplPrefix = ":" + Server::getInstance()->getServerName() + " ";
+
+    if (code < 100)
+        rplPrefix += "0";
+    if (code < 10)
+        rplPrefix += "0";
+    rplPrefix += utils::toString(static_cast<int>(code)) + " "
+                 + client.getNickname() + " ";
+    return (rplPrefix);
 }
 
 static std::string
@@ -47,7 +53,10 @@ makeReply(const Code&		 code,
 			break;
 		case (RPL_MYINFO):
 			rplMsg = Server::getInstance()->getServerName()
-					 + " 1.0 :Available channel modes: itkol";
+					 + " 1.0 io itkol";
+			break;
+		case (ERR_NOMOTD):
+			rplMsg = ":MOTD File is missing";
 			break;
 
 		case (RPL_CHANNELMODEIS):
@@ -135,6 +144,9 @@ makeReply(const Code&		 code,
 		case (ERR_USERONCHANNEL):
 			rplMsg =
 				*extra + " " + channel->getName() + " :is already on channel";
+			break;
+		case (ERR_NOORIGIN):
+			rplMsg = ":No origin specified";
 			break;
 
 		default:

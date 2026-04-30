@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 01:13:35 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 04:02:53 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,87 +234,14 @@ Server::buildReply(int				  code,
 			+ " :" + msg + "\r\n");
 }
 
-/* This function send  reply to the client when a user is done
-registering */
 void
-Server::sendWelcomeBurst(const Client& client) const
+Server::sendWelcomeBurst(const Client& client)
 {
-	std::string replies[5];
-	std::string nickname = client.getNickname();
-
-	// 001 RPL_WELCOME
-	replies[0] = buildReply(
-		1, nickname, "Welcome to the IRC Network " + client.getPrefix());
-
-	// 002 RPL_YOURHOST
-	replies[1] = buildReply(2,
-							nickname,
-							"Your host is " + this->_serverName
-								+ ", running version 1.0");
-
-	// 003 RPL_CREATED
-	time_t now = time(NULL);
-	char   dateBuf[64];
-	strftime(dateBuf, sizeof(dateBuf), "%Y-%m-%d", localtime(&now));
-	replies[2] = buildReply(
-		3, nickname, std::string("This server was created ") + dateBuf);
-
-	// 004 RPL_MYINFO — no trailing colon
-	replies[3] = ":" + this->_serverName + " 004 " + nickname + " "
-				 + this->_serverName + " 1.0 io itkol\r\n";
-
-	// 422 ERR_NOMOTD — required by irssi to unlock the prompt
-	replies[4] = buildReply(422, nickname, "MOTD File is missing");
-
-	for (int i = 0; i < 5; i++)
-	{
-		if (send(client.getFd(), replies[i].c_str(), replies[i].size(), 0)
-			== -1)
-		{
-			std::cerr << "send() failed on welcome burst reply " << i
-					  << std::endl;
-			return;
-		}
-	}
-}
-
-void
-Server::sendJoinBurst(const Client& client, Channel& chan) const
-{
-	const std::string& nick = client.getNickname();
-	const std::string  name = chan.getName();
-
-	// 1. JOIN broadcast to all members including joining client
-	chan.broadcast(":" + client.getPrefix() + " JOIN :" + name);
-
-	// 2. RPL_TOPIC 332 only if topic is set
-	if (!chan.getTopic().empty())
-	{
-		std::string reply =
-			buildReply(332, nick, name + " :" + chan.getTopic());
-		if (send(client.getFd(), reply.c_str(), reply.size(), 0) == -1)
-		{
-			std::cerr << "send() failed on RPL_TOPIC" << std::endl;
-			return;
-		}
-	}
-
-	// 3. RPL_NAMREPLY 353
-	std::string namesReply = chan.buildNamesReply();
-	if (send(client.getFd(), namesReply.c_str(), namesReply.size(), 0) == -1)
-	{
-		std::cerr << "send() failed on RPL_NAMREPLY" << std::endl;
-		return;
-	}
-
-	// 4. RPL_ENDOFNAMES 366
-	std::string endOfNames =
-		buildReply(366, nick, name + " :End of /NAMES list");
-	if (send(client.getFd(), endOfNames.c_str(), endOfNames.size(), 0) == -1)
-	{
-		std::cerr << "send() failed on RPL_ENDOFNAMES" << std::endl;
-		return;
-	}
+	ServerReply::reply(client, ServerReply::RPL_WELCOME);
+	ServerReply::reply(client, ServerReply::RPL_YOURHOST);
+	ServerReply::reply(client, ServerReply::RPL_CREATED);
+	ServerReply::reply(client, ServerReply::RPL_MYINFO);
+	ServerReply::reply(client, ServerReply::ERR_NOMOTD);
 }
 
 /* This function adds a new client not known by the server

@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:41:41 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 03:31:01 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 03:44:46 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@ enum Code
 
 	// Errors
 	ERR_NOSUCHNICK		  = 401,
+	ERR_NOORIGIN		  = 409,
 	ERR_NOSUCHCHANNEL	  = 403,
 	ERR_CANNOTSENDTOCHAN  = 404,
 	ERR_NORECIPIENT		  = 411,
 	ERR_NOTEXTTOSEND	  = 412,
 	ERR_UNKNOWNCOMMAND	  = 421,
+	ERR_NOMOTD			  = 422,
 	ERR_NONICKNAMEGIVEN	  = 431,
 	ERR_ERRONEUSNICKNAME  = 432,
 	ERR_NICKNAMEINUSE	  = 433,
