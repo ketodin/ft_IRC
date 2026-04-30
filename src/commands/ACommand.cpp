@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:00:04 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 17:55:58 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:16:00 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@ ACommand::requireArgsNum(const std::vector<std::string>& args,
 						 std::size_t					 num,
 						 const std::string&				 usage)
 {
-	if (args.size() != num)
-		throw std::invalid_argument("Wrong arguments number. Usage: " + usage);
+	if (args.size() < num)
+		throw ACommand::NeedMoreParamsException(usage);
+	else if (args.size() > num)
+		throw ACommand::TooManyParamsException(usage);
 }
 
 /*
@@ -39,9 +41,9 @@ ACommand::requireArgsNum(const std::vector<std::string>& args,
 
 {
 	if (args.size() < min)
-		throw std::invalid_argument("Not enough arguments. Usage: " + usage);
+		throw ACommand::NeedMoreParamsException(usage);
 	else if (args.size() > max)
-		throw std::invalid_argument("Too many arguments. Usage: " + usage);
+		throw ACommand::TooManyParamsException(usage);
 }
 
 /*
