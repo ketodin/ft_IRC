@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:41:41 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 01:41:50 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:45:54 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ enum Code
 
 	// Errors
 	ERR_NOSUCHNICK		  = 401,
+	ERR_NOORIGIN          = 409,
 	ERR_NORECIPIENT		  = 411,
 	ERR_NOTEXTTOSEND	  = 412,
 	ERR_UNKNOWNCOMMAND	  = 421,

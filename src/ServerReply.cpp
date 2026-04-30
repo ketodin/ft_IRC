@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:52:16 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 01:46:45 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,9 @@ makeReply(const Code&		 code,
 		case (ERR_USERONCHANNEL):
 			rplMsg =
 				*extra + " " + channel->getName() + " :is already on channel";
+			break;
+		case (ERR_NOORIGIN):
+			rplMsg = ":No origin specified";
 			break;
 
 		default:
