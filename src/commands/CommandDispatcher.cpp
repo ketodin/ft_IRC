@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:40:09 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:21:16 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,21 @@ CommandDispatcher::dispatch(Client&							client,
 
 	this->displayCommand(name, args);
 	if (it == this->_handlers.end())
-		throw std::runtime_error("Unknown command: " + name);
+	{
+		ServerReply::reply(client, ServerReply::ERR_UNKNOWNCOMMAND, name);
+		return;
+	}
 
-	it->second(client, args);
+	try
+	{
+		it->second(client, args);
+	}
+	catch (const ACommand::NeedMoreParamsException& e)
+	{
+		ServerReply::reply(client, ServerReply::ERR_NEEDMOREPARAMS, name);
+	}
+	catch (const ACommand::TooManyParamsException& e)
+	{
+		std::cout << "client sent a command with too many params\n";
+	}
 }
-
-/*
-bool
-CommandDispatcher::hasCommand(const std::string& name) const
-{
-	return (this->_handlers.find(name) != this->_handlers.end());
-}
-
-std::size_t
-CommandDispatcher::commandCount(void) const
-{
-	return (this->_handlers.size());
-}
-*/

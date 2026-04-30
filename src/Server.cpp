@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 01:13:35 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:37:39 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,7 @@ Server::buildReply(int				  code,
 
 /* This function send  reply to the client when a user is done
 registering */
+/*
 void
 Server::sendWelcomeBurst(const Client& client) const
 {
@@ -278,43 +279,22 @@ Server::sendWelcomeBurst(const Client& client) const
 	}
 }
 
+:ft_irc.42lyon.fr 001 t :Welcome to the IRC Network t!t@127.0.0.1
+:ft_irc.42lyon.fr 002 t :Your host is ft_irc.42lyon.fr, running version 1.0
+:ft_irc.42lyon.fr 003 t :This server was created 2026-04-30
+:ft_irc.42lyon.fr 004 t ft_irc.42lyon.fr 1.0 io itkol
+:ft_irc.42lyon.fr 422 t :MOTD File is missing
+
+*/
+
 void
-Server::sendJoinBurst(const Client& client, Channel& chan) const
+Server::sendWelcomeBurst(const Client& client)
 {
-	const std::string& nick = client.getNickname();
-	const std::string  name = chan.getName();
-
-	// 1. JOIN broadcast to all members including joining client
-	chan.broadcast(":" + client.getPrefix() + " JOIN :" + name);
-
-	// 2. RPL_TOPIC 332 only if topic is set
-	if (!chan.getTopic().empty())
-	{
-		std::string reply =
-			buildReply(332, nick, name + " :" + chan.getTopic());
-		if (send(client.getFd(), reply.c_str(), reply.size(), 0) == -1)
-		{
-			std::cerr << "send() failed on RPL_TOPIC" << std::endl;
-			return;
-		}
-	}
-
-	// 3. RPL_NAMREPLY 353
-	std::string namesReply = chan.buildNamesReply();
-	if (send(client.getFd(), namesReply.c_str(), namesReply.size(), 0) == -1)
-	{
-		std::cerr << "send() failed on RPL_NAMREPLY" << std::endl;
-		return;
-	}
-
-	// 4. RPL_ENDOFNAMES 366
-	std::string endOfNames =
-		buildReply(366, nick, name + " :End of /NAMES list");
-	if (send(client.getFd(), endOfNames.c_str(), endOfNames.size(), 0) == -1)
-	{
-		std::cerr << "send() failed on RPL_ENDOFNAMES" << std::endl;
-		return;
-	}
+	ServerReply::reply(client, ServerReply::RPL_WELCOME);
+	ServerReply::reply(client, ServerReply::RPL_YOURHOST);
+	ServerReply::reply(client, ServerReply::RPL_CREATED);
+	ServerReply::reply(client, ServerReply::RPL_MYINFO);
+	ServerReply::reply(client, ServerReply::ERR_NOMOTD);
 }
 
 /* This function adds a new client not known by the server
