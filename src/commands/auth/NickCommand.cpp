@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 01:51:59 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:29:37 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 		std::string message = ":" + client.getPrefix() + " NICK " + args[0];
 		instance->broadcast(message);
 	}
+	client.setNickname(args[0]);
+	client.setNickSet(true);
 	if (client.firstRegistered())
 	{
 		client.setRegistered(true);
 		instance->sendWelcomeBurst(client);
 	}
-	client.setNickname(args[0]);
-	client.setNickSet(true);
 }
