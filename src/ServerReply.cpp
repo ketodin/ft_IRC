@@ -18,15 +18,15 @@ namespace ServerReply
 static std::string
 getReplyPrefix(const Code& code, const Client& client)
 {
-    std::string rplPrefix = ":" + Server::getInstance()->getServerName() + " ";
+	std::string rplPrefix = ":" + Server::getInstance()->getServerName() + " ";
 
-    if (code < 100)
-        rplPrefix += "0";
-    if (code < 10)
-        rplPrefix += "0";
-    rplPrefix += utils::toString(static_cast<int>(code)) + " "
-                 + client.getNickname() + " ";
-    return (rplPrefix);
+	if (code < 100)
+		rplPrefix += "0";
+	if (code < 10)
+		rplPrefix += "0";
+	rplPrefix += utils::toString(static_cast<int>(code)) + " "
+				 + client.getNickname() + " ";
+	return (rplPrefix);
 }
 
 static std::string
@@ -52,8 +52,7 @@ makeReply(const Code&		 code,
 					 + Server::getInstance()->getCreationDate();
 			break;
 		case (RPL_MYINFO):
-			rplMsg = Server::getInstance()->getServerName()
-					 + " 1.0 io itkol";
+			rplMsg = Server::getInstance()->getServerName() + " 1.0 io itkol";
 			break;
 		case (ERR_NOMOTD):
 			rplMsg = ":MOTD File is missing";
