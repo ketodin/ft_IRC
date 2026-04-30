@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 05:23:43 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 06:53:23 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,12 +232,6 @@ bool
 Channel::isValidKey(const std::string& key) const
 {
 	return (key == _key);
-}
-
-bool
-Channel::hasMode(const char& c) const
-{
-	return (_key.find(c, 0) != std::string::npos);
 }
 
 std::string

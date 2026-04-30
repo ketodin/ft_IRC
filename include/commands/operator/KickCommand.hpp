@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KickCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:55 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 22:26:19 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 06:02:28 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,16 @@ class KickCommand : public ACommand
 		KickCommand(const KickCommand& other);
 		KickCommand& operator=(const KickCommand& other);
 
+		static bool isValidKick(const Client&  client,
+								const Client*  target,
+								const Channel* chan);
+
 	public:
 		static const std::string NAME; // = "KICK"
 
 		// KICK <username>
-		static void execute(const std::vector<std::string>& args);
+		static void execute(Client&							client,
+							const std::vector<std::string>& args);
 };
 
 #endif // KICK_COMMAND_HPP

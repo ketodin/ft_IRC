@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:08:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 04:26:59 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 06:44:25 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ TopicCommand::checkChannelAccess(const Client&					 client,
 		ServerReply::reply(client, *channel, ServerReply::ERR_NOTONCHANNEL);
 		return (false);
 	}
-	else if (channel->hasMode('t') && !channel->isOperator(client))
+	else if (channel->getTopicMode() && !channel->isOperator(client))
 	{
 		ServerReply::reply(client, *channel, ServerReply::ERR_CHANOPRIVSNEEDED);
 		return (false);

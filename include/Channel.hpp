@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 05:02:45 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 06:53:14 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ class Channel
 		std::size_t getMemberSize(void) const;
 
 		bool isValidKey(const std::string& key) const;
-
-		bool hasMode(const char& c) const;
 };
 
 #endif // CHANNEL_HPP
