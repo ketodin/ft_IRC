@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/30 03:37:39 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 04:02:53 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,59 +233,6 @@ Server::buildReply(int				  code,
 	return (":" + this->_serverName + " " + numericCode(code) + " " + nick
 			+ " :" + msg + "\r\n");
 }
-
-/* This function send  reply to the client when a user is done
-registering */
-/*
-void
-Server::sendWelcomeBurst(const Client& client) const
-{
-	std::string replies[5];
-	std::string nickname = client.getNickname();
-
-	// 001 RPL_WELCOME
-	replies[0] = buildReply(
-		1, nickname, "Welcome to the IRC Network " + client.getPrefix());
-
-	// 002 RPL_YOURHOST
-	replies[1] = buildReply(2,
-							nickname,
-							"Your host is " + this->_serverName
-								+ ", running version 1.0");
-
-	// 003 RPL_CREATED
-	time_t now = time(NULL);
-	char   dateBuf[64];
-	strftime(dateBuf, sizeof(dateBuf), "%Y-%m-%d", localtime(&now));
-	replies[2] = buildReply(
-		3, nickname, std::string("This server was created ") + dateBuf);
-
-	// 004 RPL_MYINFO — no trailing colon
-	replies[3] = ":" + this->_serverName + " 004 " + nickname + " "
-				 + this->_serverName + " 1.0 io itkol\r\n";
-
-	// 422 ERR_NOMOTD — required by irssi to unlock the prompt
-	replies[4] = buildReply(422, nickname, "MOTD File is missing");
-
-	for (int i = 0; i < 5; i++)
-	{
-		if (send(client.getFd(), replies[i].c_str(), replies[i].size(), 0)
-			== -1)
-		{
-			std::cerr << "send() failed on welcome burst reply " << i
-					  << std::endl;
-			return;
-		}
-	}
-}
-
-:ft_irc.42lyon.fr 001 t :Welcome to the IRC Network t!t@127.0.0.1
-:ft_irc.42lyon.fr 002 t :Your host is ft_irc.42lyon.fr, running version 1.0
-:ft_irc.42lyon.fr 003 t :This server was created 2026-04-30
-:ft_irc.42lyon.fr 004 t ft_irc.42lyon.fr 1.0 io itkol
-:ft_irc.42lyon.fr 422 t :MOTD File is missing
-
-*/
 
 void
 Server::sendWelcomeBurst(const Client& client)

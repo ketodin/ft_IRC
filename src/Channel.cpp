@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:26:40 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 00:05:17 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,4 +208,10 @@ std::string
 Channel::getTopic(void) const
 {
 	return (this->_topic);
+}
+
+void
+Channel::setTopic(const std::string& topic)
+{
+	this->_topic = topic;
 }

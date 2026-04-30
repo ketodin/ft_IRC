@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 01:21:16 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:41:13 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ CommandDispatcher::CommandDispatcher(void)
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
 	registerCommand(PongCommand::NAME, &PongCommand::execute);
 	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
+	registerCommand(TopicCommand::NAME, &TopicCommand::execute);
 	registerCommand(PrivmsgCommand::NAME, &PrivmsgCommand::execute);
 
 	/*
@@ -30,7 +31,6 @@ CommandDispatcher::CommandDispatcher(void)
 	registerCommand(InviteCommand::NAME, &InviteCommand::execute);
 	registerCommand(KickCommand::NAME, &KickCommand::execute);
 	registerCommand(ModeCommand::NAME, &ModeCommand::execute);
-	registerCommand(TopicCommand::NAME, &TopicCommand::execute);
 	*/
 }
 
