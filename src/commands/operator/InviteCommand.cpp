@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:04:33 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 21:35:55 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 21:52:09 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ InviteCommand::execute(
 
 	if (!target)
 	{
-		ServerReply::reply(client, ServerReply::ERR_NOSUCHNICK);
+		ServerReply::reply(client, ServerReply::ERR_NOSUCHNICK, args[0]);
 		return;
 	}
 	else if (!chan)
@@ -36,7 +36,7 @@ InviteCommand::execute(
 		ServerReply::reply(client, ServerReply::ERR_NOSUCHCHANNEL, args[1]);
 		return;
 	}
-	else if (chan->isMember(client))
+	else if (!chan->isMember(client))
 	{
 		ServerReply::reply(client, *chan, ServerReply::ERR_NOTONCHANNEL);
 		return;
@@ -48,7 +48,8 @@ InviteCommand::execute(
 	}
 	else if (chan->isMember(*target))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_USERONCHANNEL);
+		ServerReply::reply(
+			client, *chan, ServerReply::ERR_USERONCHANNEL, args[0]);
 		return;
 	}
 	ServerReply::reply(client, *chan, ServerReply::RPL_INVITING);
