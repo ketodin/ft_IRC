@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
 /*   Updated: 2026/04/30 02:44:30 by jaubry--         ###   ########.fr       */
@@ -23,6 +23,7 @@ CommandDispatcher::CommandDispatcher(void)
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
 	registerCommand(PongCommand::NAME, &PongCommand::execute);
 	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
+	registerCommand(TopicCommand::NAME, &TopicCommand::execute);
 	registerCommand(PrivmsgCommand::NAME, &PrivmsgCommand::execute);
 	registerCommand(ModeCommand::NAME, &ModeCommand::execute);
 	/*
@@ -61,21 +62,21 @@ CommandDispatcher::dispatch(Client&							client,
 
 	this->displayCommand(name, args);
 	if (it == this->_handlers.end())
-		throw std::runtime_error("Unknown command: " + name);
+	{
+		ServerReply::reply(client, ServerReply::ERR_UNKNOWNCOMMAND, name);
+		return;
+	}
 
-	it->second(client, args);
+	try
+	{
+		it->second(client, args);
+	}
+	catch (const ACommand::NeedMoreParamsException& e)
+	{
+		ServerReply::reply(client, ServerReply::ERR_NEEDMOREPARAMS, name);
+	}
+	catch (const ACommand::TooManyParamsException& e)
+	{
+		std::cout << "client sent a command with too many params\n";
+	}
 }
-
-/*
-bool
-CommandDispatcher::hasCommand(const std::string& name) const
-{
-	return (this->_handlers.find(name) != this->_handlers.end());
-}
-
-std::size_t
-CommandDispatcher::commandCount(void) const
-{
-	return (this->_handlers.size());
-}
-*/

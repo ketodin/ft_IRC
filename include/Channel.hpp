@@ -54,7 +54,9 @@ class Channel
 		std::string buildNamesReply(void) const;
 
 		std::string getName(void) const;
+
 		std::string getTopic(void) const;
+		void		setTopic(const std::string& topic);
 
 		unsigned int getUserLimit(void) const;
 		void		 setUserLimit(unsigned int);

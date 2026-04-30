@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:31:47 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:30:40 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:57:03 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,23 @@ UserCommand::execute(Client& client, const std::vector<std::string>& args)
 {
 	if (client.getRegistered())
 	{
-		// send ERR_ALREADYREGISTRED 462
-		std::cout << "Client already registered" << std::endl;
+		ServerReply::reply(client, ServerReply::ERR_ALREADYREGISTERED);
 		return;
 	}
-
-	try
-	{
-		requireArgsNum(
-			args, 4, "USER <username> <hostname> <servename> <realname>");
-	}
-	catch (const std::exception& e)
-	{
-		// send ERR_NEEDMOREPARAMS 461
-		std::cerr << e.what() << '\n';
-		return;
-	}
+	requireArgsNum(
+		args, 4, "USER <username> <hostname> <servename> <realname>");
+	requireWord(args, 0, "username");
+	requireWord(args, 1, "hostname");
+	requireWord(args, 2, "servename");
+	requireStr(args, 3, "realname");
 
 	client.setUsername(args[0]);
-	client.setHostName(args[1]);
 	client.setRealName(args[3]);
 	client.setUserSet(true);
 
-	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
-		&& !client.getRegistered())
+	if (client.firstRegistered())
 	{
-		const Server* instance = Server::getInstance();
 		client.setRegistered(true);
-		instance->sendWelcomeBurst(client);
+		Server::getInstance()->sendWelcomeBurst(client);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 03:04:05 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/04/30 00:02:15 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Client
 		bool		getNickSet(void) const;
 		bool		getUserSet(void) const;
 		int			getFd(void) const;
+		bool		firstRegistered(void) const;
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 00:31:26 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 03:29:37 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,36 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 {
 	if (args.empty())
 	{
-		// send ERR_NONICKNAMEGIVEN 431
-		std::cout << "NICK command needs at least one argument" << std::endl;
+		ServerReply::reply(client, ServerReply::ERR_NONICKNAMEGIVEN);
 		return;
 	}
-	requireWord(args, 0, "nickname");
+
+	try
+	{
+		requireWord(args, 0, "nickname");
+	}
+	catch (const std::exception& e)
+	{
+		ServerReply::reply(client, ServerReply::ERR_ERRONEUSNICKNAME, args[0]);
+	}
 
 	Server* instance = Server::getInstance();
 	if (instance->getClientByNick(args[0]))
 	{
-		// send ERR_NICKNAMEINUSE 433
-		std::cout << "Nickname already taken" << std::endl;
+		ServerReply::reply(client, ServerReply::ERR_NICKNAMEINUSE, args[0]);
 		return;
 	}
 
 	if (client.getRegistered())
 	{
-		std::string message = ":" + client.getNickname() + "!"
-							  + client.getUsername() + "@"
-							  + client.getHostname() + " NICK " + args[0];
+		std::string message = ":" + client.getPrefix() + " NICK " + args[0];
 		instance->broadcast(message);
 	}
-	if (client.getPassAccepted() && client.getNickSet() && client.getUserSet()
-		&& !client.getRegistered())
+	client.setNickname(args[0]);
+	client.setNickSet(true);
+	if (client.firstRegistered())
 	{
 		client.setRegistered(true);
 		instance->sendWelcomeBurst(client);
 	}
-	client.setNickname(args[0]);
-	client.setNickSet(true);
 }

@@ -245,3 +245,9 @@ Channel::getTopic(void) const
 {
 	return (this->_topic);
 }
+
+void
+Channel::setTopic(const std::string& topic)
+{
+	this->_topic = topic;
+}
