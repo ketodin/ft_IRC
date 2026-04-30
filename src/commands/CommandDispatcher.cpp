@@ -23,10 +23,10 @@ CommandDispatcher::CommandDispatcher(void)
 	registerCommand(UserCommand::NAME, &UserCommand::execute);
 	registerCommand(PongCommand::NAME, &PongCommand::execute);
 	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
-
-	/*
 	registerCommand(PrivmsgCommand::NAME, &PrivmsgCommand::execute);
 
+	/*
+	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
 	registerCommand(InviteCommand::NAME, &InviteCommand::execute);
 	registerCommand(KickCommand::NAME, &KickCommand::execute);
 	registerCommand(ModeCommand::NAME, &ModeCommand::execute);
