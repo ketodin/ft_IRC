@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 01:46:45 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:24:37 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ makeReply(const Code&		 code,
 			break;
 		case (RPL_MYINFO):
 			rplMsg = Server::getInstance()->getServerName()
-					 + " 1.0 :Available channel modes: itkol";
+					 + " 1.0 :Available channel modes: 1.0 io itkol";
+			break;
+		case (ERR_NOMOTD):
+			rplMsg = ":MOTD File is missing";
 			break;
 
 		case (RPL_CHANNELMODEIS):
