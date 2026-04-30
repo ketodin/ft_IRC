@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/29 02:58:02 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 00:03:37 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,4 +197,11 @@ bool
 Client::getUserSet() const
 {
 	return (this->_userSet);
+}
+
+bool
+Client::firstRegistered(void) const
+{
+	return (this->_passAccepted && this->_nickSet
+			&& this->_userSet && !this->_registered);
 }
