@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:21:44 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 05:02:45 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,16 @@ class Channel
 		std::string getTopic(void) const;
 
 		unsigned int getUserLimit(void) const;
+		void setUserLimit(unsigned int);
+
+		bool getInviteMode(void) const;
+		void setInviteMode(bool);
+		
+		bool getTopicMode(void) const;
+		void setTopicMode(bool);
+
+		void setKey(const std::string& newKey);
+
 		std::size_t	 getMemberSize(void) const;
 
 		bool isValidKey(const std::string& key) const;

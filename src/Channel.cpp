@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:26:40 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 05:23:43 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,42 @@ unsigned int
 Channel::getUserLimit(void) const
 {
 	return (this->_userLimit);
+}
+
+void
+Channel::setUserLimit(unsigned int limit)
+{
+	this->_userLimit = limit;
+}
+
+bool
+Channel::getInviteMode(void) const
+{
+	return (this->_inviteOnly);
+}
+
+void
+Channel::setInviteMode(bool mode)
+{
+	this->_inviteOnly = mode;
+}
+
+bool
+Channel::getTopicMode(void) const
+{
+	return (this->_topicRestricted);
+}
+
+void
+Channel::setTopicMode(bool mode)
+{
+	this->_topicRestricted = mode;
+}
+
+void
+Channel::setKey(const std::string& newKey)
+{
+	this->_key = newKey;
 }
 
 std::size_t
