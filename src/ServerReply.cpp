@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 23:29:30 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 02:02:07 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ makeReply(const Code&		 code,
 			rplMsg = channel->getName() + " :Cannot join channel (+k)";
 			break;
 		case (ERR_NOSUCHCHANNEL):
-			rplMsg = channel->getName() + ":No such channel";
+			rplMsg = *extra + ":No such channel";
 			break;
 		case (ERR_UNKNOWNMODE):
 			rplMsg = *extra + " :is unknown mode char to me";

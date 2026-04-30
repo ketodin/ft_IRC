@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:08:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 00:52:09 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 02:19:44 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,42 @@ TopicCommand::execute(
 	const Server* instance = Server::getInstance();
 	Channel*	  chan	   = instance->getChannelByName(args[0]);
 
-	if (!chan)
-	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_NOSUCHCHANNEL);
+	if (!checkChannelAccess(client, chan, args))
 		return;
-	}
-	else if (!chan->isMember(client))
-	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_NOTONCHANNEL);
-		return;
-	}
-	else if (chan->hasMode('t') && !chan->isOperator(client))
-	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_CHANOPRIVSNEEDED);
-		return;
-	}
 
 	if (args.size() == 1)
 	{
-		ServerReply::reply(client, *chan, ServerReply::RPL_NOTOPIC);
-		return;
+		if (chan->getTopic().empty())
+			ServerReply::reply(client, *chan, ServerReply::RPL_NOTOPIC);
+		else
+			ServerReply::reply(client, *chan, ServerReply::RPL_TOPIC);
 	}
+
 	chan->setTopic(args[1]);
 
 	const std::string msg = "TOPIC " + chan->getName() + " " + chan->getTopic();
 	chan->broadcast(msg);
+}
+
+bool
+TopicCommand::checkChannelAccess(const Client&					 client,
+								 const Channel*					 channel,
+								 const std::vector<std::string>& args)
+{
+	if (!channel)
+	{
+		ServerReply::reply(client, ServerReply::ERR_NOSUCHCHANNEL, args[0]);
+		return (false);
+	}
+	else if (!channel->isMember(client))
+	{
+		ServerReply::reply(client, *channel, ServerReply::ERR_NOTONCHANNEL);
+		return (false);
+	}
+	else if (channel->hasMode('t') && !channel->isOperator(client))
+	{
+		ServerReply::reply(client, *channel, ServerReply::ERR_CHANOPRIVSNEEDED);
+		return (false);
+	}
+	return (true);
 }

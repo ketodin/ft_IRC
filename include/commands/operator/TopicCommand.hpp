@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:59 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 00:18:47 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 01:58:51 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ class TopicCommand : public ACommand
 		TopicCommand(void);
 		TopicCommand(const TopicCommand& other);
 		TopicCommand& operator=(const TopicCommand& other);
+
+		static bool checkChannelAccess(const Client&				   client,
+									   const Channel*				   Channel,
+									   const std::vector<std::string>& args);
 
 	public:
 		static const std::string NAME; // = "TOPIC"
