@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:24:26 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/25 21:45:39 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 01:12:15 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define ACOMMAND_HPP
 
 #include "Server.hpp"
+#include "ServerReply.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -25,6 +26,7 @@ class ACommand
 		ACommand(void);
 		ACommand(const ACommand& other);
 		ACommand& operator=(const ACommand& other);
+
 
 	protected:
 		static void requireArgsNum(const std::vector<std::string>& args,
@@ -66,6 +68,9 @@ class ACommand
 
 	public:
 		~ACommand(void);
+
+#include "ACommandException.inl"
+
 };
 
 #endif // ACOMMAND_HPP
