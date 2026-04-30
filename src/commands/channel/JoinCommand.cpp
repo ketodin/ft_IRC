@@ -69,18 +69,19 @@ JoinCommand::checkAccess(const Client&					 client,
 void
 JoinCommand::sendJoinBurst(const Client& client, Channel& chan)
 {
-    const std::string  name = chan.getName();
+	const std::string name = chan.getName();
 
-    // 1. JOIN broadcast to all members including joining client
-    chan.broadcast(":" + client.getPrefix() + " JOIN :" + name);
+	// 1. JOIN broadcast to all members including joining client
+	chan.broadcast(":" + client.getPrefix() + " JOIN :" + name);
 
-    // 2. RPL_TOPIC 332 only if topic is set
-    if (!chan.getTopic().empty())
-        ServerReply::reply(client, chan, ServerReply::RPL_TOPIC);
+	// 2. RPL_TOPIC 332 only if topic is set
+	if (!chan.getTopic().empty())
+		ServerReply::reply(client, chan, ServerReply::RPL_TOPIC);
 
-    // 3. RPL_NAMREPLY 353
-    ServerReply::reply(client, chan, ServerReply::RPL_NAMREPLY, chan.buildNamesReply());
+	// 3. RPL_NAMREPLY 353
+	ServerReply::reply(
+		client, chan, ServerReply::RPL_NAMREPLY, chan.buildNamesReply());
 
-    // 4. RPL_ENDOFNAMES 366
-    ServerReply::reply(client, chan, ServerReply::RPL_ENDOFNAMES);
+	// 4. RPL_ENDOFNAMES 366
+	ServerReply::reply(client, chan, ServerReply::RPL_ENDOFNAMES);
 }
