@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:12:43 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 05:20:05 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 05:33:08 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ ModeCommand::execute(Client& client, const std::vector<std::string>& args)
 	if (!chan)
 	{
 		ServerReply::reply(client, ServerReply::ERR_NOSUCHCHANNEL, args[0]);
-		return ;
+		return;
 	}
 
 	if (args.size() > 1)
@@ -35,7 +35,8 @@ ModeCommand::execute(Client& client, const std::vector<std::string>& args)
 			getHandlers()[args[1]](client, *chan, args);
 		}
 		else
-			ServerReply::reply(client, *chan, ServerReply::ERR_CHANOPRIVSNEEDED);
+			ServerReply::reply(
+				client, *chan, ServerReply::ERR_CHANOPRIVSNEEDED);
 	}
 	else
 		ServerReply::reply(client, *chan, ServerReply::RPL_CHANNELMODEIS);
@@ -62,7 +63,7 @@ ModeCommand::getHandlers(void)
 }
 
 static void
-printMode(Channel& channel,
+printMode(const Channel&	 channel,
 		  const std::string& mode,
 		  const std::string& action,
 		  const std::string& param = "")
@@ -72,8 +73,9 @@ printMode(Channel& channel,
 }
 
 void
-ModeCommand::modeInvite(Client& client, Channel& chan,
-						  const std::vector<std::string>& args)
+ModeCommand::modeInvite(Client&							client,
+						Channel&						chan,
+						const std::vector<std::string>& args)
 {
 	(void)client;
 	requireArgsNum(args, 2, "MODE #<channel> <mode>");
@@ -85,12 +87,12 @@ ModeCommand::modeInvite(Client& client, Channel& chan,
 		else
 			printMode(chan, "-i", "Removed invite-only");
 	}
-	
 }
 
 void
-ModeCommand::modeTopic(Client& client, Channel& chan,
-						 const std::vector<std::string>& args)
+ModeCommand::modeTopic(Client&						   client,
+					   Channel&						   chan,
+					   const std::vector<std::string>& args)
 {
 	(void)client;
 	requireArgsNum(args, 2, "MODE #<channel> <mode>");
@@ -105,7 +107,8 @@ ModeCommand::modeTopic(Client& client, Channel& chan,
 }
 
 void
-ModeCommand::modeKeyOn(Client& client, Channel& chan,
+ModeCommand::modeKeyOn(Client&						   client,
+					   Channel&						   chan,
 					   const std::vector<std::string>& args)
 {
 	(void)client;
@@ -117,7 +120,8 @@ ModeCommand::modeKeyOn(Client& client, Channel& chan,
 }
 
 void
-ModeCommand::modeKeyOff(Client& client, Channel& chan,
+ModeCommand::modeKeyOff(Client&							client,
+						Channel&						chan,
 						const std::vector<std::string>& args)
 {
 	(void)client;
@@ -128,14 +132,16 @@ ModeCommand::modeKeyOff(Client& client, Channel& chan,
 }
 
 void
-ModeCommand::modeOpOn(Client& client, Channel& chan,
-					  const std::vector<std::string>& args)
+ModeCommand::modeOpOn(
+	Client&	 client, // cppcheck-suppress constParameterCallback
+	Channel& chan,
+	const std::vector<std::string>& args)
 {
 	requireArgsNum(args, 3, "MODE #<channel> <othernick>");
 	requireWord(args, 2, "target nickname");
 	if (client.getNickname() != args[2])
 	{
-		Client* target = Server::getInstance()->getClientByNick(args[2]);
+		const Client* target = Server::getInstance()->getClientByNick(args[2]);
 		if (target)
 		{
 			if (!chan.isOperator(*target))
@@ -151,14 +157,16 @@ ModeCommand::modeOpOn(Client& client, Channel& chan,
 }
 
 void
-ModeCommand::modeOpOff(Client& client, Channel& chan,
-					   const std::vector<std::string>& args)
+ModeCommand::modeOpOff(
+	Client&	 client, // cppcheck-suppress constParameterCallback
+	Channel& chan,
+	const std::vector<std::string>& args)
 {
 	requireArgsNum(args, 3, "MODE #<channel> <othernick>");
 	requireWord(args, 2, "target nickname");
 	if (client.getNickname() != args[2])
 	{
-		Client* target = Server::getInstance()->getClientByNick(args[2]);
+		const Client* target = Server::getInstance()->getClientByNick(args[2]);
 		if (target)
 		{
 			if (chan.isOperator(*target))
@@ -174,7 +182,8 @@ ModeCommand::modeOpOff(Client& client, Channel& chan,
 }
 
 void
-ModeCommand::modeLimitOn(Client& client, Channel& chan,
+ModeCommand::modeLimitOn(Client&						 client,
+						 Channel&						 chan,
 						 const std::vector<std::string>& args)
 {
 	(void)client;
@@ -189,7 +198,8 @@ ModeCommand::modeLimitOn(Client& client, Channel& chan,
 }
 
 void
-ModeCommand::modeLimitOff(Client& client, Channel& chan,
+ModeCommand::modeLimitOff(Client&						  client,
+						  Channel&						  chan,
 						  const std::vector<std::string>& args)
 {
 	(void)client;

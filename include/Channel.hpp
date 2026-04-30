@@ -57,17 +57,17 @@ class Channel
 		std::string getTopic(void) const;
 
 		unsigned int getUserLimit(void) const;
-		void setUserLimit(unsigned int);
+		void		 setUserLimit(unsigned int);
 
 		bool getInviteMode(void) const;
 		void setInviteMode(bool);
-		
+
 		bool getTopicMode(void) const;
 		void setTopicMode(bool);
 
 		void setKey(const std::string& newKey);
 
-		std::size_t	 getMemberSize(void) const;
+		std::size_t getMemberSize(void) const;
 
 		bool isValidKey(const std::string& key) const;
 
