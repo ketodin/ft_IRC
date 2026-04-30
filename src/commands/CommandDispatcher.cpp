@@ -25,7 +25,8 @@ CommandDispatcher::CommandDispatcher(void)
 	registerCommand(JoinCommand::NAME, &JoinCommand::execute);
 	registerCommand(TopicCommand::NAME, &TopicCommand::execute);
 	registerCommand(PrivmsgCommand::NAME, &PrivmsgCommand::execute);
-	registerCommand(ModeCommand::NAME, &ModeCommand::execute);	registerCommand(KickCommand::NAME, &KickCommand::execute);
+	registerCommand(ModeCommand::NAME, &ModeCommand::execute);
+	registerCommand(KickCommand::NAME, &KickCommand::execute);
 
 	/*
 	registerCommand(InviteCommand::NAME, &InviteCommand::execute);
