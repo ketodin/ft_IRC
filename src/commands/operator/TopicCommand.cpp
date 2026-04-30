@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:08:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 02:19:44 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 03:08:47 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ TopicCommand::execute(
 	Client& client, // cppcheck-suppress constParameterReference
 	const std::vector<std::string>& args)
 {
-	if (args.empty())
-		ServerReply::reply(client, ServerReply::ERR_NEEDMOREPARAMS);
+	requireArgsNum(args, 1, 2, "TOPIC <channel> <topic>");
+	requireChannel(args, 0, "channel");
+	if (args.size() == 2)
+		requireWord(args, 1, "topic");
 
 	const Server* instance = Server::getInstance();
 	Channel*	  chan	   = instance->getChannelByName(args[0]);
