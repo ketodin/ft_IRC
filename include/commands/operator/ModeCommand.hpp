@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:57 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 22:51:20 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 05:11:14 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-typedef void (*ModeHandler)(const std::string&				channel,
+typedef void (*ModeHandler)(Client& client, Channel& channel,
 							const std::vector<std::string>& args);
 
 class ModeCommand : public ACommand
@@ -29,32 +29,28 @@ class ModeCommand : public ACommand
 		ModeCommand& operator=(const ModeCommand& other);
 		static std::map<std::string, ModeHandler>& getHandlers(void);
 
-		static void modeInviteOn(const std::string&				 channel,
+		static void modeInvite(Client& client, Channel& channel,
 								 const std::vector<std::string>& args);
-		static void modeInviteOff(const std::string&			  channel,
-								  const std::vector<std::string>& args);
-		static void modeTopicOn(const std::string&				channel,
+		static void modeTopic(Client& client, Channel& channel,
 								const std::vector<std::string>& args);
-		static void modeTopicOff(const std::string&				 channel,
-								 const std::vector<std::string>& args);
-		static void modeKeyOn(const std::string&			  channel,
+		static void modeKeyOn(Client& client, Channel& channel,
 							  const std::vector<std::string>& args);
-		static void modeKeyOff(const std::string&			   channel,
+		static void modeKeyOff(Client& client, Channel& channel,
 							   const std::vector<std::string>& args);
-		static void modeOpOn(const std::string&				 channel,
+		static void modeOpOn(Client& client, Channel& channel,
 							 const std::vector<std::string>& args);
-		static void modeOpOff(const std::string&			  channel,
+		static void modeOpOff(Client& client, Channel& channel,
 							  const std::vector<std::string>& args);
-		static void modeLimitOn(const std::string&				channel,
+		static void modeLimitOn(Client& client, Channel& channel,
 								const std::vector<std::string>& args);
-		static void modeLimitOff(const std::string&				 channel,
+		static void modeLimitOff(Client& client, Channel& channel,
 								 const std::vector<std::string>& args);
 
 	public:
 		static const std::string NAME; // = "MODE"
 
 		// MODE <username>
-		static void execute(const std::vector<std::string>& args);
+		static void execute(Client& client, const std::vector<std::string>& args);
 };
 
 #endif // MODE_COMMAND_HPP
