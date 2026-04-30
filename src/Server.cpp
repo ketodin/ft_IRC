@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/30 03:26:35 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/04/30 03:37:39 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,7 @@ Server::sendWelcomeBurst(const Client& client) const
 */
 
 void
-Server::sendWelcomeBurst(const Client& client) const
+Server::sendWelcomeBurst(const Client& client)
 {
 	ServerReply::reply(client, ServerReply::RPL_WELCOME);
 	ServerReply::reply(client, ServerReply::RPL_YOURHOST);
