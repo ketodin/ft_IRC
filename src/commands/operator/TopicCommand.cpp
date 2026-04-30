@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:08:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 03:08:47 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 04:26:59 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ TopicCommand::execute(
 {
 	requireArgsNum(args, 1, 2, "TOPIC <channel> <topic>");
 	requireChannel(args, 0, "channel");
-	if (args.size() == 2)
-		requireWord(args, 1, "topic");
+	optionalParam(args, 1, "topic");
 
 	const Server* instance = Server::getInstance();
 	Channel*	  chan	   = instance->getChannelByName(args[0]);
@@ -37,6 +36,7 @@ TopicCommand::execute(
 			ServerReply::reply(client, *chan, ServerReply::RPL_NOTOPIC);
 		else
 			ServerReply::reply(client, *chan, ServerReply::RPL_TOPIC);
+		return;
 	}
 
 	chan->setTopic(args[1]);
