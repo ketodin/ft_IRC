@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 02:07:52 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/04/30 01:43:05 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ JoinCommand::execute(
 	const std::vector<std::string>& args)
 {
 	if (!client.getRegistered())
-		return; // ERR_NOTREGISTERED 451
+	{
+		ServerReply::reply(client, ServerReply::ERR_NOTREGISTERED);
+		return;
+	}
 
 	requireArgsNum(args, 1, 2, "JOIN <channel> <key>");
 	requireChannel(args, 0, "channel");
@@ -44,20 +47,20 @@ JoinCommand::checkAccess(const Client&					 client,
 {
 	if (chan.hasMode('i') && !chan.isInvited(client))
 	{
-		// ERR_INVITEONLYCHAN 473
+		ServerReply::reply(client, chan, ServerReply::ERR_INVITEONLYCHAN);
 		return (false);
 	}
 	if (chan.hasMode('k'))
 	{
 		if (args.size() < 2 || !chan.isValidKey(args[1]))
 		{
-			// ERR_BADCHANNELKEY 475
+			ServerReply::reply(client, chan, ServerReply::ERR_BADCHANNELKEY);
 			return (false);
 		}
 	}
 	if (chan.hasMode('l') && chan.getMemberSize() >= chan.getUserLimit())
 	{
-		// ERR_CHANNELISFULL 471
+		ServerReply::reply(client, chan, ServerReply::ERR_CHANNELISFULL);
 		return (false);
 	}
 	return (true);
