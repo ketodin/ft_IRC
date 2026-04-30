@@ -24,7 +24,7 @@ class CommandParamsException : public CommandException
 {
 	public:
 		explicit CommandParamsException(const std::string& cause,
-				const std::string& usage);
+										const std::string& usage);
 };
 
 class NeedMoreParamsException : public CommandParamsException

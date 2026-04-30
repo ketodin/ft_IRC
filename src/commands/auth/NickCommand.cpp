@@ -23,12 +23,12 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 	if (args.empty())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NONICKNAMEGIVEN);
-		return ;
+		return;
 	}
 
 	try
 	{
-	requireWord(args, 0, "nickname");
+		requireWord(args, 0, "nickname");
 	}
 	catch (const std::exception& e)
 	{
@@ -39,7 +39,7 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 	if (instance->getClientByNick(args[0]))
 	{
 		ServerReply::reply(client, ServerReply::ERR_NICKNAMEINUSE, args[0]);
-		return ;
+		return;
 	}
 
 	if (client.getRegistered())

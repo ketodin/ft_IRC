@@ -65,7 +65,7 @@ CommandDispatcher::dispatch(Client&							client,
 	if (it == this->_handlers.end())
 	{
 		ServerReply::reply(client, ServerReply::ERR_UNKNOWNCOMMAND, name);
-		return ;
+		return;
 	}
 
 	try

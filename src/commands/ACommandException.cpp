@@ -21,18 +21,20 @@ ACommand::CommandException::~CommandException(void) throw()
 {
 }
 
-ACommand::CommandParamsException::CommandParamsException(const std::string& cause,
-		const std::string& usage):
+ACommand::CommandParamsException::CommandParamsException(
+	const std::string& cause, const std::string& usage) :
 	CommandException("Invalid params number, " + cause + ". Usage: " + usage)
 {
 }
 
-ACommand::NeedMoreParamsException::NeedMoreParamsException(const std::string& usage):
+ACommand::NeedMoreParamsException::NeedMoreParamsException(
+	const std::string& usage) :
 	CommandParamsException("not enough parameters", usage)
 {
 }
 
-ACommand::TooManyParamsException::TooManyParamsException(const std::string& usage):
+ACommand::TooManyParamsException::TooManyParamsException(
+	const std::string& usage) :
 	CommandParamsException("too many parameters", usage)
 {
 }

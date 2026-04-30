@@ -20,9 +20,10 @@ UserCommand::execute(Client& client, const std::vector<std::string>& args)
 	if (client.getRegistered())
 	{
 		ServerReply::reply(client, ServerReply::ERR_ALREADYREGISTERED);
-		return ;
+		return;
 	}
-	requireArgsNum(args, 4, "USER <username> <hostname> <servename> <realname>");
+	requireArgsNum(
+		args, 4, "USER <username> <hostname> <servename> <realname>");
 	requireWord(args, 0, "username");
 	requireWord(args, 1, "hostname");
 	requireWord(args, 2, "servename");

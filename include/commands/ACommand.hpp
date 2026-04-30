@@ -27,7 +27,6 @@ class ACommand
 		ACommand(const ACommand& other);
 		ACommand& operator=(const ACommand& other);
 
-
 	protected:
 		static void requireArgsNum(const std::vector<std::string>& args,
 								   std::size_t					   num,
@@ -70,7 +69,6 @@ class ACommand
 		~ACommand(void);
 
 #include "ACommandException.inl"
-
 };
 
 #endif // ACOMMAND_HPP

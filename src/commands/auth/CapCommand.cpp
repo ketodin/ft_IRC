@@ -28,8 +28,8 @@ CapCommand::execute(Client& client, // cppcheck-suppress constParameterReference
 	std::cout << "Client fd: " << client.getFd();
 	if (!client.getRegistered())
 	{
-		std::string r = ":" + Server::getInstance()->getServerName()
-			+ " CAP " + client.getNickname() + " LS :\r\n";
+		std::string r = ":" + Server::getInstance()->getServerName() + " CAP "
+						+ client.getNickname() + " LS :\r\n";
 		send(client.getFd(), r.c_str(), r.size(), 0);
 	}
 	std::cout << "\n";

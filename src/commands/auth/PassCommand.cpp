@@ -23,7 +23,7 @@ PassCommand::execute(Client& client, const std::vector<std::string>& args)
 	if (client.getRegistered())
 	{
 		ServerReply::reply(client, ServerReply::ERR_ALREADYREGISTERED);
-		return ;
+		return;
 	}
 	const std::string& password = args[0];
 
@@ -32,7 +32,7 @@ PassCommand::execute(Client& client, const std::vector<std::string>& args)
 	if (!valid)
 	{
 		ServerReply::reply(client, ServerReply::ERR_PASSWDMISMATCH);
-		return ;
+		return;
 	}
 
 	if (client.firstRegistered())
