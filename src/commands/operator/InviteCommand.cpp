@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:04:33 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 21:52:09 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/01 02:17:24 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,34 @@ InviteCommand::execute(
 		ServerReply::reply(client, ServerReply::ERR_NOSUCHCHANNEL, args[1]);
 		return;
 	}
-	else if (!chan->isMember(client))
+	if (!checkInvitePossible(client, *target, chan, args))
+		return;
+	ServerReply::reply(client, *chan, ServerReply::RPL_INVITING, args[0]);
+	target->reply(":" + client.getNickname() + " INVITE "
+				  + target->getNickname() + " " + chan->getName());
+}
+
+bool
+InviteCommand::checkInvitePossible(const Client&				   client,
+								   const Client&				   target,
+								   const Channel*				   chan,
+								   const std::vector<std::string>& args)
+{
+	if (!chan->isMember(client))
 	{
 		ServerReply::reply(client, *chan, ServerReply::ERR_NOTONCHANNEL);
-		return;
+		return (false);
 	}
 	else if (chan->getInviteMode() && !chan->isOperator(client))
 	{
 		ServerReply::reply(client, *chan, ServerReply::ERR_CHANOPRIVSNEEDED);
-		return;
+		return (false);
 	}
-	else if (chan->isMember(*target))
+	else if (chan->isMember(target))
 	{
 		ServerReply::reply(
 			client, *chan, ServerReply::ERR_USERONCHANNEL, args[0]);
-		return;
+		return (false);
 	}
-	ServerReply::reply(client, *chan, ServerReply::RPL_INVITING);
-	target->reply("INVITE " + args[0] + " " + args[1]);
+	return (true);
 }

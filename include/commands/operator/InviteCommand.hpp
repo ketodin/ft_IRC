@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:53 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 21:15:18 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/01 02:17:30 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ class InviteCommand : public ACommand
 		// INVITE <username>
 		static void execute(Client&							client,
 							const std::vector<std::string>& args);
+		static bool checkInvitePossible(const Client&					client,
+										const Client&					target,
+										const Channel*					chan,
+										const std::vector<std::string>& args);
 };
 
 #endif // INVITE_COMMAND_HPP
