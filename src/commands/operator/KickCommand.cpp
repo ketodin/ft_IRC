@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:07:25 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:02:23 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 18:55:36 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ KickCommand::execute(
 	std::string comment =
 		(args.size() == 3 && !args[2].empty()) ? args[2] : "bad behavior";
 
-	chan->broadcast("KICK " + chan->getName() + " " + target->getNickname()
+	chan->broadcast(client, "KICK " + chan->getName() + " " + target->getNickname()
 					+ " :" + comment);
 	chan->removeMember(*target);
 }
