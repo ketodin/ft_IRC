@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:47:09 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 23:52:08 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,15 @@ JoinCommand::execute(
 	}
 
 	requireArgsNum(args, 1, 2, "JOIN <channel> <key>");
-	requireChannel(args, 0, "channel");
+	try
+	{
+		requireChannel(args, 0, "channel");
+	}
+	catch (const std::exception& e)
+	{
+		ServerReply::reply(client, ServerReply::ERR_BADCHANMASK, args[0]);
+		return;
+	}
 	optionalWord(args, 1, "key");
 
 	Server*	 instance = Server::getInstance();
