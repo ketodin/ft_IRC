@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:49:24 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 01:35:23 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 00:02:55 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@ PrivmsgCommand::validateArgs(const Client&					 client,
 		return (false);
 	}
 
+
+	if ((args.size() == 0) || args[0].empty())
+	{
+		ServerReply::reply(client, ServerReply::ERR_NORECIPIENT);
+		return (false);
+	}
+
+	if ((args.size() == 1) || args[1].empty())
+	{
+		ServerReply::reply(client, ServerReply::ERR_NOTEXTTOSEND);
+		return (false);
+	}
 	try
 	{
 		requireArgsNum(args, 2, "PRIVMSG <target> :<message>");
@@ -36,19 +48,7 @@ PrivmsgCommand::validateArgs(const Client&					 client,
 		return (false);
 	}
 
-	if (args[0].empty())
-	{
-		ServerReply::reply(client, ServerReply::ERR_NORECIPIENT);
-		return (false);
-	}
-
-	if (args[1].empty())
-	{
-		ServerReply::reply(client, ServerReply::ERR_NOTEXTTOSEND);
-		return (false);
-	}
-
-	return true;
+	return (true);
 }
 
 void
