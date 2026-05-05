@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:53:23 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 19:56:11 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,16 @@ Channel::addInvite(const Client& client)
 	}
 }
 
+void
+Channel::removeInvite(const Client& client)
+{
+	std::vector<Client*>::iterator it =
+		std::find(this->_invites.begin(), this->_invites.end(), &client);
+
+	if (it != this->_invites.end())
+		this->_invites.erase(it);
+}
+
 bool
 Channel::isInvited(const Client& client) const
 {
@@ -104,9 +114,34 @@ Channel::isInvited(const Client& client) const
 }
 
 void
+Channel::removeClient(const Client& client)
+{
+	removeMember(client);
+	removeOperator(client);
+	removeInvite(client);
+}
+
+void
 Channel::broadcast(const std::string& msg, const Client* except)
 {
 	std::string finalMessage = msg + "\r\n";
+	for (std::vector<Client*>::const_iterator it = _members.begin();
+		 it != _members.end();
+		 ++it)
+	{
+		const Client* currentClient = *it;
+
+		if (!except)
+			this->sendMsg(*currentClient, finalMessage);
+		else if (currentClient->getFd() != except->getFd())
+			this->sendMsg(*currentClient, finalMessage);
+	}
+}
+
+void
+Channel::broadcast(const Client& sender, const std::string& msg, const Client* except)
+{
+	std::string finalMessage = ":" + sender.getPrefix() + " " + msg + "\r\n";
 	for (std::vector<Client*>::const_iterator it = _members.begin();
 		 it != _members.end();
 		 ++it)
