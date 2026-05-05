@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:53 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/05/01 02:17:30 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 11:30:53 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class InviteCommand : public ACommand
 							const std::vector<std::string>& args);
 		static bool checkInvitePossible(const Client&					client,
 										const Client&					target,
-										const Channel*					chan,
+										const Channel&					chan,
 										const std::vector<std::string>& args);
 };
 

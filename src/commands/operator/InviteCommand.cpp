@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:04:33 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/05/01 02:17:24 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 11:32:48 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ InviteCommand::execute(
 	requireWord(args, 0, "nickname");
 	requireChannel(args, 1, "channel");
 
-	const Client*  target = Server::getInstance()->getClientByNick(args[0]);
-	const Channel* chan	  = Server::getInstance()->getChannelByName(args[1]);
+	const Client* target = Server::getInstance()->getClientByNick(args[0]);
+	Channel*	  chan	 = Server::getInstance()->getChannelByName(args[1]);
 
 	if (!target)
 	{
@@ -36,33 +36,34 @@ InviteCommand::execute(
 		ServerReply::reply(client, ServerReply::ERR_NOSUCHCHANNEL, args[1]);
 		return;
 	}
-	if (!checkInvitePossible(client, *target, chan, args))
+	if (!checkInvitePossible(client, *target, *chan, args))
 		return;
 	ServerReply::reply(client, *chan, ServerReply::RPL_INVITING, args[0]);
 	target->reply(":" + client.getNickname() + " INVITE "
 				  + target->getNickname() + " " + chan->getName());
+	chan->addInvite(*target);
 }
 
 bool
 InviteCommand::checkInvitePossible(const Client&				   client,
 								   const Client&				   target,
-								   const Channel*				   chan,
+								   const Channel&				   chan,
 								   const std::vector<std::string>& args)
 {
-	if (!chan->isMember(client))
+	if (!chan.isMember(client))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_NOTONCHANNEL);
+		ServerReply::reply(client, chan, ServerReply::ERR_NOTONCHANNEL);
 		return (false);
 	}
-	else if (chan->getInviteMode() && !chan->isOperator(client))
+	else if (chan.getInviteMode() && !chan.isOperator(client))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_CHANOPRIVSNEEDED);
+		ServerReply::reply(client, chan, ServerReply::ERR_CHANOPRIVSNEEDED);
 		return (false);
 	}
-	else if (chan->isMember(target))
+	else if (chan.isMember(target))
 	{
 		ServerReply::reply(
-			client, *chan, ServerReply::ERR_USERONCHANNEL, args[0]);
+			client, chan, ServerReply::ERR_USERONCHANNEL, args[0]);
 		return (false);
 	}
 	return (true);
