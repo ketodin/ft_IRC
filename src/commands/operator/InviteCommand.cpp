@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:04:33 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/05/05 11:32:48 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 18:24:31 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ InviteCommand::execute(
 	if (!checkInvitePossible(client, *target, *chan, args))
 		return;
 	ServerReply::reply(client, *chan, ServerReply::RPL_INVITING, args[0]);
-	target->reply(":" + client.getNickname() + " INVITE "
+	target->reply(":" + client.getPrefix() + " INVITE "
 				  + target->getNickname() + " " + chan->getName());
 	chan->addInvite(*target);
 }
