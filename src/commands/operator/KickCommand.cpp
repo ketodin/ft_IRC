@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:07:25 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:02:23 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 11:14:05 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ KickCommand::execute(
 		return;
 	if (target->getNickname() == client.getNickname())
 		return;
-	if (!isValidKick(client, target, chan))
+	if (!isValidKick(client, *target, *chan))
 		return;
 
 	std::string comment =
@@ -49,22 +49,22 @@ KickCommand::execute(
 
 bool
 KickCommand::isValidKick(const Client&	client,
-						 const Client*	target,
-						 const Channel* chan)
+						 const Client&	target,
+						 const Channel& chan)
 {
-	if (!chan->isMember(client))
+	if (!chan.isMember(client))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_NOTONCHANNEL);
+		ServerReply::reply(client, chan, ServerReply::ERR_NOTONCHANNEL);
 		return (false);
 	}
-	if (!chan->isOperator(client))
+	if (!chan.isOperator(client))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_CHANOPRIVSNEEDED);
+		ServerReply::reply(client, chan, ServerReply::ERR_CHANOPRIVSNEEDED);
 		return (false);
 	}
-	if (!chan->isMember(*target))
+	if (!chan.isMember(target))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_USERNOTINCHANNEL);
+		ServerReply::reply(client, chan, ServerReply::ERR_USERNOTINCHANNEL);
 		return (false);
 	}
 	return (true);

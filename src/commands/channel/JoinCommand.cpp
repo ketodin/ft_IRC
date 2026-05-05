@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:47:09 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 11:26:45 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ JoinCommand::checkAccess(const Client&					 client,
 	}
 	if (!chan.isValidKey(""))
 	{
-		if ((args.size() < 2) || (!chan.isValidKey(args[1])))
+		if ((args.size() < 2) || !chan.isValidKey(args[1]))
 		{
 			ServerReply::reply(client, chan, ServerReply::ERR_BADCHANNELKEY);
 			return (false);

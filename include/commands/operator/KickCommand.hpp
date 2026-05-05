@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:55 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:02:28 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 11:13:29 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ class KickCommand : public ACommand
 		KickCommand& operator=(const KickCommand& other);
 
 		static bool isValidKick(const Client&  client,
-								const Client*  target,
-								const Channel* chan);
+								const Client&  target,
+								const Channel& chan);
 
 	public:
 		static const std::string NAME; // = "KICK"
