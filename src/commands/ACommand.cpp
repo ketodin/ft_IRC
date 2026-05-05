@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:00:04 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 01:16:00 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/05 18:36:01 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ ACommand::validChannel(const std::string& str)
 {
 	return (
 		(str.find_first_of(std::string("\x00\r\n :", 5)) == std::string::npos)
+		&& (str.find('#', 1) == std::string::npos)
 		&& (str[0] == '#'));
 }
 
