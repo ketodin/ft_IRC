@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:07:25 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/05/05 18:55:36 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/06 00:17:26 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ KickCommand::execute(
 		return;
 	}
 	if (!target)
+	{
+		ServerReply::reply(client, *chan, ServerReply::ERR_USERNOTINCHANNEL, args[1]);
 		return;
+	}
 	if (target->getNickname() == client.getNickname())
 		return;
 	if (!isValidKick(client, *target, *chan))
