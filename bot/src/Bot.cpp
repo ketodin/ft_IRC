@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:36:01 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 01:20:12 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 01:51:53 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,12 @@ Bot::_handlePrivmsg(const std::string& raw)
 	if (body == "!ping")
 		this->_send(BotReply::privmsg(replyTarget, "pong!"));
 	else if (body == "!hello")
-		_send(BotReply::privmsg(replyTarget, "Hello, " + sender + "!"));
+		this->_send(BotReply::privmsg(replyTarget, "Hello, " + sender + "!"));
 	else if (body == "!help")
-		_send(
-			BotReply::privmsg(replyTarget, "Commands: !ping | !hello | !help"));
+		this->_send(BotReply::privmsg(
+			replyTarget, "Commands: !help | !ping | !hello | !feur"));
+	else if (body == "!feur")
+		this->_send(BotReply::privmsg(replyTarget, "Quoi ?"));
 }
 
 void
