@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:08:37 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:44:25 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 18:18:12 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ TopicCommand::execute(
 
 	chan->setTopic(args[1]);
 
-	const std::string msg = "TOPIC " + chan->getName() + " " + chan->getTopic();
-	chan->broadcast(msg);
+	const std::string msg = "TOPIC " + chan->getName() + " :" + chan->getTopic();
+	chan->broadcast(client, msg);
 }
 
 bool
