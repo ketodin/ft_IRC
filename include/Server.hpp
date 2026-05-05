@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/30 03:51:55 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 18:17:17 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ class Server
 		bool	   isPasswordValid(const std::string& password);
 
 		void broadcast(const std::string& msg, const Client* except = NULL);
+		void broadcast(const Client& sender, const std::string& msg, const Client* except = NULL);
 
 		Client*	 getClientByFd(const int fd) const;
 		Client*	 getClientByNick(const std::string& name) const;
