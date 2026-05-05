@@ -54,8 +54,7 @@ ACommand::validChannel(const std::string& str)
 {
 	return (
 		(str.find_first_of(std::string("\x00\r\n :", 5)) == std::string::npos)
-		&& (str.find('#', 1) == std::string::npos)
-		&& (str[0] == '#'));
+		&& (str.find('#', 1) == std::string::npos) && (str[0] == '#'));
 }
 
 /*

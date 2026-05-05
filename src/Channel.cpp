@@ -139,7 +139,9 @@ Channel::broadcast(const std::string& msg, const Client* except)
 }
 
 void
-Channel::broadcast(const Client& sender, const std::string& msg, const Client* except)
+Channel::broadcast(const Client&	  sender,
+				   const std::string& msg,
+				   const Client*	  except)
 {
 	std::string finalMessage = ":" + sender.getPrefix() + " " + msg + "\r\n";
 	for (std::vector<Client*>::const_iterator it = _members.begin();

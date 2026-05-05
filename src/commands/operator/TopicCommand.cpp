@@ -41,7 +41,8 @@ TopicCommand::execute(
 
 	chan->setTopic(args[1]);
 
-	const std::string msg = "TOPIC " + chan->getName() + " :" + chan->getTopic();
+	const std::string msg =
+		"TOPIC " + chan->getName() + " :" + chan->getTopic();
 	chan->broadcast(client, msg);
 }
 

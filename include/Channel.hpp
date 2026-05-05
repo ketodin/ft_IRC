@@ -52,7 +52,9 @@ class Channel
 		void removeClient(const Client& client);
 
 		void broadcast(const std::string& msg, const Client* except = NULL);
-		void broadcast(const Client& sender, const std::string& msg, const Client* except = NULL);
+		void broadcast(const Client&	  sender,
+					   const std::string& msg,
+					   const Client*	  except = NULL);
 
 		std::string getModeString(void) const;
 		std::string buildNamesReply(void) const;

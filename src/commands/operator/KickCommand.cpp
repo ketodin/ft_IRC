@@ -42,8 +42,9 @@ KickCommand::execute(
 	std::string comment =
 		(args.size() == 3 && !args[2].empty()) ? args[2] : "bad behavior";
 
-	chan->broadcast(client, "KICK " + chan->getName() + " " + target->getNickname()
-					+ " :" + comment);
+	chan->broadcast(client,
+					"KICK " + chan->getName() + " " + target->getNickname()
+						+ " :" + comment);
 	chan->removeMember(*target);
 }
 

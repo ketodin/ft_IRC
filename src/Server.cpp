@@ -111,7 +111,9 @@ Server::broadcast(const std::string& msg, const Client* except)
 }
 
 void
-Server::broadcast(const Client& sender, const std::string& msg, const Client* except)
+Server::broadcast(const Client&		 sender,
+				  const std::string& msg,
+				  const Client*		 except)
 {
 	std::string finalMessage = ":" + sender.getPrefix() + " " + msg + "\r\n";
 	for (std::vector<Client*>::const_iterator it = this->_clients.begin();
@@ -315,7 +317,9 @@ Server::removeClient(int fd)
 	if (it == this->_clients.end())
 		return (false);
 
-	for (std::vector<Channel*>::const_iterator chs = this->_channels.begin(); chs < this->_channels.end(); ++chs)
+	for (std::vector<Channel*>::const_iterator chs = this->_channels.begin();
+		 chs < this->_channels.end();
+		 ++chs)
 		(*chs)->removeClient(**it);
 
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, fd, NULL) < 0)
@@ -390,12 +394,12 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 			addNewClient();
 		else
 		{
-			int		fd = events[i].data.fd;
-			char	buffer[BUFFER_SIZE];
-			ssize_t n;
+			int		   fd = events[i].data.fd;
+			char	   buffer[BUFFER_SIZE];
+			ssize_t	   n;
 			ReadStatus status;
 
-			if (events[i].events & ( EPOLLERR | EPOLLHUP | EPOLLRDHUP ))
+			if (events[i].events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP))
 				status = READ_ERROR;
 			else
 				status = this->getReadStatus(fd, buffer, n);

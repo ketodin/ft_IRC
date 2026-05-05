@@ -39,8 +39,8 @@ InviteCommand::execute(
 	if (!checkInvitePossible(client, *target, *chan, args))
 		return;
 	ServerReply::reply(client, *chan, ServerReply::RPL_INVITING, args[0]);
-	target->reply(":" + client.getPrefix() + " INVITE "
-				  + target->getNickname() + " " + chan->getName());
+	target->reply(":" + client.getPrefix() + " INVITE " + target->getNickname()
+				  + " " + chan->getName());
 	chan->addInvite(*target);
 }
 

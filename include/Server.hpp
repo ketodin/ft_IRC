@@ -53,7 +53,9 @@ class Server
 		bool	   isPasswordValid(const std::string& password);
 
 		void broadcast(const std::string& msg, const Client* except = NULL);
-		void broadcast(const Client& sender, const std::string& msg, const Client* except = NULL);
+		void broadcast(const Client&	  sender,
+					   const std::string& msg,
+					   const Client*	  except = NULL);
 
 		Client*	 getClientByFd(const int fd) const;
 		Client*	 getClientByNick(const std::string& name) const;
