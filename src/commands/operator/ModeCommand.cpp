@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:12:43 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 05:33:08 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/05 18:29:21 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ ModeCommand::execute(Client& client, const std::vector<std::string>& args)
 		{
 			requireMode(args, 1, "channel mode");
 			getHandlers()[args[1]](client, *chan, args);
+			std::string msg = "MODE " + chan->getName() + " " + args[1];
+			if (args.size() > 2)
+				msg += " " + args[2];
+			chan->broadcast(client, msg);
 		}
 		else
 			ServerReply::reply(
