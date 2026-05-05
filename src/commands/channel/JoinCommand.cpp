@@ -52,7 +52,7 @@ JoinCommand::checkAccess(const Client&					 client,
 	}
 	if (!chan.isValidKey(""))
 	{
-		if ((args.size() < 2) || (!chan.isValidKey(args[1])))
+		if ((args.size() < 2) || !chan.isValidKey(args[1]))
 		{
 			ServerReply::reply(client, chan, ServerReply::ERR_BADCHANNELKEY);
 			return (false);

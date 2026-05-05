@@ -36,7 +36,7 @@ KickCommand::execute(
 		return;
 	if (target->getNickname() == client.getNickname())
 		return;
-	if (!isValidKick(client, target, chan))
+	if (!isValidKick(client, *target, *chan))
 		return;
 
 	std::string comment =
@@ -49,22 +49,25 @@ KickCommand::execute(
 
 bool
 KickCommand::isValidKick(const Client&	client,
-						 const Client*	target,
-						 const Channel* chan)
+						 const Client&	target,
+						 const Channel& chan)
 {
-	if (!chan->isMember(client))
+	if (!chan.isMember(client))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_NOTONCHANNEL);
+		ServerReply::reply(client, chan, ServerReply::ERR_NOTONCHANNEL);
 		return (false);
 	}
-	if (!chan->isOperator(client))
+	if (!chan.isOperator(client))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_CHANOPRIVSNEEDED);
+		ServerReply::reply(client, chan, ServerReply::ERR_CHANOPRIVSNEEDED);
 		return (false);
 	}
-	if (!chan->isMember(*target))
+	if (!chan.isMember(target))
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_USERNOTINCHANNEL);
+		ServerReply::reply(client,
+						   chan,
+						   ServerReply::ERR_USERNOTINCHANNEL,
+						   target.getNickname());
 		return (false);
 	}
 	return (true);
