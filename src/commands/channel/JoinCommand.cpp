@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 21:37:36 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 03:06:33 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/05 11:26:45 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,21 @@ JoinCommand::checkAccess(const Client&					 client,
 						 const Channel&					 chan,
 						 const std::vector<std::string>& args)
 {
-	if (chan.hasMode('i') && !chan.isInvited(client))
+	if (chan.getInviteMode() && !chan.isInvited(client))
 	{
 		ServerReply::reply(client, chan, ServerReply::ERR_INVITEONLYCHAN);
 		return (false);
 	}
-	if (chan.hasMode('k'))
+	if (!chan.isValidKey(""))
 	{
-		if (args.size() < 2 || !chan.isValidKey(args[1]))
+		if ((args.size() < 2) || !chan.isValidKey(args[1]))
 		{
 			ServerReply::reply(client, chan, ServerReply::ERR_BADCHANNELKEY);
 			return (false);
 		}
 	}
-	if (chan.hasMode('l') && chan.getMemberSize() >= chan.getUserLimit())
+	if ((chan.getUserLimit() != 0)
+		&& (chan.getMemberSize() >= chan.getUserLimit()))
 	{
 		ServerReply::reply(client, chan, ServerReply::ERR_CHANNELISFULL);
 		return (false);
