@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:42:02 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 04:01:37 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 23:47:06 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,9 @@ makeReply(const Code&		 code,
 			break;
 		case (ERR_BADCHANNELKEY):
 			rplMsg = channel->getName() + " :Cannot join channel (+k)";
+			break;
+		case (ERR_BADCHANMASK):
+			rplMsg = *extra + " :Bad Channel Mask";
 			break;
 		case (ERR_NOSUCHCHANNEL):
 			rplMsg = *extra + ":No such channel";

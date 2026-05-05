@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 23:41:41 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 03:44:46 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 23:44:06 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ enum Code
 	ERR_UNKNOWNMODE		  = 472,
 	ERR_INVITEONLYCHAN	  = 473,
 	ERR_BADCHANNELKEY	  = 475,
+	ERR_BADCHANMASK       = 476,
 	ERR_CHANOPRIVSNEEDED  = 482
 };
 
