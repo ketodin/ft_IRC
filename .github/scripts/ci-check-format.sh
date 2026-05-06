@@ -24,7 +24,7 @@ MAGENTA=$'\033[0;35m'
 WHITE=$'\033[1;37m'
 
 # ── Config ────────────────────────────────────────────────────────────────────
-SRC_DIRS=("src" "include")
+SRC_DIRS=("src" "include" "bot/src" "bot/include")
 EXTENSIONS=("*.cpp" "*.hpp" "*.tpp" "*.ipp" "*.inl")
 
 # ── Build find name filter from config ───────────────────────────────────────

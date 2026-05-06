@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:36:04 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 16:32:13 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 16:45:43 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,11 @@ main(int argc, const char* argv[])
 		return (1);
 	}
 
-	std::string host = argv[1];
-	std::string pass = argv[3];
-	std::string nick = argv[4];
-
 	try
 	{
+		std::string host = argv[1];
+		std::string pass = argv[3];
+		std::string nick = argv[4];
 		checkArgs(host, pass, nick);
 		int port = parsePort(argv[2]);
 		setupSignals();

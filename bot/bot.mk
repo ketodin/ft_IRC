@@ -1,14 +1,14 @@
-# Directories
-BOT_DIR      = bot
+BOT_NAME    = ircbot
+BOT_DIR     = bot/src
+BOT_INCDIR  = bot/include
+BOT_OBJDIR  := .obj/bot
 
-# Source files
-BOT_SRCS	= main.cpp \
-			  Bot.cpp \
-			  BotReply.cpp \
-			  BotCommand.cpp \
-			  setupSignals.cpp
+BOT_SRCS    = $(BOT_DIR)/main.cpp       \
+              $(BOT_DIR)/Bot.cpp         \
+              $(BOT_DIR)/BotCommand.cpp  \
+              $(BOT_DIR)/BotReply.cpp    \
+              $(BOT_DIR)/BotSignals.cpp
 
-SRCS		+= $(addprefix $(BOT_DIR)/, $(BOT_SRCS))
-
-# VPATH
-vpath %.cpp	$(SRCDIR)
+BOT_OBJS    = $(addprefix $(BOT_OBJDIR)/, $(notdir $(BOT_SRCS:.cpp=.o)))
+BOT_DEPS    = $(addprefix $(DEPDIR)/, $(notdir $(BOT_SRCS:.cpp=.d)))
+BOT_HEADERS = $(shell find $(BOT_INCDIR) -type f \( -name '*.hpp' \))

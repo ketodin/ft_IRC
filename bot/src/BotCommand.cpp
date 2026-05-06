@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:50:05 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 01:22:17 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 16:44:46 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ BotCommand::getTarget(const std::string& raw)
 	pos++;
 
 	// trailing starts with ':'  → no separate target
-	if (raw[pos] == ':')
+	if (pos >= raw.size() || raw[pos] == ':')
 		return ("");
 
 	std::size_t end = raw.find(' ', pos);

@@ -23,6 +23,7 @@ ci_header "ci-run-cppcheck  •  Static analysis (cppcheck $(cppcheck --version 
 
 # ── Build -I flags ────────────────────────────────────────────────────────────
 INCLUDE_DIR="include"
+BOT_INCLUDE_DIR="bot/include"
 INCLUDE_FLAGS=""
 
 ci_step "Building include flags from ${INCLUDE_DIR}/..."
@@ -36,12 +37,19 @@ else
   ci_warn "Directory '${INCLUDE_DIR}/' not found — no -I flags will be passed."
 fi
 
+if [ -d "${BOT_INCLUDE_DIR}" ]; then
+  while IFS= read -r dir; do
+    INCLUDE_FLAGS="${INCLUDE_FLAGS} -I ${dir}"
+  done < <(find "${BOT_INCLUDE_DIR}" -type d)
+  ci_ok "Bot include flags added"
+fi
+
 # ── Run cppcheck ──────────────────────────────────────────────────────────────
-ci_section "Running analysis on src/"
+ci_section "Running analysis on src/ bot/src/"
 
 ci_step "Command: cppcheck --enable=all --std=c++98 --language=c++ --inline-suppr"
 ci_step "         --error-exitcode=1 --check-level=exhaustive"
-ci_step "         --suppressions-list=suppressions.txt${INCLUDE_FLAGS} src"
+ci_step "         --suppressions-list=suppressions.txt${INCLUDE_FLAGS} src bot/src"
 
 ci_timer_start
 
@@ -54,7 +62,8 @@ cppcheck \
   --check-level=exhaustive \
   --suppressions-list=suppressions.txt \
   ${INCLUDE_FLAGS} \
-  src
+  src \
+  bot/src
 
 elapsed=$(ci_timer_end)
 ci_ok "Analysis completed in ${elapsed} — no errors or warnings found."
