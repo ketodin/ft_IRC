@@ -3,30 +3,28 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/09/29 05:48:20 by jaubry--          #+#    #+#              #
-#    Updated: 2026/05/06 17:54:31 by jaubry--         ###   ########.fr        #
+#    Created: 2026/05/06 17:27:13 by jaubry--          #+#    #+#              #
+#    Updated: 2026/05/06 17:54:17 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-ROOTDIR		= .
+ROOTDIR		= ..
 include $(ROOTDIR)/mkidir/make_utils.mk
 
 # Directories
 SRCDIR		= src
 OBJDIR		= .obj
 DEPDIR		= .dep
-BOTDIR		= bot
 
 # Includes
 include	includes.mk
 
-INCLUDES	= $(INCDIRS_IRC)
+INCLUDES	= $(INCDIRS_BOT)
 
 # Output
-NAME		= ircserv
-BOT			= ircbot
+NAME		= ircbot
 
 # Variables
 
@@ -73,29 +71,6 @@ else
 endif
 	$(call bin-finish-msg)
 
-bot: $(BOT)
-bonus: $(BOT)
-
-$(BOT):
-ifeq ($(VERBOSE),1)
-	$(MAKE) -C $(BOTDIR) $(RULE) $(VARS)
-else
-	@$(MAKE) -s -C $(BOTDIR) $(RULE) $(VARS)
-endif
-
-check-cpp:
-	@./.github/scripts/ci-run-cppcheck.sh
-
-check-format:
-	@./.github/scripts/ci-check-format.sh src include
-
-check-all: check-cpp check-format
-
-submodules:
-	git submodule init
-	git submodule sync
-	git submodule update --remote
-
 help:
 	@echo "Available targets:"
 	@echo -e "\tall, $(NAME)\t\t: Build the program"
@@ -116,23 +91,16 @@ help:
 	@echo -e "\tresan-leak\t\t\t: Rebuild with LeakSanitizer"
 	@echo -e "\tresan-ub\t\t\t: Rebuild with UndefinedBehaviorSanitizer"
 	@echo
-	@echo "Quality checks:"
-	@echo -e "\tcheck-format\t\t\t: Check clang-format compliance on src/ and include/"
-	@echo -e "\tcheck-cpp\t\t\t: Run cppcheck static analysis"
-	@echo -e "\tcheck-all\t\t\t: Run check-format and check-cpp"
-	@echo
 	@echo -e "\tclean\t\t\t\t: Remove object files"
 	@echo -e "\tfclean\t\t\t\t: Remove object files, libraries and program"
 	@echo
 	@echo -e "\tprint-%\t\t\t\t: Prints makefile variable content when replacing '%'"
 
 clean:
-	@$(MAKE) -s -C $(BOTDIR) clean
 	$(call rm-obj-msg)
 	@rm -rf $(OBJDIR) $(DEPDIR)
 
 fclean:
-	@$(MAKE) -s -C $(BOTDIR) fclean
 	$(call rm-obj-msg)
 	@rm -rf $(OBJDIR) $(DEPDIR)
 	$(call rm-bin-msg)
