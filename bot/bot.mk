@@ -5,7 +5,8 @@ BOT_DIR      = bot
 BOT_SRCS	= main.cpp \
 			  Bot.cpp \
 			  BotReply.cpp \
-			  BotCommand.cpp
+			  BotCommand.cpp \
+			  setupSignals.cpp
 
 SRCS		+= $(addprefix $(BOT_DIR)/, $(BOT_SRCS))
 

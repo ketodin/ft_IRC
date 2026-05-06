@@ -6,11 +6,13 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:36:04 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 01:37:32 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 16:32:13 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
+#include "BotSignals.hpp"
+
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
@@ -90,6 +92,7 @@ main(int argc, const char* argv[])
 	{
 		checkArgs(host, pass, nick);
 		int port = parsePort(argv[2]);
+		setupSignals();
 		Bot newBot(host, port, pass, nick);
 		newBot.run();
 	}

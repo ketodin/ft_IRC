@@ -6,13 +6,14 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:36:01 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 02:11:49 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 16:32:19 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 #include "BotCommand.hpp"
 #include "BotReply.hpp"
+#include "BotSignals.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -130,18 +131,32 @@ Bot::_loop(void)
 	char		buf[512];
 	std::string accumulator;
 
-	while (true)
+	while (g_bot_running)
 	{
 		std::memset(buf, 0, sizeof(buf));
-		ssize_t bytes = recv(this->_sockfd, buf, sizeof(buf) - 1, 0);
+		ssize_t bytes = recv(_sockfd, buf, sizeof(buf) - 1, 0);
 
-		if (bytes <= 0)
+		if (bytes < 0)
 		{
-			std::cout << "[Bot] Connection closed." << std::endl;
+			if (errno == EINTR)
+				continue;
+			std::cerr << "[Bot] recv() error." << std::endl;
+			break;
+		}
+		if (bytes == 0)
+		{
+			std::cout << "[Bot] Server closed connection." << std::endl;
 			break;
 		}
 
 		accumulator += std::string(buf, bytes);
+
+		if (accumulator.size() > 4096)
+		{
+			std::cerr << "[Bot] Buffer overflow, clearing." << std::endl;
+			accumulator.clear();
+			continue;
+		}
 
 		std::size_t pos;
 		while ((pos = accumulator.find("\r\n")) != std::string::npos)
@@ -153,12 +168,21 @@ Bot::_loop(void)
 
 			std::string cmd = BotCommand::getCommand(line);
 
-			if (cmd == "PRIVMSG")
-				this->_handlePrivmsg(line);
-			else if (cmd == "001")
-				this->_send(BotReply::joinChannel(this->_channel));
+			try
+			{
+				if (cmd == "PRIVMSG")
+					this->_handlePrivmsg(line);
+				else if (cmd == "001")
+					this->_send(BotReply::joinChannel(this->_channel));
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << "[Bot] send error: " << e.what() << '\n';
+				return;
+			}
 		}
 	}
+	std::cout << "[Bot] Shutting down." << std::endl;
 }
 
 void
