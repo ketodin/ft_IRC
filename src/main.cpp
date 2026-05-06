@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 17:44:20 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/27 18:53:22 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/06 18:05:53 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ main(int argc, char** argv)
 			return (1);
 		}
 
-		Server::init(port, password);
-
 		setupSignals();
+
+		Server::init(port, password);
 
 		Server::getInstance()->start();
 		Server::destroy();
@@ -48,6 +48,8 @@ main(int argc, char** argv)
 	catch (const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
+		Server::destroy();
+		return (1);
 	}
 
 	return (0);

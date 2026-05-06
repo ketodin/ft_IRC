@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 06:53:14 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/05 19:22:21 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,15 @@ class Channel
 		bool isOperator(const Client& client) const;
 
 		void addInvite(const Client& client);
+		void removeInvite(const Client& client);
 		bool isInvited(const Client& client) const;
 
+		void removeClient(const Client& client);
+
 		void broadcast(const std::string& msg, const Client* except = NULL);
+		void broadcast(const Client&	  sender,
+					   const std::string& msg,
+					   const Client*	  except = NULL);
 
 		std::string getModeString(void) const;
 		std::string buildNamesReply(void) const;

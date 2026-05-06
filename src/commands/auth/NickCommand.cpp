@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:50:10 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/30 03:29:37 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/05 19:01:10 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ const std::string NickCommand::NAME = "NICK";
 void
 NickCommand::execute(Client& client, const std::vector<std::string>& args)
 {
-	if (args.empty())
+	try
+	{
+		requireArgsNum(args, 1, "NICK <nickname>");
+	}
+	catch (const std::exception& e)
 	{
 		ServerReply::reply(client, ServerReply::ERR_NONICKNAMEGIVEN);
 		return;
@@ -33,6 +37,7 @@ NickCommand::execute(Client& client, const std::vector<std::string>& args)
 	catch (const std::exception& e)
 	{
 		ServerReply::reply(client, ServerReply::ERR_ERRONEUSNICKNAME, args[0]);
+		return;
 	}
 
 	Server* instance = Server::getInstance();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   InviteCommand.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:25:53 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/23 22:26:00 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/05 11:30:53 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@ class InviteCommand : public ACommand
 		static const std::string NAME; // = "INVITE"
 
 		// INVITE <username>
-		static void execute(const std::vector<std::string>& args);
+		static void execute(Client&							client,
+							const std::vector<std::string>& args);
+		static bool checkInvitePossible(const Client&					client,
+										const Client&					target,
+										const Channel&					chan,
+										const std::vector<std::string>& args);
 };
 
 #endif // INVITE_COMMAND_HPP
