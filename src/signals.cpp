@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:40:18 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/27 18:43:55 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/06 18:14:33 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@ signalHandler(int signum)
 void
 setupSignals()
 {
-	signal(SIGINT, signalHandler);
-	signal(SIGTERM, signalHandler);
+	struct sigaction sa;
+
+	sa.sa_handler = signalHandler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGTERM, &sa, NULL);
+	signal(SIGPIPE, SIG_IGN);
 }
