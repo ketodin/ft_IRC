@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:36:06 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 00:23:35 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 02:11:21 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ class Bot
 
 		void _send(const std::string& msg) const;
 		void _handlePrivmsg(const std::string& raw);
-		void _handlePing(const std::string& raw);
 
 		Bot(void);
 		Bot(const Bot& other);

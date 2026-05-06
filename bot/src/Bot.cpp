@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:36:01 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 01:51:53 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/06 02:11:49 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,6 @@ Bot::_authenticate(const std::string& pass)
 }
 
 void
-Bot::_handlePing(const std::string& raw)
-{
-	std::string token = BotCommand::getBody(raw);
-	this->_send(BotReply::pong(token));
-}
-
-void
 Bot::_handlePrivmsg(const std::string& raw)
 {
 	std::string sender = BotCommand::getSender(raw);
@@ -160,9 +153,7 @@ Bot::_loop(void)
 
 			std::string cmd = BotCommand::getCommand(line);
 
-			if (cmd == "PING")
-				this->_handlePing(line);
-			else if (cmd == "PRIVMSG")
+			if (cmd == "PRIVMSG")
 				this->_handlePrivmsg(line);
 			else if (cmd == "001")
 				this->_send(BotReply::joinChannel(this->_channel));
