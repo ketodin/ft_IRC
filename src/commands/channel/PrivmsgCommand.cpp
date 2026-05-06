@@ -25,7 +25,6 @@ PrivmsgCommand::validateArgs(const Client&					 client,
 		return (false);
 	}
 
-
 	if ((args.size() == 0) || args[0].empty())
 	{
 		ServerReply::reply(client, ServerReply::ERR_NORECIPIENT);

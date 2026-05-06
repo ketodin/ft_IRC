@@ -34,7 +34,8 @@ KickCommand::execute(
 	}
 	if (!target)
 	{
-		ServerReply::reply(client, *chan, ServerReply::ERR_USERNOTINCHANNEL, args[1]);
+		ServerReply::reply(
+			client, *chan, ServerReply::ERR_USERNOTINCHANNEL, args[1]);
 		return;
 	}
 	if (target->getNickname() == client.getNickname())
