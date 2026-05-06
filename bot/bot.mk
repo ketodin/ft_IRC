@@ -1,7 +1,8 @@
 BOT_NAME    = ircbot
 BOT_DIR     = bot/src
 BOT_INCDIR  = bot/include
-BOT_OBJDIR  := .obj/bot
+BOT_OBJDIR  = bot/.obj
+BOT_DEPDIR  = bot/.dep
 
 BOT_SRCS    = $(BOT_DIR)/main.cpp       \
               $(BOT_DIR)/Bot.cpp         \
@@ -10,5 +11,5 @@ BOT_SRCS    = $(BOT_DIR)/main.cpp       \
               $(BOT_DIR)/BotSignals.cpp
 
 BOT_OBJS    = $(addprefix $(BOT_OBJDIR)/, $(notdir $(BOT_SRCS:.cpp=.o)))
-BOT_DEPS    = $(addprefix $(DEPDIR)/, $(notdir $(BOT_SRCS:.cpp=.d)))
+BOT_DEPS    = $(addprefix $(BOT_DEPDIR)/, $(notdir $(BOT_SRCS:.cpp=.d)))
 BOT_HEADERS = $(shell find $(BOT_INCDIR) -type f \( -name '*.hpp' \))
