@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:36:01 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 16:32:19 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/07 15:56:41 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
 
 Bot::Bot(const std::string& host,
 		 int				port,
