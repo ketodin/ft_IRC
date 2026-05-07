@@ -119,3 +119,9 @@ cd bot && ./ircbot <host> <port> <password> <nickname>
 # Example
 cd bot && ./ircbot 127.0.0.1 6667 mysecretpassword coolnickname
 ```
+
+In order to interact with the bot after you ran it, you will have to **follow these steps**:
+1. Join the server as an usual client
+2. Join the channel `#botchannel`
+3. Type `!help` to list the bot commands
+4. Try the commands listed !
