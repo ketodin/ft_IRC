@@ -13,7 +13,6 @@
 - **Every PR requires at least one review** before merge
 - **No merge if CI is red**
 - **Zero compiler warnings** allowed
-- **No secrets** (passwords, IPs, tokens) committed
 - **No forking** – single `poll()` for all I/O operations
 - **All I/O must be non-blocking**
 
@@ -92,7 +91,8 @@ docs(readme): document compilation and usage
 |---------|-------|---------|
 | Classes | PascalCase | `Server`, `Channel` |
 | Methods | camelCase | `getClientByFd` |
-| Member variables | `_snake_case_` | `_inputBuffer` |
+| Member variables | camelCase | `inputBuffer` |
+| Private member variables | _camelCase | `_inputBuffer` |
 | Constants | `UPPER_SNAKE_CASE` | `MAX_EVENTS` |
 
 ### 3.4 Formatting
