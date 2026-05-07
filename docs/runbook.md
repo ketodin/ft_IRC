@@ -45,18 +45,29 @@ nc -C 127.0.0.1 6667
 # com -> man -> d\r\n
 ```
 
-With reference IRC client (HexChat)
-```text
-Server:     127.0.0.1
-Port:       6667
-Password:   <your password>
-```
+With reference IRC client (**irssi**)
+```sh
+irssi -c 127.0.0.1 -p 6667 -w <password> -n <nickname>
 
-> The chosen reference client must be documented here once decided.
+# Example
+irssi -c 127.0.0.1 -p 6667 -w mysecretpassword -n coolnickname
+```
+> *For this to work, the server must be launched*
+
+Then, for the commands implemented in the project, once you are logged in the server with the command above, you can use the **commands** below:
+- `/join <channel>`
+- `/nick <nickname>`
+- `/topic <topic>`
+- `/kick <target nickname>`
+- `/mode <option>`
+- `/invite <target nickname>`
+- `/msg <target nickanme> <message>` (if you want to write on a channel, you can just directly type your message)
 
 ## Run with Valgrind or Sanitizer
 
-\[...\]
+```sh
+valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./ircserv 6667 <password>
+```
 
 ## Debugging a Network Bug
 
@@ -81,7 +92,7 @@ Password:   <your password>
 ```bash
 make fclean
 make
-./ircserv 6667 password
+./ircserv 6667 <password>
 ```
 
 ## Reproducible Test Scripts
