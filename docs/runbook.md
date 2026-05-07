@@ -2,30 +2,21 @@
 
 > Operational procedures for building, running, testing, and debugging `ircserv`.
 
+---
+
 ## Build
 
-#### Full build
-```bash
-make
-```
+| Command | Description |
+|---------|-------------|
+| `make` | Full build |
+| `make re` | Clean rebuild |
+| `make clean` | Remove objects only |
+| `make fclean` | Remove objects + binary |
 
-#### Clean rebuild
-```bash
-make re
-```
+**Compilation flags:** `-Wall -Wextra -Werror -std=c++98`
+**Dependencies:** No external libraries or Boost allowed.
 
-#### Remove objects only
-```bash
-make clean
-```
-
-#### Remove objects + binary
-```bash
-make fclean
-```
-
-Compilation flags: `-Wall -Wextra -Werror -std=c++98`
-No external libraries or Boost allowed.
+---
 
 ## Run
 
@@ -36,58 +27,75 @@ No external libraries or Boost allowed.
 ./ircserv 6667 mysecretpassword
 ```
 
+---
+
 ## Connect for Manual Testing
 
-With `nc` (partial data fragmentation test)
+### Using netcat (nc) - fragmentation test
 ```bash
 nc -C 127.0.0.1 6667
 # Then type commands, use Ctrl+D to send in parts:
 # com -> man -> d\r\n
 ```
 
-With reference IRC client (**irssi**)
-```sh
+refer to [RFC](https://www.rfc-editor.org/rfc/rfc1459.html) to send valid raw commands to the server using `nc`
+
+### Using irssi (reference IRC client)
+```bash
 irssi -c 127.0.0.1 -p 6667 -w <password> -n <nickname>
 
 # Example
 irssi -c 127.0.0.1 -p 6667 -w mysecretpassword -n coolnickname
 ```
-> *For this to work, the server must be launched*
+> *Server must be running before connecting*
 
-Then, for the commands implemented in the project, once you are logged in the server with the command above, you can use the **commands** below:
-- `/join <channel>`
-- `/nick <nickname>`
-- `/topic <topic>`
-- `/kick <target nickname>`
-- `/mode <option>`
-- `/invite <target nickname>`
-- `/msg <target nickanme> <message>` (if you want to write on a channel, you can just directly type your message)
+#### Available Commands (irssi):
 
-## Run with Valgrind or Sanitizer
+| Command | Description |
+|---------|-------------|
+| `/join <channel>` | Join a channel |
+| `/nick <nickname>` | Change nickname |
+| `/topic <topic>` | Set channel topic |
+| `/kick <nickname>` | Kick user from channel |
+| `/mode <option>` | Change channel modes |
+| `/invite <nickname>` | Invite user to channel |
+| `/msg <nickname/chan> <message>` | Send private/channel message |
 
-```sh
+> *In a channel, you can type messages directly without `/msg`*
+
+---
+
+## Run with Valgrind
+
+```bash
 valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./ircserv 6667 <password>
 ```
 
+flags:
+- `--leak-check=full` enhances the leak checking of valgrind
+- `--show-leak-kinds=all` shows all the leak kinds possible valgrind can report
+- `--track-fds=yes` checks any possible file descriptor leak
+
+---
+
 ## Debugging a Network Bug
 
-1. Check `poll()` return value and `revents` flags.
+1. Check `poll()` return value and `revents` flags
+2. Verify client fd is still valid (handle `recv()` returning `0` or `-1/ECONNRESET`)
+3. Confirm per-client buffer accumulates correctly for partial messages
+4. Reproduce with `nc -C` fragmentation test
 
-2. Verify the client fd is still valid (handle `recv()` returning `0` or `-1/ECONNRESET`).
-
-3. Confirm the per-client buffer is being accumulated correctly for partial messages.
-
-4. Reproduce with `nc -C` fragmentation test.
+---
 
 ## Server Crash During Evaluation
 
-1. `make re` to do a clean rebuild.
+1. `make re` - Clean rebuild
+2. Run under `valgrind` to identify fault
+3. Check for: uninitialised reads, double-free, or use-after-close on socket fd
 
-2. Run under `valgrind` to identify the fault.
+---
 
-3. Check for uninitialised reads, double-free, or use-after-close on a socket fd.
-
-## Recreate a Clean Environment
+## Clean Environment Setup
 
 ```bash
 make fclean
@@ -95,7 +103,19 @@ make
 ./ircserv 6667 <password>
 ```
 
-## Reproducible Test Scripts
+---
 
-> Test scripts will be documented here as they are written.
-> All scripts must be runnable from the repo root and referenced in this file.
+## Build & Run bot
+
+**Build**:
+```sh
+make bot
+```
+
+**Run:**
+```sh
+cd bot && ./ircbot <host> <port> <password> <nickname>
+
+# Example
+cd bot && ./ircbot 127.0.0.1 6667 mysecretpassword coolnickname
+```
