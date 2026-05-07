@@ -1,50 +1,74 @@
 *This project has been created as part of the 42 curriculum by lcalero, ekeisler, jaubry--.*
 
+---
+
 # ft_irc
+
+> A lightweight IRC server implemented in C++98, built as part of the 42 curriculum.
+
+---
 
 ## Description
 
 `ft_irc` is a simplified Internet Relay Chat (IRC) server written in C++98.
 
 The goal of this project is to implement a basic IRC server that:
-- accepts TCP connections from standard IRC clients,
-- handles user authentication (PASS, NICK, USER),
-- manages channels and channel modes,
-- routes private and channel messages between clients,
-- respects the core behavior of the IRC protocol as described in the subject.
+- Accepts TCP connections from standard IRC clients
+- Handles user authentication (`PASS`, `NICK`, `USER`)
+- Manages channels and channel modes (`i`, `t`, `k`, `o`, `l`)
+- Routes private and channel messages between clients
+- Supports channel operator commands: `KICK`, `INVITE`, `TOPIC`, `MODE`
+- Respects the core behavior of the IRC protocol as described in the subject
 
-This repository is currently in the bootstrap phase: only the initial structure, a minimal `main.cpp`, and a basic `Makefile` are provided.
+---
 
 ## Instructions
 
-### Build
+### Prerequisites
 
-```bash
-make
-```
+- A C++98-compatible compiler (e.g. `g++` or `clang++`)
+- A reference IRC client (e.g. [irssi](https://irssi.org/), [LimeChat](http://limechat.net/), [WeeChat](https://weechat.org/))
+- Linux or MacOS
 
-This will compile the project with:
+---
 
-- `c++`
-- `-Wall -Wextra -Werror -std=c++98`
+### Build & Run
 
-and produce the `ircserv` binary.
+Refer to the [runbook](runbook.md)
 
-### Run
+---
 
-```bash
-./ircserv <port> <password>
-```
+## Features
 
-- `port`: TCP port on which the server will listen for incoming IRC connections.  
-- `password`: connection password required by clients.
+| Feature                           | Status   |
+|-----------------------------------|----------|
+| TCP/IP client handling            | ✅       |
+| Authentication (PASS, NICK, USER) | ✅       |
+| Channel join / messaging          | ✅       |
+| Private messages                  | ✅       |
+| Channel operators                 | ✅       |
+| KICK / INVITE / TOPIC             | ✅       |
+| MODE (i, t, k, o, l)              | ✅       |
+| File transfer                     | ⭐ Bonus |
+| Bot                               | ⭐ Bonus |
 
-(At this stage of the project, `ircserv` may only validate arguments and exit.)
+---
 
 ## Resources
 
-This section will be extended as the project grows. It will include:
+### C++ Architecture
+- [Design Patterns](https://refactoring.guru/fr/design-patterns/cpp)
 
-- Links to IRC RFCs and protocol documentation
-- Articles or tutorials used as references
-- Notes about how AI was used (for tooling, documentation, or code assistance)
+### IRC Protocol
+- [RFC 1459 — Internet Relay Chat Protocol](https://tools.ietf.org/html/rfc1459)
+- [Modern IRC documentation](https://modern.ircdocs.horse/)
+
+### Networking (C++)
+- [`epoll()` man page](https://www.man7.org/linux/man-pages/man7/epoll.7.html)
+- [`socket()` man page](https://man7.org/linux/man-pages/man2/socket.2.html)
+- [`listen()` man page](https://man7.org/linux/man-pages/man2/listen.2.html)
+- [`bind()` man page](https://man7.org/linux/man-pages/man2/bind.2.html)
+
+### AI Usage
+- Assistance on our workflow (review of our Issues/PR syntax).
+- Documentation about IRC server behavior.

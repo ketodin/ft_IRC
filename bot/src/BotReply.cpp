@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 23:50:34 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/05/06 01:47:52 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:27:25 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,6 @@ std::string
 BotReply::joinChannel(const std::string& channel)
 {
 	return ("JOIN " + channel + "\r\n");
-}
-
-std::string
-BotReply::pong(const std::string& token)
-{
-	return ("PONG :" + token + "\r\n");
 }
 
 std::string
