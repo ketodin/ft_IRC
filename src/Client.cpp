@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/30 00:03:37 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:52:36 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,6 @@ Client::getFd() const
 	return (this->_fd);
 }
 
-bool
-Client::getPassAccepted() const
-{
-	return (this->_passAccepted);
-}
-
 void
 Client::setPassAccepted(bool status)
 {
@@ -139,28 +133,10 @@ Client::setRealName(const std::string& realname)
 	this->_realname = realname;
 }
 
-void
-Client::setHostName(const std::string& hostname)
-{
-	this->_hostname = hostname;
-}
-
 std::string
 Client::getPrefix(void) const
 {
 	return (this->_nickname + "!" + this->_username + "@" + this->_hostname);
-}
-
-std::string
-Client::getUsername() const
-{
-	return (this->_username);
-}
-
-std::string
-Client::getHostname() const
-{
-	return (this->_hostname);
 }
 
 bool
@@ -185,18 +161,6 @@ void
 Client::setUserSet(bool userset)
 {
 	this->_userSet = userset;
-}
-
-bool
-Client::getNickSet() const
-{
-	return (this->_nickSet);
-}
-
-bool
-Client::getUserSet() const
-{
-	return (this->_userSet);
 }
 
 bool

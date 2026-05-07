@@ -6,7 +6,7 @@
 /*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/04/30 00:02:15 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:52:33 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,12 @@ class Client
 		void					 setUsername(const std::string& username);
 		void					 setUserSet(bool userset);
 		void					 setRealName(const std::string& realname);
-		void					 setHostName(const std::string& hostname);
 		void					 setRegistered(bool registered);
 		void					 reply(const std::string& msg) const;
 
 		std::string getNickname(void) const;
-		std::string getUsername(void) const;
-		std::string getHostname(void) const;
 		std::string getPrefix(void) const;
 		bool		getRegistered(void) const;
-		bool		getPassAccepted(void) const;
-		bool		getNickSet(void) const;
-		bool		getUserSet(void) const;
 		int			getFd(void) const;
 		bool		firstRegistered(void) const;
 };
