@@ -2,7 +2,18 @@
 
 ## Overview
 
-This project is a C++ IRC server implementing the IRC protocol, built around a non-blocking `epoll`-based event loop. It follows a layered architecture: network I/O → message parsing → command dispatch → domain logic. A companion IRC bot is also compiled as a separate bonus binary.
+This project is a **C++ IRC server** implementing the IRC protocol, built around a non-blocking `epoll`-based event loop. It follows a **layered architecture**: network I/O → message parsing → command dispatch → domain logic. A companion IRC bot is also compiled as a separate bonus binary.
+
+---
+
+## Design patterns
+
+For this project, once we had a good overall idea of what we would have to implement for the project, we decided to look up [design patterns](https://refactoring.guru/design-patterns/cpp?utm_source=perplexity) that could fit the project without overthinking it.</br>
+Design patterns are a big thing in OOP since this is not only functionnal programming.</br>
+In this project, we chose to use:
+- [Singleton](https://refactoring.guru/design-patterns/singleton) for the `Server` class, which makes the server instanciable only once.
+- [Command](https://refactoring.guru/design-patterns/command) design pattern that encapsulates *IRC* commands.
+- [Template Method](https://refactoring.guru/design-patterns/template-method) in `Acommand` defines the skeleton of the command parsing with the `require*()` functions, and lets the subclasses use them.
 
 ---
 
@@ -10,27 +21,20 @@ This project is a C++ IRC server implementing the IRC protocol, built around a n
 
 ```
 .
-├── src/
-│   ├── main.cpp
-│   ├── Server.cpp / Server.hpp          # Core server, epoll loop, client lifecycle
-│   ├── Client.cpp / Client.hpp          # Per-connection state and input buffer
-│   ├── Channel.cpp / Channel.hpp        # Channel state, membership, modes
-│   ├── ServerReply.cpp / ServerReply.hpp # Numeric IRC reply formatting
-│   ├── signals.h                         # SIGINT/SIGTERM handling
-│   ├── utils.hpp / utils.cpp             # Shared helpers (is_digits, ft_atou, etc.)
-│   └── commands/
-│       ├── core/         # CommandParser, CommandDispatcher, ACommand
-│       ├── auth/         # PASS, NICK, USER
-│       ├── channel/      # JOIN, PRIVMSG, PONG, CAP
-│       └── operator/     # KICK, INVITE, TOPIC, MODE
-├── include/
-│   └── commands/         # Mirrors src/commands/ header structure
-├── bot/                  # Bonus IRC bot (separate binary)
-├── .github/
-│   ├── workflows/        # CI: build, clang-format, cppcheck, automation
-│   └── scripts/          # CI shell/JS scripts
-├── docs/                 # Engineering guidelines
-└── Makefile / srcs.mk / includes.mk / commands.mk
+├── bot/				# IRC bot (headers, sources, Makefile)
+├── docs/				# Documentation (ADRs, architecture, runbook)
+├── include/			# Server headers
+│ ├── commands/			# Command hierarchy
+│ │ ├── auth/			# PASS, NICK, USER, CAP commands
+│ │ ├── channel/		# JOIN, PRIVMSG, PONG commands
+│ │ └── operator/ 		# MODE, KICK, INVITE, TOPIC commands
+│ └── [core headers] 	# Server, Channel, Client, replies, utils
+├── mkidir/				# Makefile utilities
+├── src/				# Server sources
+│ └── commands/			# Command implementations (mirrors include/)
+├── CHANGELOG.md		# Version history
+├── Makefile			# Root build configuration
+└── suppressions.txt	# Valgrind suppressions
 ```
 
 ---
@@ -48,7 +52,7 @@ The `Server` class owns the listening socket and all connected clients. It runs 
 
 The server is a **singleton** and holds the authoritative `Client` and `Channel` collections, exposing lookup helpers: `getClientByNick()`, `getClientByFd()`, `getChannelByName()`, and `getOrCreateChannel()`.
 
-Signal handling (`SIGINT`/`SIGTERM`) is managed through a global flag in `signals.h`, checked on each loop iteration for a clean shutdown.
+Signal handling (`SIGINT`/`SIGTERM`/`SIGPIPE`) is managed through a global flag in `signals.h`, checked on each loop iteration for a clean shutdown.
 
 ---
 
