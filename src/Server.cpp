@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/05 21:35:53 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:53:14 by ekeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,27 +230,6 @@ Server::setNonBlocking(int fd)
 		throw FcntlException("F_GETFL");
 	if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
 		throw FcntlException("F_SETFL");
-}
-
-std::string
-Server::numericCode(int code)
-{
-	std::string		   s;
-	std::ostringstream oss;
-	oss << code;
-	s = oss.str();
-	while (s.size() < 3)
-		s = "0" + s;
-	return s;
-}
-
-std::string
-Server::buildReply(int				  code,
-				   const std::string& nick,
-				   const std::string& msg) const
-{
-	return (":" + this->_serverName + " " + numericCode(code) + " " + nick
-			+ " :" + msg + "\r\n");
 }
 
 void
