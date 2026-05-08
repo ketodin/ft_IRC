@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/07 16:53:09 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/08 18:14:37 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <vector>
-
-#ifndef DEBUG
-#	define DEBUG 0
-#endif
 
 #if DEBUG
 #	define LOG_INFO(msg) std::cout << "[DEBUG] " << msg << std::endl

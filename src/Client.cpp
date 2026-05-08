@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/07 16:52:36 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/08 18:42:05 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include "Debug.hpp"
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -26,7 +27,6 @@ Client::Client(int fd, std::string hostname) :
 	_userSet(false),
 	_registered(false)
 {
-	printClientData();
 }
 
 Client::~Client()
@@ -38,10 +38,10 @@ Client::~Client()
 void
 Client::printClientData() const
 {
-	std::cout << this->_fd << std::endl;
-	std::cout << this->_nickname << std::endl;
-	std::cout << this->_username << std::endl;
-	std::cout << this->_realname << std::endl;
+	DBG_FIELD("fd", this->_fd);
+	DBG_FIELD("nickname", this->_nickname);
+	DBG_FIELD("username", this->_username);
+	DBG_FIELD("realname", this->_realname);
 }
 
 void

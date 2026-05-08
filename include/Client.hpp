@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:08:01 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/07 16:52:33 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/08 18:32:07 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ class Client
 		bool _userSet;
 		bool _registered;
 
-		void printClientData() const;
-
 	public:
 		// explicit keyword to prevent from implicit conversions
 		explicit Client(int fd, std::string hostname);
@@ -60,6 +58,8 @@ class Client
 		bool		getRegistered(void) const;
 		int			getFd(void) const;
 		bool		firstRegistered(void) const;
+
+		void printClientData() const;
 };
 
 #endif
