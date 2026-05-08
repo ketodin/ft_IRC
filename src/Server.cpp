@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/07 16:53:14 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/08 19:01:25 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ Server::broadcast(const std::string& msg, const Client* except)
 		const Client* currentClient = *it;
 
 		if (!except)
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 		else if (currentClient->getFd() != except->getFd())
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 	}
 }
 
@@ -123,21 +123,10 @@ Server::broadcast(const Client&		 sender,
 		const Client* currentClient = *it;
 
 		if (!except)
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 		else if (currentClient->getFd() != except->getFd())
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 	}
-}
-
-void
-Server::sendMsg(const Client& client, const std::string& msg)
-{
-	ssize_t sent = send(client.getFd(), msg.c_str(), msg.size(), 0);
-
-	if (sent == -1)
-		std::cout << "send(): failed" << std::endl;
-	else if (sent < static_cast<ssize_t>(msg.size()))
-		std::cout << "send(): message partially sent" << std::endl;
 }
 
 /* This function creates the listening socket of the server and binds

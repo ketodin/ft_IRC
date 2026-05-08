@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/08 18:42:05 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/08 18:52:46 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,15 @@ void
 Client::reply(const std::string& msg) const
 {
 	std::string finalMsg = msg + "\r\n";
-	ssize_t sent = send(this->getFd(), finalMsg.c_str(), finalMsg.size(), 0);
 
+	if (DEBUG)
+		DBG_REPLY(msg);
+
+	ssize_t sent = send(this->getFd(), finalMsg.c_str(), finalMsg.size(), 0);
 	if (sent == -1)
-		std::cout << "send(): failed" << std::endl;
+		DBG_WARN("send(): failed");
 	else if (sent < static_cast<ssize_t>(finalMsg.size()))
-		std::cout << "send(): message partially sent" << std::endl;
+		DBG_WARN("send(): message partially sent");
 }
 
 int

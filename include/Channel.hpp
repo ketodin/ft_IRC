@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:00:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/05/08 18:13:44 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/08 19:01:07 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ class Channel
 		std::vector<Client*> _members;
 		std::vector<Client*> _operators;
 		std::vector<Client*> _invites;
-
-		static void sendMsg(const Client& client, const std::string& msg);
 
 	public:
 		explicit Channel(const std::string& name);

@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 18:40:41 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/08 18:41:08 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/08 18:50:31 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,7 @@
 
 #define DBG_WARN(msg) std::cout << BOLD RED "warn" RESET ": " << (msg) << "\n"
 
-#endif
+#define DBG_REPLY(msg)                                                         \
+	std::cout << BOLD CYAN ">>>" RESET " " DIM << (msg) << RESET "\n"
+
+#endif // DEBUG_HPP
