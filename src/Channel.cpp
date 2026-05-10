@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:01:11 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/05/05 19:56:11 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/08 19:00:56 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,9 @@ Channel::broadcast(const std::string& msg, const Client* except)
 		const Client* currentClient = *it;
 
 		if (!except)
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 		else if (currentClient->getFd() != except->getFd())
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 	}
 }
 
@@ -151,21 +151,10 @@ Channel::broadcast(const Client&	  sender,
 		const Client* currentClient = *it;
 
 		if (!except)
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 		else if (currentClient->getFd() != except->getFd())
-			this->sendMsg(*currentClient, finalMessage);
+			currentClient->reply(finalMessage);
 	}
-}
-
-void
-Channel::sendMsg(const Client& client, const std::string& msg)
-{
-	ssize_t sent = send(client.getFd(), msg.c_str(), msg.size(), 0);
-
-	if (sent == -1)
-		std::cout << "send(): failed" << std::endl;
-	else if (sent < static_cast<ssize_t>(msg.size()))
-		std::cout << "send(): message partially sent" << std::endl;
 }
 
 std::string

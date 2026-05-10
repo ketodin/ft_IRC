@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/05 18:17:17 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/10 02:31:33 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,6 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <vector>
-
-#ifndef DEBUG
-#	define DEBUG 0
-#endif
-
-#if DEBUG
-#	define LOG_INFO(msg) std::cout << "[DEBUG] " << msg << std::endl
-#else
-#	define LOG_INFO(msg)                                                      \
-		do                                                                     \
-		{                                                                      \
-		} while (0)
-#endif
 
 class Server
 {
@@ -95,18 +82,12 @@ class Server
 		void setupSocket(void);
 		void acceptClient(int& clientFd, std::string& clientHostname);
 
-		static std::string numericCode(int code);
-
 		void addNewClient(void);
 		bool removeClient(int fd);
 		void handleEvents(struct epoll_event events[MAX_EVENTS], int nfds);
 		static void setNonBlocking(int fd);
-		static void sendMsg(const Client& client, const std::string& msg);
 
 		static ReadStatus getReadStatus(int fd, char* buffer, ssize_t& n);
-		std::string		  buildReply(int				code,
-									 const std::string& nick,
-									 const std::string& msg) const;
 
 #include "ServerException.inl"
 };
