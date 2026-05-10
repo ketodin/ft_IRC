@@ -6,3 +6,9 @@ a.out
 *.d
 ircserv
 ircbot
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/

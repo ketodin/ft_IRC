@@ -1,4 +1,6 @@
 """suites/test_operator.py — OPERATOR edge cases."""
+import re
+import time
 import threading
 import reporter.printer as printer
 from reporter.console import TestReporter
@@ -16,18 +18,38 @@ def _test_kick_broadcast(cfg: Config, reporter: TestReporter):
 
     printer.print_test("KICK — victim receives message with full :nick!u@h prefix")
     printer.print_send(f"KICK {chan} {victim} :bye", important=True)
-    result = two_client_scenario(
-        cfg,
-        receiver_nick    = victim,
-        receiver_cmds    = (f"JOIN {chan}",),
-        receiver_pattern = pat,
-        sender_nick      = kicker,
-        sender_cmds      = (f"JOIN {chan}",),
-        sender_action    = (f"KICK {chan} {victim} :bye",)
-    )
-    printer.print_recv(result.receiver_lines)
-    reporter.assert_match("KICK message has full :nick!u@h prefix",
-                          result.receiver_lines, pat)
+
+    victim_in_channel = threading.Event()
+    victim_lines: list = []
+
+    def kicker_thread():
+        with IRCClient(cfg.host, cfg.port) as c:
+            register(c, kicker, cfg.password)
+            c.send(f"JOIN {chan}")
+            c.recv_lines_containing("366")
+            victim_in_channel.wait(timeout=8)
+            time.sleep(0.15)
+            c.send(f"KICK {chan} {victim} :bye")
+            c.recv_until_quiet(max_wait=3.0)
+
+    def victim_thread():
+        with IRCClient(cfg.host, cfg.port) as c:
+            register(c, victim, cfg.password)
+            c.send(f"JOIN {chan}")
+            lines = c.recv_lines_containing(
+                pat,
+                max_wait      = 10.0,
+                ready_pattern = "366",
+                ready_event   = victim_in_channel,
+            )
+            victim_lines.extend(lines)
+
+    t_k = threading.Thread(target=kicker_thread, daemon=True)
+    t_v = threading.Thread(target=victim_thread, daemon=True)
+    t_k.start(); t_v.start()
+    t_k.join(timeout=15); t_v.join(timeout=15)
+    printer.print_recv(victim_lines)
+    reporter.assert_match("KICK message has full :nick!u@h prefix", victim_lines, pat)
 
 
 def _test_mode_broadcast(cfg: Config, reporter: TestReporter):
@@ -39,18 +61,39 @@ def _test_mode_broadcast(cfg: Config, reporter: TestReporter):
 
     printer.print_test("MODE +i — channel member receives broadcast with full prefix")
     printer.print_send(f"MODE {chan} +i", important=True)
-    result = two_client_scenario(
-        cfg,
-        receiver_nick    = lis,
-        receiver_cmds    = (f"JOIN {chan}",),
-        receiver_pattern = pat,
-        sender_nick      = op,
-        sender_cmds      = (f"JOIN {chan}",),
-        sender_action    = (f"MODE {chan} +i",)
-    )
-    printer.print_recv(result.receiver_lines)
+
+    listener_joined = threading.Event()
+    listener_lines: list = []
+
+    def op_thread():
+        with IRCClient(cfg.host, cfg.port) as c:
+            register(c, op, cfg.password)
+            c.send(f"JOIN {chan}")
+            c.recv_lines_containing("366")
+            listener_joined.wait(timeout=8)
+            time.sleep(0.15)
+            c.send(f"MODE {chan} +i")
+            c.recv_until_quiet(max_wait=3.0)
+
+    def listener_thread():
+        with IRCClient(cfg.host, cfg.port) as c:
+            register(c, lis, cfg.password)
+            c.send(f"JOIN {chan}")
+            lines = c.recv_lines_containing(
+                pat,
+                max_wait      = 10.0,
+                ready_pattern = "366",
+                ready_event   = listener_joined,
+            )
+            listener_lines.extend(lines)
+
+    t_op  = threading.Thread(target=op_thread,       daemon=True)
+    t_lis = threading.Thread(target=listener_thread, daemon=True)
+    t_op.start(); t_lis.start()
+    t_op.join(timeout=15); t_lis.join(timeout=15)
+    printer.print_recv(listener_lines)
     reporter.assert_match("MODE broadcast → :op!u@h MODE #chan +i",
-                          result.receiver_lines, pat)
+                          listener_lines, pat)
 
 
 def _test_non_op_kick(cfg: Config, reporter: TestReporter):
@@ -154,8 +197,6 @@ def _test_channel_limit(cfg: Config, reporter: TestReporter):
     printer.print_recv(lu_lines)
     reporter.assert_match("Full channel JOIN → 471", lu_lines, r"471")
 
-
-# ── helpers called from run_test() lambdas ────────────────────────────────────
 
 def _invite_existing_session(outer_cfg: Config) -> list:
     s      = outer_cfg.suffix
