@@ -6,13 +6,14 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/08 19:01:25 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/10 02:35:31 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "CommandDispatcher.hpp"
 #include "CommandParser.hpp"
+#include "Debug.hpp"
 #include "signals.hpp"
 #include "utils.hpp"
 #include <algorithm>
@@ -63,10 +64,11 @@ Server::Server(int port, const std::string& password) :
 	_channels()
 {
 	// logging
-	LOG_INFO(this->_port);
-	LOG_INFO(this->_password);
-	LOG_INFO(this->_epoll_fd);
-	LOG_INFO(this->_listen_sock);
+	DBG_FIELD("port", this->_port);
+	DBG_FIELD("password", this->_password);
+	DBG_FIELD("server fd", this->_epoll_fd);
+	DBG_FIELD("listening socket fd", this->_listen_sock);
+	DBG_SEPARATOR;
 
 	// logic
 	this->_clients.reserve(MAX_EVENTS);
@@ -158,8 +160,6 @@ Server::setupSocket(void)
 
 	if (listen(this->_listen_sock, MAX_EVENTS) < 0)
 		throw ListenException(this->_port);
-
-	LOG_INFO("Server listening on port " << _port);
 }
 
 /* This function tries to accept a client and returns his associated fd */
@@ -184,7 +184,8 @@ Server::acceptClient(int& clientFd, std::string& clientHostname)
 
 	// clientAddr currently unused - will be needed for IP logging/banning
 
-	LOG_INFO("New client connected, fd=" << clientFd);
+	DBG_SECTION("NEW CLIENT");
+	DBG_FIELD("new client fd", clientFd);
 }
 
 /* This function parses the port and checks its validity
@@ -376,7 +377,7 @@ Server::handleEvents(struct epoll_event events[MAX_EVENTS], int nfds)
 				continue;
 			if (status == READ_ERROR || status == READ_DISCONNECT)
 			{
-				LOG_INFO("DELETED CLIENT, fd=" + utils::toString(fd));
+				DBG_FIELD("deleted client fd", utils::toString(fd));
 				this->removeClient(fd);
 				continue;
 			}

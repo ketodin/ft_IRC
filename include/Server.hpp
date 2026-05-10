@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:27:59 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/08 19:01:16 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/10 02:31:33 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,6 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <vector>
-
-#if DEBUG
-#	define LOG_INFO(msg) std::cout << "[DEBUG] " << msg << std::endl
-#else
-#	define LOG_INFO(msg)                                                      \
-		do                                                                     \
-		{                                                                      \
-		} while (0)
-#endif
 
 class Server
 {
