@@ -26,7 +26,7 @@ The goal of this project is to implement a basic IRC server that:
 
 ### Prerequisites
 
-- A C++98-compatible compiler (e.g. `g++` or `clang++`)
+- The C++98-compatible compiler `clang` (llvm-12)
 - [irssi](https://irssi.org/) (IRC Client)
 - Linux
 
