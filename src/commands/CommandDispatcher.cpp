@@ -6,12 +6,12 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:11:23 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/05/08 18:41:37 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/11 15:39:42 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandDispatcher.hpp"
-#include "Debug.hpp"
+#include "debug.hpp"
 #include "utils.hpp"
 #include <iostream>
 #include <stdexcept>

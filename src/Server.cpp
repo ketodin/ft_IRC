@@ -6,14 +6,14 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 16:52:35 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/10 02:35:31 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/11 15:40:21 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "CommandDispatcher.hpp"
 #include "CommandParser.hpp"
-#include "Debug.hpp"
+#include "debug.hpp"
 #include "signals.hpp"
 #include "utils.hpp"
 #include <algorithm>

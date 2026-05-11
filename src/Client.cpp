@@ -6,12 +6,12 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/08 18:52:46 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/11 15:39:56 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-#include "Debug.hpp"
+#include "debug.hpp"
 #include <sys/socket.h>
 #include <unistd.h>
 
