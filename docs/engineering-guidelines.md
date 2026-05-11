@@ -13,7 +13,7 @@
 - **Every PR requires at least one review** before merge
 - **No merge if CI is red**
 - **Zero compiler warnings** allowed
-- **No forking** – single `poll()` for all I/O operations
+- **No forking** – single `epoll()` for all I/O operations
 - **All I/O must be non-blocking**
 
 ---
@@ -24,7 +24,7 @@
 
 | Type | Format | Example |
 |------|--------|---------|
-| Feature | `feat/<issue>-<short-name>` | `feat/12-join-command` |
+| task | `feat/<issue>-<short-name>` | `feat/12-join-command` |
 | Bug fix | `fix/<issue>-<short-name>` | `fix/25-part-segfault` |
 | Refactor | `refactor/<issue>-<short-name>` | `refactor/31-parser-cleanup` |
 | Docs | `docs/<issue>-<short-name>` | `docs/40-readme-setup` |
@@ -48,7 +48,7 @@ type(scope): short description
 ```
 
 **Types:**
-- `feat` – new feature (IRC command, mode, etc.)
+- `feat` – new task (IRC command, mode, etc.)
 - `fix` – bug fix
 - `docs` – documentation only
 - `refactor` – code change without functional change
@@ -73,7 +73,7 @@ docs(readme): document compilation and usage
 - One function does one thing
 - Explicit names (`handleJoinCommand`, not `hj`)
 - No magic numbers (use named constants: `MAX_CLIENTS`, `IRC_BUFFER_SIZE`)
-- Handle all syscall errors (`recv`, `send`, `accept`, `poll`)
+- Handle all syscall errors (`recv`, `send`, `accept`, `epoll`)
 - Validate ALL user input before processing
 - No memory leaks – destructors must close sockets
 
@@ -97,8 +97,8 @@ docs(readme): document compilation and usage
 
 ### 3.4 Formatting
 
-- Choose one style and stick to it
-- Use `clang-format` with a shared `.clang-format` file if available
+- Stick to the style choosed
+- Use `clang-format` with the shared `.clang-format`
 - Comments explain **why**, not what
 
 ---
@@ -108,40 +108,42 @@ docs(readme): document compilation and usage
 ### 4.1 Directory Structure
 
 ```
-src/
-├── network/      # Socket, poll loop, client accept
-├── core/         # Server, Client management, Channel management
-├── parser/       # IRC message parsing
-├── commands/     # JOIN, MODE, KICK, PRIVMSG, etc.
-└── auth/         # Registration state machine
+Makefile
+mkidir/ # Makefile utils
+includes.mk
+
+docs/
+
+src/ # ircserv core sources
+└── commands/ # command parsing
+    ├── auth/ # CAP NICK PASS USER
+    ├── channel/ # JOIN PONG PRIVMSG
+    └── operator/ #INVITE KICK MODE TOPIC
 
 include/
-├── commands/     # Command headers
-├── Channel.hpp
-├── Client.hpp
-├── Server.hpp
-└── ...
+└── commands/
+    ├── auth/
+    ├── channel/
+    └── operator/
+```
+
+```
+bot/
+├── include/ # bot includes
+├── Makefile
+├── includes.mk
+└── src/ # bot sources
 ```
 
 ### 4.2 Responsibility Separation
 
 | Layer | Responsibility |
 |-------|----------------|
-| Network | Socket creation, bind, listen, accept, event loop |
-| Core | Global state, client list, channel list, command dispatch |
-| Parser | Line reconstruction from partial reads, token extraction |
-| Commands | IRC command handlers (PASS, NICK, JOIN, PRIVMSG, etc.) |
-| Auth | Registration state, operator vs regular user |
-
-### 4.3 ADR (Architecture Decision Records)
-
-For major decisions, create a record:
-
-```text
-docs/adr/0001-single-poll-event-loop.md
-docs/adr/0002-per-client-recv-buffer.md
-docs/adr/0003-command-dispatch-map.md
-```
+| Server | Socket creation, bind, listen, accept, event loop, global state, client list, channel list |
+| ACommand, CommandParser, CommandDipatcher | Pre-parsing, token extraction, command dispatch and factory |
+| Auth | `CAP`, `NICK`, `PASS`, `USER` |
+| Channel | `JOIN`, `PONG`, `PRIVMSG` |
+| Operator | `INVITE`, `KICK`, `MODE`, `OPERATOR`, `TOPIC` |
 
 ---
 
@@ -242,7 +244,7 @@ RFC reply codes, edge cases, etc.
 
 ### 7.2 Labels
 
-`feature`, `bug`, `tech-debt`, `docs`, `security`, `blocked`, `priority:high`, `priority:medium`, `priority:low`, `good-first-issue`
+`task`, `bug`, `tech-debt`, `docs`, `security`, `blocked`, `priority:high`, `priority:medium`, `priority:low`, `good-first-issue`
 
 ### 7.3 Workflow
 
@@ -263,6 +265,8 @@ RFC reply codes, edge cases, etc.
 - Compilation with `-Wall -Wextra -Werror -std=c++98`
 - Binary `ircserv` is produced
 - `make clean && make` works (no unnecessary relinking)
+- Passes `cppcheck`
+- Code is formated accordingly to `clang-format`
 
 ### 8.2 Minimal Workflow
 
@@ -329,10 +333,7 @@ The Makefile must not relink unnecessarily.
 | `NICK` | Auth | Unique, valid characters |
 | `USER` | Auth | Completes registration |
 | `JOIN` | Channel | Create if doesn't exist |
-| `PART` | Channel | Broadcast + remove |
 | `PRIVMSG` | Messaging | User-to-user & user-to-channel |
-| `NOTICE` | Messaging | No auto-reply |
-| `QUIT` | Lifecycle | Broadcast + cleanup |
 | `PING`/`PONG` | Keepalive | Prevent client timeout |
 | `KICK` | Operator | With permission check |
 | `INVITE` | Operator | With mode `i` |
@@ -360,9 +361,9 @@ The Makefile must not relink unnecessarily.
 
 ### 11.1 Event Loop
 
-- Single `poll()` (or `select`/`epoll`/`kqueue`) for all fds
+- Single `epoll()` for all fds
 - All sockets non-blocking from creation
-- Never call `recv`/`send` on fd not ready per `poll()`
+- Never call `recv`/`send` on fd not ready per `epoll()`
 - Handle disconnections properly (`recv` returns 0, `ECONNRESET`)
 
 ### 11.2 Per-Client Buffers
@@ -417,10 +418,9 @@ irssi -c 127.0.0.1 -p 6667 -w password -n nickname
 - `docs/engineering-guidelines.md` (this file)
 - `docs/architecture.md`
 - `docs/runbook.md`
-- `docs/adr/*.md`
 - `CHANGELOG.md`
 
-### 13.2 README Requirements
+### 13.2 `README.md` Requirements
 
 First line in italics:
 > *This project has been created as part of the 42 curriculum by \<login1>[, \<login2>[, ...]]*
@@ -442,7 +442,7 @@ An issue is **Done** only when:
 - [ ] PR reviewed and merged
 - [ ] CI is green
 - [ ] Documentation updated
-- [ ] Feature can be demonstrated to evaluator
+- [ ] task can be demonstrated to evaluator
 
 ---
 
@@ -483,4 +483,4 @@ We prioritize:
 - **Documented decisions** over implicit conventions
 - **One working command** over three half-finished ones
 
-Only **fully functional** features count for evaluation. Bonus is evaluated only if mandatory part is perfect and without issues.
+Only **fully functional** tasks count for evaluation. Bonus is evaluated only if mandatory part is perfect and without issues.
