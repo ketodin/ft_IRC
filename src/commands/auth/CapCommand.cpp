@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CapCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 17:36:26 by ekeisler          #+#    #+#             */
-/*   Updated: 2026/04/29 23:31:16 by jaubry--         ###   ########.fr       */
+/*   Updated: 2026/05/08 19:03:35 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ CapCommand::execute(Client& client, // cppcheck-suppress constParameterReference
 	requireArgsNum(args, 2, "CAP LS 302");
 	requireWord(args, 0, "CAP");
 
-	std::cout << "Client fd: " << client.getFd();
 	if (!client.getRegistered())
 	{
 		std::string r = ":" + Server::getInstance()->getServerName() + " CAP "

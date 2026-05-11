@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.hpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekeisler <ekeisler@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 16:24:50 by jaubry--          #+#    #+#             */
-/*   Updated: 2026/04/29 00:39:16 by ekeisler         ###   ########.fr       */
+/*   Updated: 2026/05/08 18:29:36 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ class CommandDispatcher
 		CommandDispatcher& operator=(const CommandDispatcher& other);
 
 		static void displayCommand(const std::string&			   name,
+								   const Client&				   client,
 								   const std::vector<std::string>& args);
 
 	public:
