@@ -27,8 +27,8 @@ The goal of this project is to implement a basic IRC server that:
 ### Prerequisites
 
 - A C++98-compatible compiler (e.g. `g++` or `clang++`)
-- A reference IRC client (e.g. [irssi](https://irssi.org/), [LimeChat](http://limechat.net/), [WeeChat](https://weechat.org/))
-- Linux or MacOS
+- [irssi](https://irssi.org/) (IRC Client)
+- Linux
 
 ---
 
