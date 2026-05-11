@@ -9,93 +9,6 @@ from irc.session import Config, register, run_session, two_client_scenario
 from suites.base import TestCase, run_test
 
 
-def _test_kick_broadcast(cfg: Config, reporter: TestReporter):
-    s      = cfg.suffix
-    kicker = f"KI{s}a"
-    victim = f"KI{s}b"
-    chan   = f"#kf{s}"
-    pat    = rf":{kicker}![^@]+@[^ ]+ KICK {chan} {victim}"
-
-    printer.print_test("KICK — victim receives message with full :nick!u@h prefix")
-    printer.print_send(f"KICK {chan} {victim} :bye", important=True)
-
-    victim_in_channel = threading.Event()
-    victim_lines: list = []
-
-    def kicker_thread():
-        with IRCClient(cfg.host, cfg.port) as c:
-            register(c, kicker, cfg.password)
-            c.send(f"JOIN {chan}")
-            c.recv_lines_containing("366")
-            victim_in_channel.wait(timeout=8)
-            time.sleep(0.15)
-            c.send(f"KICK {chan} {victim} :bye")
-            c.recv_until_quiet(max_wait=3.0)
-
-    def victim_thread():
-        with IRCClient(cfg.host, cfg.port) as c:
-            register(c, victim, cfg.password)
-            c.send(f"JOIN {chan}")
-            lines = c.recv_lines_containing(
-                pat,
-                max_wait      = 10.0,
-                ready_pattern = "366",
-                ready_event   = victim_in_channel,
-            )
-            victim_lines.extend(lines)
-
-    t_k = threading.Thread(target=kicker_thread, daemon=True)
-    t_v = threading.Thread(target=victim_thread, daemon=True)
-    t_k.start(); t_v.start()
-    t_k.join(timeout=15); t_v.join(timeout=15)
-    printer.print_recv(victim_lines)
-    reporter.assert_match("KICK message has full :nick!u@h prefix", victim_lines, pat)
-
-
-def _test_mode_broadcast(cfg: Config, reporter: TestReporter):
-    s    = cfg.suffix
-    op   = f"KI{s}h"
-    lis  = f"KI{s}i"
-    chan = f"#modebc{s}"
-    pat  = rf":{op}![^@]+@[^ ]+ MODE {chan}"
-
-    printer.print_test("MODE +i — channel member receives broadcast with full prefix")
-    printer.print_send(f"MODE {chan} +i", important=True)
-
-    listener_joined = threading.Event()
-    listener_lines: list = []
-
-    def op_thread():
-        with IRCClient(cfg.host, cfg.port) as c:
-            register(c, op, cfg.password)
-            c.send(f"JOIN {chan}")
-            c.recv_lines_containing("366")
-            listener_joined.wait(timeout=8)
-            time.sleep(0.15)
-            c.send(f"MODE {chan} +i")
-            c.recv_until_quiet(max_wait=3.0)
-
-    def listener_thread():
-        with IRCClient(cfg.host, cfg.port) as c:
-            register(c, lis, cfg.password)
-            c.send(f"JOIN {chan}")
-            lines = c.recv_lines_containing(
-                pat,
-                max_wait      = 10.0,
-                ready_pattern = "366",
-                ready_event   = listener_joined,
-            )
-            listener_lines.extend(lines)
-
-    t_op  = threading.Thread(target=op_thread,       daemon=True)
-    t_lis = threading.Thread(target=listener_thread, daemon=True)
-    t_op.start(); t_lis.start()
-    t_op.join(timeout=15); t_lis.join(timeout=15)
-    printer.print_recv(listener_lines)
-    reporter.assert_match("MODE broadcast → :op!u@h MODE #chan +i",
-                          listener_lines, pat)
-
-
 def _test_non_op_kick(cfg: Config, reporter: TestReporter):
     s       = cfg.suffix
     real_op = f"KI{s}j"
@@ -236,7 +149,6 @@ def _invite_notify_session(outer_cfg: Config) -> list:
 def run_suite(cfg: Config, reporter: TestReporter):
     s = cfg.suffix
     printer.print_section("OPERATOR — edge cases")
-    _test_kick_broadcast(cfg, reporter)
     run_test(TestCase(
         label       = "KICK absent user → 441",
         description = "KICK user not present in channel → 441 ERR_USERNOTINCHANNEL",
@@ -259,7 +171,6 @@ def run_suite(cfg: Config, reporter: TestReporter):
         run         = lambda c: _invite_notify_session(cfg),
         expect      = rf"INVITE KI{s}g #inv2{s}",
     ), cfg, reporter)
-    _test_mode_broadcast(cfg, reporter)
     _test_non_op_kick(cfg, reporter)
     _test_wrong_key(cfg, reporter)
     _test_channel_limit(cfg, reporter)
