@@ -6,7 +6,7 @@
 /*   By: lcalero <lcalero@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 17:14:10 by lcalero           #+#    #+#             */
-/*   Updated: 2026/05/11 15:39:56 by lcalero          ###   ########.fr       */
+/*   Updated: 2026/05/11 18:50:53 by lcalero          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,31 +56,27 @@ Client::extractMessages()
 	std::vector<std::string> messages;
 	std::string::size_type	 pos;
 
-	// guard: if buffer has no \n and exceeds 512, the client is misbehaving
-	// discard everything to avoid memory bloat
+	// guard: if buffer has no \r\n and exceeds 512, discard (misbehaving
+	// client)
 	if ((this->_inputBuffer.size() > 512)
-		&& (this->_inputBuffer.find('\n') == std::string::npos))
+		&& (this->_inputBuffer.find("\r\n") == std::string::npos))
 	{
 		this->_inputBuffer.clear();
 		return (messages);
 	}
 
-	while ((pos = this->_inputBuffer.find("\n")) != std::string::npos)
+	while ((pos = this->_inputBuffer.find("\r\n")) != std::string::npos)
 	{
 		std::string msg = this->_inputBuffer.substr(0, pos);
-		// strip trailing \r if present (handles both \r\n and \n)
-		if (!msg.empty() && msg[msg.size() - 1] == '\r')
-			msg.erase(msg.size() - 1);
 
-		// truncate individual message at 510 (512 - \r\n)
+		// truncate to 510 (512 - \r\n)
 		if (msg.size() > 510)
 			msg.resize(510);
 
 		// RFC says empty messages are silently ignored
 		if (!msg.empty())
 			messages.push_back(msg);
-
-		this->_inputBuffer.erase(0, pos + 1);
+		this->_inputBuffer.erase(0, pos + 2);
 	}
 	return (messages);
 }
